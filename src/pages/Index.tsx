@@ -9,6 +9,7 @@ import { getProducts, formatNaira } from "@/lib/products";
 import { ArrowRight, ShieldCheck, Ruler, Truck, Star } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import vitafoamLogo from "@/assets/vitafoam-logo.svg";
+import vitafoamMark from "@/assets/vitafoam-mark.png";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "Authorized Distributor", body: "Direct from Vitafoam. 100% genuine products with manufacturer warranty intact." },
@@ -48,7 +49,7 @@ const Index = () => {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="animate-fade-up text-white">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-medium tracking-wider uppercase backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" /> Authorized Vitafoam Distributor
+                <img src={vitafoamMark} alt="" className="h-4 w-4 object-contain" /> Authorized Vitafoam Distributor
               </span>
               <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05]">
                 Sleep Like Royalty.<br /><span className="text-accent">Every Night.</span>
