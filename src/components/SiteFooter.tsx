@@ -8,7 +8,7 @@ export const SiteFooter = () => (
       <div className="grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="inline-block rounded-lg bg-white p-3">
-            <img src={logo} alt="Multibiz.global Venture — Better Sleep. Better Life. Everywhere." className="h-28 w-auto object-contain" />
+            <img src={logo} alt="Multibiz.global Venture, Better Sleep. Better Life. Everywhere." className="h-28 w-auto object-contain" />
           </div>
           <p className="mt-5 max-w-md text-sm text-primary-foreground/70 leading-relaxed">
             Authorized Vitafoam distributor delivering premium mattresses across Nigeria. Genuine products, every grade, every size.

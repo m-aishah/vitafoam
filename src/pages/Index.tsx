@@ -12,7 +12,7 @@ import WhatsAppIcon from "@/components/WhatsAppIcon";
 const FEATURES = [
   { icon: ShieldCheck, title: "Authorized Distributor", body: "Direct from Vitafoam. 100% genuine products with manufacturer warranty intact." },
   { icon: Ruler, title: "Every Size & Grade", body: "From single beds to custom king sizes. Every Vitafoam grade, always in stock." },
-  { icon: WhatsAppIcon, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp — fast, simple, personal." },
+  { icon: WhatsAppIcon, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp, fast, simple, personal." },
   { icon: Truck, title: "Delivered Nationwide", body: "We deliver across Nigeria. Your mattress, when and where you need it." },
 ];
 
@@ -53,7 +53,7 @@ const Index = () => {
                 Sleep Like Royalty.<br /><span className="text-accent">Every Night.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-white/80 leading-relaxed">
-                Nigeria's trusted Vitafoam distributor — premium mattresses delivered to your door.
+                Nigeria's trusted Vitafoam distributor, premium mattresses delivered to your door.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild variant="hero" size="xl">
@@ -107,7 +107,7 @@ const Index = () => {
           <Reveal className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-semibold tracking-[0.3em] uppercase text-accent">Why Us</span>
             <h2 className="mt-3 font-display text-4xl lg:text-5xl font-bold text-primary">Why Choose Multibiz.global?</h2>
-            <p className="mt-4 text-muted-foreground">Premium products, transparent pricing, personal service — that's our promise.</p>
+            <p className="mt-4 text-muted-foreground">Premium products, transparent pricing, personal service, that's our promise.</p>
           </Reveal>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -169,7 +169,7 @@ const Index = () => {
                   </div>
                   <p className="mt-5 font-display text-lg leading-relaxed">"{t.quote}"</p>
                   <div className="mt-6 text-sm font-semibold">
-                    {t.name} <span className="text-primary-foreground/60 font-normal">— {t.city}</span>
+                    {t.name} <span className="text-primary-foreground/60 font-normal">, {t.city}</span>
                   </div>
                 </div>
               </Reveal>

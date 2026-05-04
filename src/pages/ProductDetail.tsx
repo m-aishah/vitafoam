@@ -38,7 +38,7 @@ const ProductDetail = () => {
 
   const handleAdd = () => {
     addToCart(product, selectedSize, qty);
-    toast({ title: "Added to cart", description: `${product.name} — ${formatSize(selectedSize)}` });
+    toast({ title: "Added to cart", description: `${product.name}, ${formatSize(selectedSize)}` });
   };
 
   const waMessage = `Hi Multibiz.global Venture, I'd like to order:\n\n• ${product.name}\n• Size: ${formatSize(selectedSize)}\n• Qty: ${qty}\n• Price: ${formatNaira(selectedSize.price * qty)} (7.5% VAT inclusive)\n\nPlease confirm availability and delivery.`;
@@ -100,7 +100,7 @@ const ProductDetail = () => {
                 <SelectContent className="max-h-72">
                   {product.sizes.map((s) => (
                     <SelectItem key={s.size} value={s.size} className="text-sm">
-                      {formatSize(s)} — {formatNaira(s.price)}
+                      {formatSize(s)}, {formatNaira(s.price)}
                     </SelectItem>
                   ))}
                 </SelectContent>
