@@ -50,7 +50,7 @@ const AdminLogin = () => {
             <Input id="p" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-11" autoComplete="current-password" />
           </div>
           <Button type="submit" variant="navy" size="lg" className="w-full h-12">Sign In</Button>
-          <p className="text-xs text-muted-foreground text-center">Default: admin / multibiz2026</p>
+          <p className="text-xs text-muted-foreground text-center">Authorized access only.</p>
         </form>
       </div>
     </div>

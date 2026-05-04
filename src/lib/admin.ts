@@ -1,7 +1,7 @@
 const AUTH_KEY = "mbg_admin_auth_v1";
 // Demo credentials; in a real app, validate server-side.
-const DEFAULT_USER = "admin";
-const DEFAULT_PASS = "multibiz2026";
+const DEFAULT_USER = "multibiz_admin";
+const DEFAULT_PASS = "Vitafoam@2026";
 
 export function adminLogin(u: string, p: string): boolean {
   if (u === DEFAULT_USER && p === DEFAULT_PASS) {
