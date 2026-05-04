@@ -6,12 +6,13 @@ import ProductCard from "@/components/ProductCard";
 import MattressIllustration from "@/components/MattressIllustration";
 import Reveal from "@/components/Reveal";
 import { getProducts, formatNaira } from "@/lib/products";
-import { ArrowRight, ShieldCheck, Ruler, MessageCircle, Truck, Star } from "lucide-react";
+import { ArrowRight, ShieldCheck, Ruler, Truck, Star } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "Authorized Distributor", body: "Direct from Vitafoam. 100% genuine products with manufacturer warranty intact." },
   { icon: Ruler, title: "Every Size & Grade", body: "From single beds to custom king sizes. Every Vitafoam grade, always in stock." },
-  { icon: MessageCircle, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp — fast, simple, personal." },
+  { icon: WhatsAppIcon, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp — fast, simple, personal." },
   { icon: Truck, title: "Delivered Nationwide", body: "We deliver across Nigeria. Your mattress, when and where you need it." },
 ];
 
