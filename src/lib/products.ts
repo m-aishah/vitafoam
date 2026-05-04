@@ -1,4 +1,5 @@
 import productsData from "@/data/products.json";
+import coronaImg from "@/assets/corona-mattress.jpg";
 
 export type GradeKey =
   | "Deluxe"
@@ -29,7 +30,12 @@ export interface Product {
   shortDesc: string;
   badgeClass: string; // tailwind classes
   sizes: SizeOption[];
+  image?: string;
 }
+
+const IMAGES: Partial<Record<GradeKey, string>> = {
+  Corona: coronaImg,
+};
 
 const META: Record<GradeKey, { name: string; short: string; desc: string; badge: string }> = {
   Deluxe: {
@@ -127,6 +133,7 @@ function buildProducts(): Product[] {
       shortDesc: m.short,
       badgeClass: m.badge,
       sizes,
+      image: IMAGES[g],
     };
   }).filter((p) => p.sizes.length > 0);
 }
