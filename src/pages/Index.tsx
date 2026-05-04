@@ -124,7 +124,7 @@ const Index = () => {
               <Reveal key={f.title} delay={i * 80}>
                 <div className="group relative h-full overflow-hidden rounded-xl bg-card p-7 shadow-card transition-smooth hover:-translate-y-1 hover:shadow-card-hover">
                   <div className="absolute inset-x-0 top-0 h-1 bg-gradient-gold" />
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary-soft text-primary">
+                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${f.icon === WhatsAppIcon ? "bg-[#25D366]/10 text-[#25D366]" : "bg-primary-soft text-primary"}`}>
                     <f.icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 font-display text-xl font-semibold text-primary">{f.title}</h3>
