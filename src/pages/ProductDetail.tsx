@@ -9,7 +9,9 @@ import {
 } from "@/components/ui/select";
 import { getProduct, formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
 import { addToCart } from "@/lib/cart";
-import { ArrowLeft, Check, MessageCircle, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { ArrowLeft, Check, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
+import vitafoamMark from "@/assets/vitafoam-mark.png";
 import { toast } from "@/hooks/use-toast";
 
 const ProductDetail = () => {
@@ -68,6 +70,7 @@ const ProductDetail = () => {
               <MattressIllustration className="max-w-md" />
             </div>
             <div className="mt-6 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.25em] text-primary/60">
+              <img src={vitafoamMark} alt="Vitafoam" className="h-5 w-5 object-contain" />
               <ShieldCheck className="h-4 w-4" /> Genuine Vitafoam Product
             </div>
           </div>
@@ -121,7 +124,7 @@ const ProductDetail = () => {
               </Button>
               <Button asChild variant="gold" size="lg" className="h-12">
                 <a href={whatsappOrderUrl(waMessage)} target="_blank" rel="noreferrer">
-                  <MessageCircle className="h-5 w-5" /> Order on WhatsApp
+                  <WhatsAppIcon className="h-5 w-5" /> Order on WhatsApp
                 </a>
               </Button>
             </div>

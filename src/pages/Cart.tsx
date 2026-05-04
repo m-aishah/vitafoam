@@ -5,7 +5,8 @@ import SiteFooter from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { CartItem, cartTotal, clearCart, getCart, removeItem, updateQty } from "@/lib/cart";
 import { formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
-import { MessageCircle, ShoppingBag, Trash2 } from "lucide-react";
+import { ShoppingBag, Trash2 } from "lucide-react";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 const Cart = () => {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -90,7 +91,7 @@ const Cart = () => {
                   </div>
                   <Button asChild variant="gold" size="lg" className="mt-6 w-full h-12">
                     <a href={whatsappOrderUrl(message)} target="_blank" rel="noreferrer">
-                      <MessageCircle className="h-5 w-5" /> Checkout via WhatsApp
+                      <WhatsAppIcon className="h-5 w-5" /> Checkout via WhatsApp
                     </a>
                   </Button>
                   <p className="mt-3 text-center text-xs text-muted-foreground">Order is finalised in chat with our team.</p>
