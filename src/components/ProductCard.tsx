@@ -10,11 +10,15 @@ export const ProductCard = ({ product }: { product: Product }) => {
       to={`/product/${product.id}`}
       className="group flex flex-col rounded-xl border border-border bg-card shadow-card transition-smooth hover:-translate-y-1 hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <div className="relative overflow-hidden rounded-t-xl bg-gradient-to-br from-primary-soft to-secondary p-6">
-        <span className={`absolute top-3 left-3 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide ${product.badgeClass}`}>
+      <div className="relative overflow-hidden rounded-t-xl bg-gradient-to-br from-primary-soft to-secondary p-6 aspect-[4/3] flex items-center justify-center">
+        <span className={`absolute top-3 left-3 z-10 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide ${product.badgeClass}`}>
           {product.grade}
         </span>
-        <MattressIllustration className="mt-6" />
+        {product.image ? (
+          <img src={product.image} alt={product.name} className="h-full w-full object-contain transition-smooth group-hover:scale-105" loading="lazy" />
+        ) : (
+          <MattressIllustration className="mt-6" />
+        )}
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-xl font-semibold text-primary">{product.name}</h3>
