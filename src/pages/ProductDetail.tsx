@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { getProduct, formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
+import { getProduct, getProducts, formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
+import ProductCard from "@/components/ProductCard";
 import { addToCart } from "@/lib/cart";
 import { ArrowLeft, Check, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
@@ -18,6 +19,7 @@ const ProductDetail = () => {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const product = useMemo(() => getProduct(id), [id]);
+  const related = useMemo(() => getProducts().filter((p) => p.id !== id).slice(0, 4), [id]);
   const [sizeKey, setSizeKey] = useState<string>(product?.sizes[0]?.size ?? "");
   const [qty, setQty] = useState(1);
 
@@ -67,7 +69,11 @@ const ProductDetail = () => {
               {product.grade}
             </span>
             <div className="flex h-full items-center justify-center">
-              <MattressIllustration className="max-w-md" />
+              {product.image ? (
+                <img src={product.image} alt={product.name} className="max-w-full max-h-[420px] object-contain" />
+              ) : (
+                <MattressIllustration className="max-w-md" />
+              )}
             </div>
             <div className="mt-6 flex items-center justify-center gap-2 text-xs uppercase tracking-[0.25em] text-primary/60">
               <img src={vitafoamMark} alt="Vitafoam" className="h-5 w-5 object-contain" />
