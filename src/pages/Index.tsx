@@ -8,6 +8,7 @@ import Reveal from "@/components/Reveal";
 import { getProducts, formatNaira } from "@/lib/products";
 import { ArrowRight, ShieldCheck, Ruler, Truck, Star } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
+import vitafoamLogo from "@/assets/vitafoam-logo.svg";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "Authorized Distributor", body: "Direct from Vitafoam. 100% genuine products with manufacturer warranty intact." },
@@ -63,11 +64,19 @@ const Index = () => {
                   <a href="#why">Learn More</a>
                 </Button>
               </div>
-              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
-                <span>✓ Authorized Vitafoam Distributor</span>
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/70">
                 <span>✓ All Sizes Available</span>
                 <span>✓ Order via WhatsApp</span>
                 <span>✓ Genuine Products Only</span>
+              </div>
+
+              {/* Authorized Vitafoam badge */}
+              <div className="mt-8 inline-flex items-center gap-3 rounded-xl bg-white/95 px-5 py-3 shadow-elegant backdrop-blur">
+                <img src={vitafoamLogo} alt="Vitafoam" className="h-12 w-auto" />
+                <div className="leading-tight">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/70">Authorized Distributor</div>
+                  <div className="text-sm font-bold text-primary">Genuine Vitafoam Products</div>
+                </div>
               </div>
             </div>
 
