@@ -35,7 +35,7 @@ const META: Record<GradeKey, { name: string; short: string; desc: string; badge:
   Deluxe: {
     name: "Deluxe Mattress",
     short: "Entry-level Vitafoam quality with great everyday value.",
-    desc: "Our entry-level Vitafoam grade offers dependable comfort at an unbeatable price. Engineered for everyday use, the Deluxe is the perfect first mattress, guest room essential, or budget-friendly upgrade — without compromising on Vitafoam's signature build quality.",
+    desc: "Our entry-level Vitafoam grade offers dependable comfort at an unbeatable price. Engineered for everyday use, the Deluxe is the perfect first mattress, guest room essential, or budget-friendly upgrade, without compromising on Vitafoam's signature build quality.",
     badge: "bg-slate-200 text-slate-800",
   },
   Shine: {
@@ -46,8 +46,8 @@ const META: Record<GradeKey, { name: string; short: string; desc: string; badge:
   },
   Corona: {
     name: "Corona Mattress",
-    short: "Mid-premium grade — Nigeria's most popular choice.",
-    desc: "A mid-premium grade with superior comfort foam layers, ideal for everyday luxury sleep. Perfect for families who want quality without compromise — Corona is consistently our best-seller across Nigeria.",
+    short: "Mid-premium grade, Nigeria's most popular choice.",
+    desc: "A mid-premium grade with superior comfort foam layers, ideal for everyday luxury sleep. Perfect for families who want quality without compromise, Corona is consistently our best-seller across Nigeria.",
     badge: "bg-teal-100 text-teal-800",
   },
   Grand: {
@@ -58,7 +58,7 @@ const META: Record<GradeKey, { name: string; short: string; desc: string; badge:
   },
   Sizzler: {
     name: "Sizzler Super Soft Mattress",
-    short: "Ultra-soft premium feel — sink in and unwind.",
+    short: "Ultra-soft premium feel, sink in and unwind.",
     desc: "Sizzler Super Soft (SS) wraps you in luxurious plushness. With ultra-soft top layers over a supportive core, it's pure indulgence for those who love to sink into bed.",
     badge: "bg-amber-100 text-amber-900",
   },
@@ -71,7 +71,7 @@ const META: Record<GradeKey, { name: string; short: string; desc: string; badge:
   Supreme: {
     name: "Supreme Mattress",
     short: "Top-tier luxury comfort and craftsmanship.",
-    desc: "The Supreme grade is luxury redefined — premium high-density foams, refined comfort layers and elegant finishing. Built for the most discerning sleepers who refuse to compromise.",
+    desc: "The Supreme grade is luxury redefined, premium high-density foams, refined comfort layers and elegant finishing. Built for the most discerning sleepers who refuse to compromise.",
     badge: "bg-red-100 text-red-800",
   },
   "Vita Galaxy Classic": {

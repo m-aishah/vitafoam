@@ -31,8 +31,12 @@ export const SiteHeader = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="container mx-auto container-px flex h-20 items-center justify-between">
-        <Link to="/" className="flex items-center" aria-label="Multibiz.global Venture — Better Sleep. Better Life. Everywhere.">
-          <img src={logo} alt="Multibiz.global Venture — Better Sleep. Better Life. Everywhere." className="h-16 w-auto object-contain" />
+        <Link to="/" className="flex items-center gap-3" aria-label="Multibiz.global Venture, Better Sleep. Better Life. Everywhere.">
+          <img src={logo} alt="Multibiz.global Venture" className="h-14 w-14 rounded-md object-contain" />
+          <div className="hidden sm:block leading-tight">
+            <div className="font-display text-lg font-bold text-primary">Multibiz<span className="text-accent">.global</span> Venture</div>
+            <div className="text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Better Sleep. Better Life. Everywhere.</div>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">

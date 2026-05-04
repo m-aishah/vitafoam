@@ -8,11 +8,12 @@ import Reveal from "@/components/Reveal";
 import { getProducts, formatNaira } from "@/lib/products";
 import { ArrowRight, ShieldCheck, Ruler, Truck, Star } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
+import vitafoamLogo from "@/assets/vitafoam-logo.svg";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "Authorized Distributor", body: "Direct from Vitafoam. 100% genuine products with manufacturer warranty intact." },
   { icon: Ruler, title: "Every Size & Grade", body: "From single beds to custom king sizes. Every Vitafoam grade, always in stock." },
-  { icon: WhatsAppIcon, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp — fast, simple, personal." },
+  { icon: WhatsAppIcon, title: "WhatsApp Checkout", body: "No complicated forms. Order directly on WhatsApp, fast, simple, personal." },
   { icon: Truck, title: "Delivered Nationwide", body: "We deliver across Nigeria. Your mattress, when and where you need it." },
 ];
 
@@ -53,7 +54,7 @@ const Index = () => {
                 Sleep Like Royalty.<br /><span className="text-accent">Every Night.</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg text-white/80 leading-relaxed">
-                Nigeria's trusted Vitafoam distributor — premium mattresses delivered to your door.
+                Nigeria's trusted Vitafoam distributor, premium mattresses delivered to your door.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild variant="hero" size="xl">
@@ -63,11 +64,19 @@ const Index = () => {
                   <a href="#why">Learn More</a>
                 </Button>
               </div>
-              <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-white/70">
-                <span>✓ Authorized Vitafoam Distributor</span>
+              <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-white/70">
                 <span>✓ All Sizes Available</span>
                 <span>✓ Order via WhatsApp</span>
                 <span>✓ Genuine Products Only</span>
+              </div>
+
+              {/* Authorized Vitafoam badge */}
+              <div className="mt-8 inline-flex items-center gap-3 rounded-xl bg-white/95 px-5 py-3 shadow-elegant backdrop-blur">
+                <img src={vitafoamLogo} alt="Vitafoam" className="h-12 w-auto" />
+                <div className="leading-tight">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/70">Authorized Distributor</div>
+                  <div className="text-sm font-bold text-primary">Genuine Vitafoam Products</div>
+                </div>
               </div>
             </div>
 
@@ -107,7 +116,7 @@ const Index = () => {
           <Reveal className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-semibold tracking-[0.3em] uppercase text-accent">Why Us</span>
             <h2 className="mt-3 font-display text-4xl lg:text-5xl font-bold text-primary">Why Choose Multibiz.global?</h2>
-            <p className="mt-4 text-muted-foreground">Premium products, transparent pricing, personal service — that's our promise.</p>
+            <p className="mt-4 text-muted-foreground">Premium products, transparent pricing, personal service, that's our promise.</p>
           </Reveal>
 
           <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -115,7 +124,7 @@ const Index = () => {
               <Reveal key={f.title} delay={i * 80}>
                 <div className="group relative h-full overflow-hidden rounded-xl bg-card p-7 shadow-card transition-smooth hover:-translate-y-1 hover:shadow-card-hover">
                   <div className="absolute inset-x-0 top-0 h-1 bg-gradient-gold" />
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary-soft text-primary">
+                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-lg ${f.icon === WhatsAppIcon ? "bg-[#25D366]/10 text-[#25D366]" : "bg-primary-soft text-primary"}`}>
                     <f.icon className="h-6 w-6" />
                   </div>
                   <h3 className="mt-5 font-display text-xl font-semibold text-primary">{f.title}</h3>
@@ -169,7 +178,7 @@ const Index = () => {
                   </div>
                   <p className="mt-5 font-display text-lg leading-relaxed">"{t.quote}"</p>
                   <div className="mt-6 text-sm font-semibold">
-                    {t.name} <span className="text-primary-foreground/60 font-normal">— {t.city}</span>
+                    {t.name} <span className="text-primary-foreground/60 font-normal">, {t.city}</span>
                   </div>
                 </div>
               </Reveal>
