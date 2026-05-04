@@ -139,13 +139,17 @@ function buildProducts(): Product[] {
 }
 
 const SEED = buildProducts();
-const STORAGE_KEY = "mbg_products_v1";
+const STORAGE_KEY = "mbg_products_v2";
 
 export function getProducts(): Product[] {
   if (typeof window === "undefined") return SEED;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as Product[];
+    if (raw) {
+      const stored = JSON.parse(raw) as Product[];
+      // Re-attach images from code (don't trust stored image data URLs)
+      return stored.map((p) => ({ ...p, image: IMAGES[p.grade] || p.image }));
+    }
   } catch {}
   localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED));
   return SEED;
