@@ -145,6 +145,27 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {related.length > 0 && (
+        <section className="border-t border-border bg-surface py-16">
+          <div className="container mx-auto container-px">
+            <div className="flex items-end justify-between gap-4 mb-8">
+              <div>
+                <span className="text-xs font-semibold tracking-[0.3em] uppercase text-accent">More to explore</span>
+                <h2 className="mt-2 font-display text-3xl lg:text-4xl font-bold text-primary">Related Mattresses</h2>
+              </div>
+              <Link to="/shop" className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-accent transition-smooth">
+                View all <ArrowLeft className="h-4 w-4 rotate-180" />
+              </Link>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <SiteFooter />
     </div>
   );
