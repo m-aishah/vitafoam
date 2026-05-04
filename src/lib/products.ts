@@ -15,7 +15,7 @@ export type GradeKey =
   | "Vita Spring Firm";
 
 export interface SizeOption {
-  size: string; // "75x54x8"
+  size: string;
   L: number;
   W: number;
   T: number;
@@ -28,9 +28,29 @@ export interface Product {
   name: string;
   description: string;
   shortDesc: string;
-  badgeClass: string; // tailwind classes
+  badgeClass: string;
   sizes: SizeOption[];
   image?: string;
+}
+
+export interface RawProduct {
+  code: string;
+  grade: string;
+  gradeSuffix: string;
+  dimensionRaw: string;
+  lengthInches: number;
+  widthInches: number;
+  thicknessInches: number;
+  price: number;
+  displaySize: string;
+  displayLabel: string;
+}
+
+export interface CatalogFile {
+  lastUpdated: string | null;
+  uploadedFileName: string | null;
+  totalProducts: number;
+  products: RawProduct[];
 }
 
 const IMAGES: Partial<Record<GradeKey, string>> = {
@@ -120,10 +140,51 @@ const gradeToId: Record<GradeKey, string> = {
   "Vita Spring Firm": "vita-spring-firm",
 };
 
-function buildProducts(): Product[] {
-  const data = productsData as Record<GradeKey, SizeOption[]>;
+const SEED_CATALOG = productsData as CatalogFile;
+const OVERRIDE_KEY = "mbg_catalog_override_v1";
+
+export function getCatalog(): CatalogFile {
+  if (typeof window !== "undefined") {
+    try {
+      const raw = localStorage.getItem(OVERRIDE_KEY);
+      if (raw) return JSON.parse(raw) as CatalogFile;
+    } catch {}
+  }
+  return SEED_CATALOG;
+}
+
+export function saveCatalog(cat: CatalogFile) {
+  localStorage.setItem(OVERRIDE_KEY, JSON.stringify(cat));
+  window.dispatchEvent(new Event("mbg-catalog-changed"));
+}
+
+export function resetCatalog() {
+  localStorage.removeItem(OVERRIDE_KEY);
+  window.dispatchEvent(new Event("mbg-catalog-changed"));
+}
+
+export function isUsingSeed(): boolean {
+  if (typeof window === "undefined") return true;
+  return !localStorage.getItem(OVERRIDE_KEY);
+}
+
+function buildProducts(catalog: CatalogFile): Product[] {
+  const byGrade: Record<string, RawProduct[]> = {};
+  for (const r of catalog.products) {
+    if (!META[r.grade as GradeKey]) continue;
+    (byGrade[r.grade] ||= []).push(r);
+  }
   return (Object.keys(META) as GradeKey[]).map((g) => {
-    const sizes = (data[g] || []).filter((s) => s.price > 0).sort((a, b) => a.price - b.price);
+    const rawList = (byGrade[g] || [])
+      .filter((r) => r.price > 0)
+      .sort((a, b) => a.price - b.price);
+    const sizes: SizeOption[] = rawList.map((r) => ({
+      size: `${r.lengthInches}x${r.widthInches}x${r.thicknessInches}`,
+      L: r.lengthInches,
+      W: r.widthInches,
+      T: r.thicknessInches,
+      price: r.price,
+    }));
     const m = META[g];
     return {
       id: gradeToId[g],
@@ -138,25 +199,8 @@ function buildProducts(): Product[] {
   }).filter((p) => p.sizes.length > 0);
 }
 
-const SEED = buildProducts();
-const STORAGE_KEY = "mbg_products_v2";
-
 export function getProducts(): Product[] {
-  if (typeof window === "undefined") return SEED;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const stored = JSON.parse(raw) as Product[];
-      // Re-attach images from code (don't trust stored image data URLs)
-      return stored.map((p) => ({ ...p, image: IMAGES[p.grade] || p.image }));
-    }
-  } catch {}
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED));
-  return SEED;
-}
-
-export function saveProducts(products: Product[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  return buildProducts(getCatalog());
 }
 
 export function getProduct(id: string): Product | undefined {
@@ -167,21 +211,10 @@ export function formatNaira(n: number): string {
   return "₦" + n.toLocaleString("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-// Convert "75x54x8" -> "4½ft × 6ft × 8 inches"
 const inchToFt: Record<number, string> = {
-  30: "2½ft",
-  36: "3ft",
-  42: "3½ft",
-  48: "4ft",
-  54: "4½ft",
-  60: "5ft",
-  72: "6ft",
-  75: "6¼ft",
-  79: "6½ft",
-  84: "7ft",
-  88: "7⅓ft",
-  96: "8ft",
-  108: "9ft",
+  30: "2½ft", 36: "3ft", 42: "3½ft", 48: "4ft", 54: "4½ft",
+  60: "5ft", 72: "6ft", 75: "6¼ft", 79: "6½ft", 84: "7ft",
+  88: "7⅓ft", 96: "8ft", 108: "9ft",
 };
 
 export function formatSize(s: SizeOption): string {
@@ -201,6 +234,16 @@ export const GRADE_OPTIONS: GradeKey[] = [
 ];
 
 export const THICKNESS_OPTIONS = [3, 4, 6, 8, 10, 12, 14, 16, 18, 20];
+
+export const GRADE_SUFFIX: Record<GradeKey, string> = {
+  Deluxe: "DE", Shine: "SH", Corona: "CP", Grand: "SG", Sizzler: "SS",
+  "Vita Haven": "VH", Supreme: "VS", "Vita Galaxy Classic": "GS",
+  "Galaxy Orthopaedic": "RQ", "Vita Spring Flex": "SX", "Vita Spring Firm": "SF",
+};
+
+export const SUFFIX_TO_GRADE: Record<string, GradeKey> = Object.fromEntries(
+  Object.entries(GRADE_SUFFIX).map(([k, v]) => [v, k as GradeKey])
+) as Record<string, GradeKey>;
 
 export const WHATSAPP_NUMBER = "2348053054348";
 
