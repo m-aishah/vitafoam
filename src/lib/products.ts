@@ -1,4 +1,5 @@
 import productsData from "@/data/products.json";
+import coronaImg from "@/assets/corona-mattress.jpg";
 
 export type GradeKey =
   | "Deluxe"
@@ -29,7 +30,12 @@ export interface Product {
   shortDesc: string;
   badgeClass: string; // tailwind classes
   sizes: SizeOption[];
+  image?: string;
 }
+
+const IMAGES: Partial<Record<GradeKey, string>> = {
+  Corona: coronaImg,
+};
 
 const META: Record<GradeKey, { name: string; short: string; desc: string; badge: string }> = {
   Deluxe: {
@@ -127,18 +133,23 @@ function buildProducts(): Product[] {
       shortDesc: m.short,
       badgeClass: m.badge,
       sizes,
+      image: IMAGES[g],
     };
   }).filter((p) => p.sizes.length > 0);
 }
 
 const SEED = buildProducts();
-const STORAGE_KEY = "mbg_products_v1";
+const STORAGE_KEY = "mbg_products_v2";
 
 export function getProducts(): Product[] {
   if (typeof window === "undefined") return SEED;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as Product[];
+    if (raw) {
+      const stored = JSON.parse(raw) as Product[];
+      // Re-attach images from code (don't trust stored image data URLs)
+      return stored.map((p) => ({ ...p, image: IMAGES[p.grade] || p.image }));
+    }
   } catch {}
   localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED));
   return SEED;
