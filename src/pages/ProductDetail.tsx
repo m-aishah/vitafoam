@@ -58,7 +58,7 @@ const ProductDetail = () => {
         <p className="mt-2 text-white/70 text-sm relative z-10">
           <Link to="/" className="hover:text-white">Home</Link>
           {" / "}
-          <Link to="/shop" className="hover:text-white">Shop</Link>
+          <Link to="/shop?category=mattress" className="hover:text-white">Shop</Link>
           {" / "}
           <span className="text-white">{product.name}</span>
         </p>
@@ -84,7 +84,7 @@ const ProductDetail = () => {
               <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">
                 <Link to="/" className="hover:text-primary">HOME</Link>
                 {" / "}
-                <Link to="/shop" className="hover:text-primary">MATTRESS</Link>
+                <Link to="/shop?category=mattress" className="hover:text-primary">MATTRESSES</Link>
                 {" / "}
                 <span>{product.name.toUpperCase()}</span>
               </p>

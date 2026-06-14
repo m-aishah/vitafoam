@@ -4,16 +4,15 @@ import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
 import { cartCount } from "@/lib/cart";
 import { getAllShopItems } from "@/lib/catalog";
-import { GRADE_OPTIONS } from "@/lib/products";
 
 const NAV_CATEGORIES = [
-  { label: "MATTRESSES", cat: "mattress", to: "/shop?category=mattress", hasDropdown: true },
-  { label: "TOPPERS", cat: "topper", to: "/shop?category=topper", hasDropdown: false },
-  { label: "PILLOWS", cat: "pillow", to: "/shop?category=pillow", hasDropdown: false },
-  { label: "BEDDING", cat: "bedding", to: "/shop?category=bedding", hasDropdown: false },
-  { label: "LIFESTYLE", cat: "lifestyle", to: "/shop?category=lifestyle", hasDropdown: false },
-  { label: "LEISURE", cat: "leisure", to: "/shop?category=leisure", hasDropdown: false },
-  { label: "BABY & MOTHER", cat: "baby", to: "/shop?category=baby", hasDropdown: false },
+  { label: "MATTRESSES", cat: "mattress", to: "/shop?category=mattress" },
+  { label: "TOPPERS", cat: "topper", to: "/shop?category=topper" },
+  { label: "PILLOWS", cat: "pillow", to: "/shop?category=pillow" },
+  { label: "BEDDING", cat: "bedding", to: "/shop?category=bedding" },
+  { label: "LIFESTYLE", cat: "lifestyle", to: "/shop?category=lifestyle" },
+  { label: "LEISURE", cat: "leisure", to: "/shop?category=leisure" },
+  { label: "BABY & MOTHER", cat: "baby", to: "/shop?category=baby" },
 ];
 
 export const SiteHeader = () => {
@@ -22,9 +21,7 @@ export const SiteHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<ReturnType<typeof getAllShopItems>>([]);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loc = useLocation();
   const navigate = useNavigate();
 
@@ -39,7 +36,7 @@ export const SiteHeader = () => {
     };
   }, []);
 
-  useEffect(() => { setMobileOpen(false); setSearchQuery(""); setSearchOpen(false); setActiveDropdown(null); }, [loc.pathname]);
+  useEffect(() => { setMobileOpen(false); setSearchQuery(""); setSearchOpen(false); }, [loc.pathname]);
 
   useEffect(() => {
     if (searchQuery.trim().length < 2) { setSearchResults([]); setSearchOpen(false); return; }
@@ -67,15 +64,6 @@ export const SiteHeader = () => {
       navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
     }
-  };
-
-  const openDropdown = (label: string) => {
-    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
-    setActiveDropdown(label);
-  };
-
-  const closeDropdown = () => {
-    dropdownTimer.current = setTimeout(() => setActiveDropdown(null), 150);
   };
 
   const searchParams = new URLSearchParams(loc.search);
@@ -166,12 +154,7 @@ export const SiteHeader = () => {
         <div className="container mx-auto container-px">
           <ul className="flex items-center gap-0">
             {NAV_CATEGORIES.map((cat) => (
-              <li
-                key={cat.label}
-                className="relative"
-                onMouseEnter={() => cat.hasDropdown && openDropdown(cat.label)}
-                onMouseLeave={closeDropdown}
-              >
+              <li key={cat.label}>
                 <Link
                   to={cat.to}
                   className={`inline-block px-4 py-3 text-[13px] font-semibold tracking-wide transition-colors hover:text-primary ${
@@ -180,34 +163,6 @@ export const SiteHeader = () => {
                 >
                   {cat.label}
                 </Link>
-
-                {/* Grade dropdown (mattresses only) */}
-                {cat.hasDropdown && activeDropdown === cat.label && (
-                  <div
-                    className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-xl z-50 min-w-[200px] py-2"
-                    onMouseEnter={() => openDropdown(cat.label)}
-                    onMouseLeave={closeDropdown}
-                  >
-                    <p className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100 mb-1">Shop by Grade</p>
-                    {GRADE_OPTIONS.map((grade) => (
-                      <Link
-                        key={grade}
-                        to={`/shop?category=mattress&grade=${encodeURIComponent(grade)}`}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
-                      >
-                        {grade}
-                      </Link>
-                    ))}
-                    <div className="border-t border-gray-100 mt-1 pt-1">
-                      <Link
-                        to="/shop?category=mattress"
-                        className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-gray-50 transition-colors"
-                      >
-                        View All Mattresses →
-                      </Link>
-                    </div>
-                  </div>
-                )}
               </li>
             ))}
           </ul>

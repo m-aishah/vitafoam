@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { CartItem, cartTotal, clearCart, getCart, removeItem, updateQty } from "@/lib/cart";
-import { formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
+import { formatNaira, formatSize, whatsappOrderUrl, SizeOption } from "@/lib/products";
+
+function displaySize(s: SizeOption): string {
+  return (s.L > 0 && s.W > 0) ? formatSize(s) : s.size;
+}
 import { ShoppingBag, Trash2 } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 
@@ -19,7 +23,7 @@ const Cart = () => {
   const total = cartTotal(items);
   const message = items.length === 0 ? "" :
     `Hi Vitafoam Comfort Centre, I'd like to order:\n\n` +
-    items.map((i, n) => `${n + 1}. ${i.name}\n   Size: ${formatSize(i.size)}\n   Qty: ${i.qty}\n   Subtotal: ${formatNaira(i.size.price * i.qty)}`).join("\n\n") +
+    items.map((i, n) => `${n + 1}. ${i.name}\n   Size: ${displaySize(i.size)}\n   Qty: ${i.qty}\n   Subtotal: ${formatNaira(i.size.price * i.qty)}`).join("\n\n") +
     `\n\nGrand Total: ${formatNaira(total)} (7.5% VAT inclusive)\n\nPlease confirm availability and delivery.`;
 
   return (
@@ -59,7 +63,7 @@ const Cart = () => {
                     <div key={key} className="flex flex-col sm:flex-row gap-4 border border-gray-200 rounded p-5">
                       <div className="flex-1">
                         <Link to={`/product/${i.productId}`} className="font-bold text-gray-900 hover:text-primary transition-colors text-base">{i.name}</Link>
-                        <div className="mt-1 text-sm text-gray-500">{formatSize(i.size)}</div>
+                        <div className="mt-1 text-sm text-gray-500">{displaySize(i.size)}</div>
                         <div className="mt-2 font-semibold text-gray-900">{formatNaira(i.size.price)} <span className="text-xs font-normal text-gray-400">/ unit · VAT incl.</span></div>
                       </div>
                       <div className="flex sm:flex-col items-center sm:items-end gap-3 justify-between">

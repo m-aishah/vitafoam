@@ -458,7 +458,7 @@ export interface GroupedShopItem {
   minPrice: number;
   grade?: string;
   badgeClass?: string;
-  sizes: { label: string; price: number }[];
+  sizes: { label: string; L: number; W: number; T: number; price: number }[];
 }
 
 export function getGroupedShopItems(): GroupedShopItem[] {
@@ -470,7 +470,9 @@ export function getGroupedShopItems(): GroupedShopItem[] {
     (byGrade[r.grade] ||= []).push(r);
   }
   for (const [grade, raws] of Object.entries(byGrade)) {
-    const sorted = raws.filter((r) => r.price > 0).sort((a, b) => a.price - b.price);
+    const sorted = raws
+      .filter((r) => r.price > 0)
+      .sort((a, b) => a.widthInches !== b.widthInches ? a.widthInches - b.widthInches : a.thicknessInches - b.thicknessInches);
     if (!sorted.length) continue;
     const id = grade.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
     items.push({
@@ -481,10 +483,10 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       shortDesc: GRADE_SHORT_DESC[grade] ?? `${grade} mattress.`,
       description: GRADE_SHORT_DESC[grade] ?? `${grade} foam mattress by Vitafoam.`,
       image: null,
-      minPrice: sorted[0].price,
+      minPrice: Math.min(...sorted.map((r) => r.price)),
       grade,
       badgeClass: GRADE_BADGE[grade] ?? "bg-gray-100 text-gray-800",
-      sizes: sorted.map((r) => ({ label: r.displaySize, price: r.price })),
+      sizes: sorted.map((r) => ({ label: r.displaySize, L: r.lengthInches, W: r.widthInches, T: r.thicknessInches, price: r.price })),
     });
   }
 
@@ -502,7 +504,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       minPrice: toppers[0].price,
       grade: "Memory Topper",
       badgeClass: GRADE_BADGE["Memory Topper"],
-      sizes: toppers.map((t) => ({ label: t.displaySize, price: t.price })),
+      sizes: toppers.map((t) => ({ label: t.displaySize, L: t.lengthInches, W: t.widthInches, T: t.thicknessInches, price: t.price })),
     });
   }
 
@@ -518,7 +520,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
         description: p.description,
         image: p.image,
         minPrice: p.price,
-        sizes: [{ label: "Standard", price: p.price }],
+        sizes: [{ label: "Standard", L: 0, W: 0, T: 0, price: p.price }],
       });
     }
   };
@@ -540,7 +542,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       description: p.description,
       image: p.image,
       minPrice: sorted[0].price,
-      sizes: sorted.map((v) => ({ label: v.sizeName, price: v.price })),
+      sizes: sorted.map((v) => ({ label: v.sizeName, L: v.L, W: v.W, T: 0, price: v.price })),
     });
   }
 

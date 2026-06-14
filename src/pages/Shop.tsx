@@ -96,10 +96,10 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
         description: item.description,
         grade: (item.grade ?? item.categoryLabel) as any,
         badgeClass: item.badgeClass ?? "",
-        sizes: item.sizes.map((s, i) => ({ size: String(i), L: 0, W: 0, T: 0, price: s.price })),
+        sizes: item.sizes.map((s) => ({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price })),
         image: item.image ?? undefined,
       },
-      { size: String(selectedIdx), L: 0, W: 0, T: 0, price: selected?.price ?? 0 },
+      { size: selected?.label ?? "", L: selected?.L ?? 0, W: selected?.W ?? 0, T: selected?.T ?? 0, price: selected?.price ?? 0 },
       1
     );
     toast({ title: "Added to cart", description: item.name });
@@ -135,7 +135,11 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
           {item.grade && item.badgeClass && (
             <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
           )}
-          <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">{item.name}</h3>
+          <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">
+            {item.category === "mattress" ? (
+              <Link to={`/product/${item.id}`} className="hover:text-primary transition-colors">{item.name}</Link>
+            ) : item.name}
+          </h3>
           <p className="text-xs text-gray-500 mb-3 line-clamp-2">{item.shortDesc}</p>
           <p className="text-sm text-gray-700 mb-4">
             {item.sizes.length > 1 ? "FROM " : ""}<span className="font-bold text-gray-900">{formatNaira(item.minPrice)}</span>
