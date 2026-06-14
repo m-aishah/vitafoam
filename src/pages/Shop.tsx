@@ -15,6 +15,51 @@ type SortKey = "price-asc" | "price-desc" | "name-asc";
 
 const PRODUCT_CATEGORIES = ["Mattress", "Pillow", "Bedding", "Lifestyle", "Mother & Child", "Furniture"];
 
+function PriceRangeSlider({
+  min, max, low, high, step, onChange,
+}: { min: number; max: number; low: number; high: number; step: number; onChange: (lo: number, hi: number) => void }) {
+  const pct = (v: number) => ((v - min) / (max - min)) * 100;
+  return (
+    <div className="space-y-3">
+      <p className="text-xs text-gray-500 font-semibold">
+        {formatNaira(low)} — {formatNaira(high)}
+      </p>
+      <div className="relative h-5 flex items-center">
+        {/* Track background */}
+        <div className="absolute w-full h-1.5 rounded-full bg-gray-200" />
+        {/* Active track */}
+        <div
+          className="absolute h-1.5 rounded-full bg-primary"
+          style={{ left: `${pct(low)}%`, right: `${100 - pct(high)}%` }}
+        />
+        {/* Min handle */}
+        <input
+          type="range"
+          min={min} max={max} step={step} value={low}
+          onChange={(e) => { const v = Number(e.target.value); if (v < high) onChange(v, high); }}
+          className="absolute w-full h-full opacity-0 cursor-pointer"
+          style={{ zIndex: low > min + (max - min) * 0.9 ? 5 : 3 }}
+        />
+        {/* Max handle */}
+        <input
+          type="range"
+          min={min} max={max} step={step} value={high}
+          onChange={(e) => { const v = Number(e.target.value); if (v > low) onChange(low, v); }}
+          className="absolute w-full h-full opacity-0 cursor-pointer"
+          style={{ zIndex: 4 }}
+        />
+        {/* Visual handles */}
+        <div className="absolute w-4 h-4 rounded-full bg-white border-2 border-primary shadow pointer-events-none" style={{ left: `calc(${pct(low)}% - 8px)` }} />
+        <div className="absolute w-4 h-4 rounded-full bg-white border-2 border-primary shadow pointer-events-none" style={{ left: `calc(${pct(high)}% - 8px)` }} />
+      </div>
+      <div className="flex justify-between text-[10px] text-gray-400">
+        <span>{formatNaira(min)}</span>
+        <span>{formatNaira(max)}</span>
+      </div>
+    </div>
+  );
+}
+
 function AccordionSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
@@ -43,11 +88,12 @@ const Shop = () => {
   }, [all]);
 
   const [grades, setGrades] = useState<Set<GradeKey>>(new Set());
-  const [priceMin, setPriceMin] = useState(0);
-  const [priceMax, setPriceMax] = useState(Infinity);
+  const [priceMin, setPriceMin] = useState<number | null>(null);
+  const [priceMax, setPriceMax] = useState<number | null>(null);
   const [sort, setSort] = useState<SortKey>("price-asc");
 
-  const effectiveMax = priceMax === Infinity ? priceRange.max : priceMax;
+  const effectiveLow = priceMin ?? priceRange.min;
+  const effectiveMax = priceMax ?? priceRange.max;
 
   const filtered = useMemo(() => {
     let list = all.filter((p) => {
@@ -57,8 +103,8 @@ const Shop = () => {
         if (!p.name.toLowerCase().includes(q) && !p.grade.toLowerCase().includes(q) && !p.shortDesc.toLowerCase().includes(q)) return false;
       }
       const lowestPrice = Math.min(...p.sizes.map((s) => s.price));
-      if (lowestPrice < priceMin) return false;
-      if (priceMax !== Infinity && lowestPrice > priceMax) return false;
+      if (priceMin !== null && lowestPrice < priceMin) return false;
+      if (priceMax !== null && lowestPrice > priceMax) return false;
       return true;
     });
     list.sort((a, b) => {
@@ -76,7 +122,7 @@ const Shop = () => {
     setGrades(next);
   };
 
-  const clearAll = () => { setGrades(new Set()); setPriceMin(0); setPriceMax(Infinity); };
+  const clearAll = () => { setGrades(new Set()); setPriceMin(null); setPriceMax(null); };
 
   const FilterPanel = () => (
     <div>
@@ -112,27 +158,17 @@ const Shop = () => {
       </AccordionSection>
 
       <AccordionSection title="Filter by Price" defaultOpen>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>{formatNaira(priceMin)}</span>
-            <span>{formatNaira(effectiveMax)}</span>
-          </div>
-          <input
-            type="range"
-            min={priceRange.min}
-            max={priceRange.max}
-            step={5000}
-            value={effectiveMax}
-            onChange={(e) => setPriceMax(Number(e.target.value))}
-            className="w-full accent-primary"
-          />
-          <p className="text-xs text-gray-500">
-            Price: {formatNaira(priceMin)} — {formatNaira(effectiveMax)}
-          </p>
-        </div>
+        <PriceRangeSlider
+          min={priceRange.min}
+          max={priceRange.max}
+          low={effectiveLow}
+          high={effectiveMax}
+          step={5000}
+          onChange={(lo, hi) => { setPriceMin(lo > priceRange.min ? lo : null); setPriceMax(hi < priceRange.max ? hi : null); }}
+        />
       </AccordionSection>
 
-      {(grades.size > 0 || priceMax !== Infinity) && (
+      {(grades.size > 0 || priceMin !== null || priceMax !== null) && (
         <button
           onClick={clearAll}
           className="mt-3 w-full text-xs bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 transition-colors font-semibold uppercase tracking-wide"
@@ -211,8 +247,8 @@ const Shop = () => {
               <div className="border border-dashed border-gray-300 rounded p-16 text-center">
                 <p className="font-bold text-xl text-gray-700">No mattresses match your filters</p>
                 <p className="mt-2 text-gray-500 text-sm">Try clearing some filters to see more options.</p>
-                {(grades.size > 0 || priceMax !== Infinity) && (
-                  <button onClick={clearAll} className="mt-4 text-sm text-primary underline">Clear all filters</button>
+                {(grades.size > 0 || priceMin !== null || priceMax !== null) && (
+                  <button onClick={clearAll} className="mt-4 text-sm text-primary font-semibold underline">Clear all filters</button>
                 )}
               </div>
             ) : (

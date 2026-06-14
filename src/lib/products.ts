@@ -225,20 +225,23 @@ export function formatNaira(n: number): string {
   return "₦" + n.toLocaleString("en-NG", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-const inchToFt: Record<number, string> = {
-  30: "2½ft", 36: "3ft", 42: "3½ft", 48: "4ft", 54: "4½ft",
-  60: "5ft", 72: "6ft", 75: "6¼ft", 79: "6½ft", 84: "7ft",
-  88: "7⅓ft", 96: "8ft", 108: "9ft",
+const W_TO_FT: Record<number, string> = {
+  30: "2½'", 36: "3'", 42: "3½'", 48: "4'", 54: "4½'",
+  60: "5'", 63: "5¼'", 71: "5'11\"", 72: "6'", 84: "7'",
+};
+const L_TO_FT: Record<number, string> = {
+  75: "6'", 79: "6½'", 84: "7'",
 };
 
 export function formatSize(s: SizeOption): string {
-  const widthLabel = inchToFt[s.W] || `${s.W}"`;
-  const lengthLabel = inchToFt[s.L] || `${s.L}"`;
-  return `${widthLabel} × ${lengthLabel} × ${s.T} inches`;
+  const W = W_TO_FT[s.W] ?? `${s.W}"`;
+  const L = L_TO_FT[s.L] ?? `${s.L}"`;
+  return `${W} × ${L} × ${s.T}"`;
 }
 
 export function formatSizeShort(s: SizeOption): string {
-  return `${s.L} × ${s.W} × ${s.T}"`;
+  const W = W_TO_FT[s.W] ?? `${s.W}"`;
+  return `${W} × ${s.T}"`;
 }
 
 export const GRADE_OPTIONS: GradeKey[] = [

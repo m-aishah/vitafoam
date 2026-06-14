@@ -280,8 +280,8 @@ const AdminDashboard = () => {
           <div className="font-display text-base font-semibold text-primary">Admin Credentials</div>
           <p className="mt-1 text-muted-foreground">For your reference, keep these private.</p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <div><span className="text-xs uppercase tracking-wide text-muted-foreground">Username</span><div className="font-mono text-primary">multibiz_admin</div></div>
-            <div><span className="text-xs uppercase tracking-wide text-muted-foreground">Password</span><div className="font-mono text-primary">Vitafoam@2026</div></div>
+            <div><span className="text-xs uppercase tracking-wide text-muted-foreground">Username</span><div className="font-mono text-primary">admin</div></div>
+            <div><span className="text-xs uppercase tracking-wide text-muted-foreground">Password</span><div className="font-mono text-primary">admin2026</div></div>
           </div>
         </section>
       </main>

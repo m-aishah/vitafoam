@@ -144,13 +144,7 @@ export const SiteFooter = () => {
               <img src={vitafoamLogo} alt="Vitafoam" className="h-8 w-auto brightness-0 invert opacity-60" />
               <span>© 2026 Vitafoam Comfort Centre. All Rights Reserved</span>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="text-gray-400">We Accept:</span>
-              <div className="flex gap-2">
-                <div className="bg-white rounded px-2 py-1 text-[10px] font-bold text-red-600">Mastercard</div>
-                <div className="bg-white rounded px-2 py-1 text-[10px] font-bold text-blue-700">VISA</div>
-              </div>
-            </div>
+            <div className="text-gray-500 text-xs">Authorized Vitafoam Comfort Centre</div>
           </div>
         </div>
       </div>
