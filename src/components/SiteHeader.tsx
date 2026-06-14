@@ -1,14 +1,32 @@
-import { Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { ShoppingCart, Menu, X } from "lucide-react";
-import logo from "@/assets/logo.jpg";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { ShoppingCart, Menu, X, Search } from "lucide-react";
+import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
 import { cartCount } from "@/lib/cart";
-import { Button } from "@/components/ui/button";
+import { getProducts, GRADE_OPTIONS } from "@/lib/products";
+
+const NAV_CATEGORIES = [
+  { label: "MATTRESS", to: "/shop", hasDropdown: true },
+  { label: "PILLOW", to: "/shop", hasDropdown: false },
+  { label: "BEDDING", to: "/shop", hasDropdown: false },
+  { label: "FURNITURE", to: "/shop", hasDropdown: false },
+  { label: "MOTHER & CHILD", to: "/shop", hasDropdown: false },
+  { label: "LIFESTYLE", to: "/shop", hasDropdown: false },
+  { label: "DO MORE", to: "/shop", hasDropdown: false },
+  { label: "SPECIAL OFFERS", to: "/shop", hasDropdown: false },
+];
 
 export const SiteHeader = () => {
   const [count, setCount] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<ReturnType<typeof getProducts>>([]);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loc = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const update = () => setCount(cartCount());
@@ -21,51 +39,207 @@ export const SiteHeader = () => {
     };
   }, []);
 
-  useEffect(() => { setOpen(false); }, [loc.pathname]);
+  useEffect(() => { setMobileOpen(false); setSearchQuery(""); setSearchOpen(false); setActiveDropdown(null); }, [loc.pathname]);
 
-  const linkCls = (path: string) =>
-    `font-body text-sm font-medium transition-smooth hover:text-accent ${
-      loc.pathname === path ? "text-accent" : "text-primary"
-    }`;
+  useEffect(() => {
+    if (searchQuery.trim().length < 2) { setSearchResults([]); setSearchOpen(false); return; }
+    const q = searchQuery.toLowerCase();
+    const results = getProducts().filter(
+      (p) => p.name.toLowerCase().includes(q) || p.grade.toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)
+    ).slice(0, 6);
+    setSearchResults(results);
+    setSearchOpen(results.length > 0);
+  }, [searchQuery]);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+    }
+  };
+
+  const openDropdown = (label: string) => {
+    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
+    setActiveDropdown(label);
+  };
+
+  const closeDropdown = () => {
+    dropdownTimer.current = setTimeout(() => setActiveDropdown(null), 150);
+  };
+
+  const activeCategory = loc.pathname === "/shop" ? "MATTRESS" : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="container mx-auto container-px flex h-20 items-center justify-between">
-        <Link to="/" className="flex items-center gap-3" aria-label="Multibiz.global Venture, Better Sleep. Better Life. Everywhere.">
-          <img src={logo} alt="Multibiz.global Venture" className="h-14 w-14 rounded-md object-contain" />
-          <div className="hidden sm:block leading-tight">
-            <div className="font-display text-lg font-bold text-primary">Multibiz<span className="text-accent">.global</span> Venture</div>
-            <div className="text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Better Sleep. Better Life. Everywhere.</div>
-          </div>
-        </Link>
-
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/" className={linkCls("/")}>Home</Link>
-          <Link to="/shop" className={linkCls("/shop")}>Shop</Link>
-          <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="font-body text-sm font-medium text-primary transition-smooth hover:text-accent">Contact</a>
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <Link to="/cart" className="relative inline-flex h-11 w-11 items-center justify-center rounded-md border border-border text-primary transition-smooth hover:bg-primary hover:text-primary-foreground" aria-label="Cart">
-            <ShoppingCart className="h-5 w-5" />
-            {count > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold text-accent-foreground">
-                {count}
-              </span>
-            )}
+    <header className="sticky top-0 z-40 w-full">
+      {/* Top bar */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto container-px flex h-16 items-center gap-4">
+          {/* Logo */}
+          <Link to="/" className="flex-shrink-0 flex items-center gap-2" aria-label="Vitafoam Comfort Centre">
+            <img src={vitafoamLogo} alt="Vitafoam" className="h-12 w-auto" />
           </Link>
-          <Button variant="ghost" size="icon" className="md:hidden h-11 w-11" onClick={() => setOpen(!open)} aria-label="Menu">
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+
+          {/* Search */}
+          <div className="flex-1 max-w-xl mx-4 hidden md:block" ref={searchRef}>
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <div className="flex items-center border border-gray-300 rounded overflow-hidden focus-within:border-primary transition-colors">
+                <select className="h-10 px-2 text-sm border-r border-gray-300 bg-gray-50 text-gray-600 focus:outline-none">
+                  <option>All</option>
+                  <option>Mattress</option>
+                  <option>Pillow</option>
+                  <option>Bedding</option>
+                </select>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Hello, what are you looking for today?"
+                  className="flex-1 h-10 px-3 text-sm focus:outline-none"
+                />
+                <button type="submit" className="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                  <Search className="h-4 w-4" />
+                </button>
+              </div>
+              {/* Search dropdown */}
+              {searchOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50">
+                  {searchResults.map((p) => (
+                    <Link
+                      key={p.id}
+                      to={`/product/${p.id}`}
+                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm"
+                      onClick={() => setSearchOpen(false)}
+                    >
+                      <span className="text-primary font-semibold">{p.name}</span>
+                      <span className="text-gray-400 text-xs">{p.grade}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </form>
+          </div>
+
+          {/* Right links */}
+          <div className="hidden md:flex items-center gap-5 ml-auto text-sm font-semibold text-gray-700">
+            <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">CONTACT</a>
+            <Link to="/admin/login" className="hover:text-primary transition-colors">LOGIN</Link>
+            <Link to="/cart" className="flex items-center gap-1.5 hover:text-primary transition-colors" aria-label="Cart">
+              <ShoppingCart className="h-5 w-5" />
+              <span>CART / <span className="text-primary">₦{count > 0 ? count : "0.00"}</span></span>
+              {count > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-white px-1 text-[11px] font-bold">
+                  {count}
+                </span>
+              )}
+            </Link>
+          </div>
+
+          {/* Mobile cart + hamburger */}
+          <div className="flex items-center gap-3 md:hidden ml-auto">
+            <Link to="/cart" className="relative text-gray-700" aria-label="Cart">
+              <ShoppingCart className="h-5 w-5" />
+              {count > 0 && (
+                <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white text-[10px] font-bold">{count}</span>
+              )}
+            </Link>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="text-gray-700" aria-label="Menu">
+              {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {open && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="container mx-auto container-px flex flex-col py-3">
-            <Link to="/" className="py-3 font-body font-medium text-primary">Home</Link>
-            <Link to="/shop" className="py-3 font-body font-medium text-primary">Shop</Link>
-            <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="py-3 font-body font-medium text-primary">Contact</a>
+      {/* Black category nav */}
+      <nav className="bg-[#1a1a1a] text-white hidden md:block relative">
+        <div className="container mx-auto container-px">
+          <ul className="flex items-center gap-0">
+            {NAV_CATEGORIES.map((cat) => (
+              <li
+                key={cat.label}
+                className="relative"
+                onMouseEnter={() => cat.hasDropdown && openDropdown(cat.label)}
+                onMouseLeave={closeDropdown}
+              >
+                <Link
+                  to={cat.to}
+                  className={`inline-block px-4 py-3 text-[13px] font-semibold tracking-wide transition-colors hover:text-primary ${
+                    activeCategory === cat.label ? "text-primary border-b-2 border-primary" : "text-white"
+                  }`}
+                >
+                  {cat.label}
+                </Link>
+
+                {/* Grade dropdown */}
+                {cat.hasDropdown && activeDropdown === cat.label && (
+                  <div
+                    className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-xl z-50 min-w-[200px] py-2"
+                    onMouseEnter={() => openDropdown(cat.label)}
+                    onMouseLeave={closeDropdown}
+                  >
+                    <p className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100 mb-1">Shop by Grade</p>
+                    {GRADE_OPTIONS.map((grade) => (
+                      <Link
+                        key={grade}
+                        to={`/shop?search=${encodeURIComponent(grade)}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
+                      >
+                        {grade}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <Link
+                        to="/shop"
+                        className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-gray-50 transition-colors"
+                      >
+                        View All Mattresses →
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="bg-white border-t border-gray-200 md:hidden shadow-lg">
+          {/* Mobile search */}
+          <div className="p-3 border-b border-gray-100">
+            <form onSubmit={handleSearchSubmit} className="flex items-center border border-gray-300 rounded overflow-hidden">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search mattresses..."
+                className="flex-1 h-10 px-3 text-sm focus:outline-none"
+              />
+              <button type="submit" className="h-10 w-10 flex items-center justify-center text-gray-400">
+                <Search className="h-4 w-4" />
+              </button>
+            </form>
+          </div>
+          <div className="py-2">
+            {NAV_CATEGORIES.map((cat) => (
+              <Link key={cat.label} to={cat.to} className="block px-5 py-3 text-sm font-semibold text-gray-800 hover:text-primary hover:bg-gray-50 border-b border-gray-50">
+                {cat.label}
+              </Link>
+            ))}
+            <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="block px-5 py-3 text-sm font-semibold text-gray-800 hover:text-primary">
+              CONTACT
+            </a>
           </div>
         </div>
       )}

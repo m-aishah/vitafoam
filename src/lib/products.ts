@@ -1,5 +1,12 @@
 import productsData from "@/data/products.json";
 import coronaImg from "@/assets/corona-mattress.jpg";
+import shineImg from "@/assets/vita-shine.jpg";
+import grandImg from "@/assets/vita-grand.jpg";
+import havenImg from "@/assets/vita-haven.jpg";
+import sizzlerImg from "@/assets/vita-sizzler.jpg";
+import springFirmImg from "@/assets/vita-spring-firm.jpg";
+import springFlexImg from "@/assets/vita-spring-flex.jpg";
+import supremeImg from "@/assets/vita-supreme.jpg";
 
 export type GradeKey =
   | "Deluxe"
@@ -55,6 +62,13 @@ export interface CatalogFile {
 
 const IMAGES: Partial<Record<GradeKey, string>> = {
   Corona: coronaImg,
+  Shine: shineImg,
+  Grand: grandImg,
+  "Vita Haven": havenImg,
+  Sizzler: sizzlerImg,
+  "Vita Spring Firm": springFirmImg,
+  "Vita Spring Flex": springFlexImg,
+  Supreme: supremeImg,
 };
 
 const META: Record<GradeKey, { name: string; short: string; desc: string; badge: string }> = {

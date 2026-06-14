@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/vitafoam-logo-1.svg";
 import { adminLogout, isAdminAuthed } from "@/lib/admin";
 import {
   getCatalog, saveCatalog, resetCatalog, isUsingSeed,
@@ -105,10 +105,10 @@ const AdminDashboard = () => {
       <header className="bg-primary text-primary-foreground">
         <div className="container mx-auto container-px flex h-20 items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="" className="h-10 w-10 rounded-md bg-white p-1" />
+            <img src={logo} alt="Vitafoam" className="h-10 w-auto bg-white rounded px-1" />
             <div>
               <div className="font-display text-lg font-bold">Admin Console</div>
-              <div className="text-[11px] tracking-wider uppercase text-primary-foreground/60">Multibiz.global Venture</div>
+              <div className="text-[11px] tracking-wider uppercase text-primary-foreground/60">Vitafoam Comfort Centre</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
