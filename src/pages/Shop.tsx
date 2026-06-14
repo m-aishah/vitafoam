@@ -86,6 +86,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
   const selected = item.sizes[selectedIdx] ?? item.sizes[0];
+  const isMattress = item.category === "mattress";
 
   const handleAdd = () => {
     addToCart(
@@ -121,14 +122,16 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
               </svg>
             </div>
           )}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-end justify-center pb-4">
-            <button
-              onClick={() => setShowModal(true)}
-              className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200 bg-white text-gray-900 text-xs font-bold px-5 py-2 rounded shadow-lg hover:bg-primary hover:text-white"
-            >
-              QUICK VIEW
-            </button>
-          </div>
+          {!isMattress && (
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-end justify-center pb-4">
+              <button
+                onClick={() => setShowModal(true)}
+                className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200 bg-white text-gray-900 text-xs font-bold px-5 py-2 rounded shadow-lg hover:bg-primary hover:text-white"
+              >
+                QUICK VIEW
+              </button>
+            </div>
+          )}
         </div>
         <div className="p-4 border-t border-gray-100">
           <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">{item.categoryLabel}</p>
@@ -136,7 +139,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
             <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
           )}
           <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">
-            {item.category === "mattress" ? (
+            {isMattress ? (
               <Link to={`/product/${item.id}`} className="hover:text-primary transition-colors">{item.name}</Link>
             ) : item.name}
           </h3>
@@ -144,16 +147,25 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
           <p className="text-sm text-gray-700 mb-4">
             {item.sizes.length > 1 ? "FROM " : ""}<span className="font-bold text-gray-900">{formatNaira(item.minPrice)}</span>
           </p>
-          <button
-            onClick={() => setShowModal(true)}
-            className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
-          >
-            {item.sizes.length > 1 ? "SELECT OPTIONS" : "ADD TO CART"}
-          </button>
+          {isMattress ? (
+            <Link
+              to={`/product/${item.id}`}
+              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
+            >
+              SELECT OPTIONS
+            </Link>
+          ) : (
+            <button
+              onClick={() => setShowModal(true)}
+              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
+            >
+              {item.sizes.length > 1 ? "SELECT OPTIONS" : "ADD TO CART"}
+            </button>
+          )}
         </div>
       </div>
 
-      {showModal && (
+      {showModal && !isMattress && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
           <div className="absolute inset-0 bg-black/50" />
           <div className="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>

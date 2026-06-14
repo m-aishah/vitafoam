@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
-import { getProducts } from "@/lib/products";
+import { getGroupedShopItems } from "@/lib/catalog";
 import { Truck, Clock, CreditCard, CheckCircle2, Settings, Star } from "lucide-react";
 import freeDeliveryImg from "@/assets/Vitafoam-Free-Delivery.jpg";
 import gdnsImg from "@/assets/vitafoam-GDNs-07-scaled.jpg";
@@ -36,17 +36,19 @@ const TESTIMONIALS = [
   { stars: 5, quote: "Finally found a reliable Vitafoam distributor. Will always come back.", name: "Fatima I.", city: "Kano" },
 ];
 
-const CATEGORIES = [
-  { label: "FURNITURE", to: "/shop" },
-  { label: "PILLOW", to: "/shop" },
-  { label: "MATTRESS", to: "/shop" },
-  { label: "LIFESTYLE", to: "/shop" },
-  { label: "MOTHER & CHILD", to: "/shop" },
+const SHOP_CATEGORIES = [
+  { label: "MATTRESSES", to: "/shop?category=mattress" },
+  { label: "TOPPERS", to: "/shop?category=topper" },
+  { label: "PILLOWS", to: "/shop?category=pillow" },
+  { label: "BEDDING", to: "/shop?category=bedding" },
+  { label: "LIFESTYLE", to: "/shop?category=lifestyle" },
 ];
 
 const Index = () => {
-  const products = getProducts();
-  const featured = products.slice(0, 6);
+  const allItems = useMemo(() => getGroupedShopItems(), []);
+  const mattresses = useMemo(() => allItems.filter((p) => p.category === "mattress"), [allItems]);
+  const featured = mattresses.slice(0, 6);
+
   const [slide, setSlide] = useState(0);
 
   useEffect(() => {
@@ -70,7 +72,6 @@ const Index = () => {
               loading={i === 0 ? "eager" : "lazy"}
             />
           ))}
-          {/* Dot indicators */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             {HERO_SLIDES.map((_, i) => (
               <button
@@ -148,7 +149,7 @@ const Index = () => {
                 So many mattresses to choose from!<br />Let's help you choose the best one for you.
               </p>
               <Link
-                to="/shop"
+                to="/shop?category=mattress"
                 className="inline-block bg-white text-gray-900 text-sm font-bold px-6 py-2.5 rounded hover:bg-gray-100 transition-colors uppercase tracking-wide"
               >
                 FIND THE RIGHT MATTRESS
@@ -170,7 +171,7 @@ const Index = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.slice(0, 3).map((p, i) => (
               <Reveal key={p.id} delay={i * 70}>
-                <ProductCard product={p} />
+                <ProductCard item={p} />
               </Reveal>
             ))}
           </div>
@@ -184,14 +185,13 @@ const Index = () => {
             <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">Shop By Category</h2>
           </Reveal>
 
-          {/* Category tabs */}
           <div className="flex flex-wrap gap-0 border-b border-gray-200 mb-8">
-            {CATEGORIES.map((cat, i) => (
+            {SHOP_CATEGORIES.map((cat, i) => (
               <Link
                 key={cat.label}
                 to={cat.to}
                 className={`px-5 py-3 text-sm font-bold tracking-wide transition-colors border-b-2 -mb-[2px] ${
-                  i === 2
+                  i === 0
                     ? "text-primary border-primary"
                     : "text-gray-700 border-transparent hover:text-primary"
                 }`}
@@ -204,7 +204,7 @@ const Index = () => {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.slice(3, 6).map((p, i) => (
               <Reveal key={p.id} delay={i * 70}>
-                <ProductCard product={p} />
+                <ProductCard item={p} />
               </Reveal>
             ))}
           </div>
@@ -214,7 +214,7 @@ const Index = () => {
               to="/shop"
               className="inline-block bg-[#1a1a1a] text-white text-sm font-bold px-8 py-3 rounded hover:bg-gray-800 transition-colors uppercase tracking-wide"
             >
-              VIEW ALL MATTRESSES
+              VIEW ALL PRODUCTS
             </Link>
           </div>
         </div>
