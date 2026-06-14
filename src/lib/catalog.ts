@@ -8,6 +8,54 @@ import beddingData from "@/data/bedding.json";
 
 export type CategoryKey = "mattress" | "topper" | "pillow" | "baby" | "lifestyle" | "leisure" | "bedding";
 
+export const CATEGORY_LABELS: Record<CategoryKey, string> = {
+  mattress: "Mattresses",
+  topper: "Memory Toppers",
+  pillow: "Pillows",
+  baby: "Baby & Mother",
+  lifestyle: "Lifestyle",
+  leisure: "Leisure",
+  bedding: "Bedding",
+};
+
+const GRADE_BADGE: Record<string, string> = {
+  Deluxe: "bg-slate-200 text-slate-800",
+  Shine: "bg-sky-100 text-sky-800",
+  Corona: "bg-teal-100 text-teal-800",
+  Grand: "bg-purple-100 text-purple-800",
+  Sizzler: "bg-amber-100 text-amber-900",
+  "Vita Haven": "bg-orange-100 text-orange-800",
+  Supreme: "bg-red-100 text-red-800",
+  "Vita Galaxy Classic": "bg-emerald-100 text-emerald-800",
+  "Galaxy Orthopaedic": "bg-primary/10 text-primary",
+  "Vita Spring Flex": "bg-pink-100 text-pink-800",
+  "Vita Spring Firm": "bg-amber-900/10 text-amber-900",
+  "Twill Single": "bg-stone-100 text-stone-800",
+  "Twill Double": "bg-stone-200 text-stone-900",
+  Vitaluxe: "bg-violet-100 text-violet-800",
+  Vitahelix: "bg-cyan-100 text-cyan-800",
+  "Memory Topper": "bg-lime-100 text-lime-800",
+};
+
+const GRADE_SHORT_DESC: Record<string, string> = {
+  Deluxe: "Entry-level Vitafoam quality with great everyday value.",
+  Shine: "Improved comfort layers and lasting durability.",
+  Corona: "Mid-premium grade, Nigeria's most popular choice.",
+  Grand: "High-end comfort engineered to last.",
+  Sizzler: "Ultra-soft premium feel, sink in and unwind.",
+  "Vita Haven": "Orthopaedic-grade support for healthier sleep.",
+  Supreme: "Top-tier luxury comfort and craftsmanship.",
+  "Vita Galaxy Classic": "Advanced multi-zone foam technology.",
+  "Galaxy Orthopaedic": "Medical-grade orthopaedic support.",
+  "Vita Spring Flex": "Spring + foam hybrid with flexible comfort response.",
+  "Vita Spring Firm": "Spring + foam hybrid with firm orthopaedic support.",
+  "Twill Single": "Durable twill-cover single mattress.",
+  "Twill Double": "Durable twill-cover double mattress.",
+  Vitaluxe: "Ultra-luxury premium foam for the finest sleep.",
+  Vitahelix: "Innovative helix-core design for ultimate pressure relief.",
+  "Memory Topper": "Memory foam topper that transforms your mattress.",
+};
+
 export interface MattressRaw {
   code: string;
   grade: string;
@@ -97,9 +145,43 @@ function saveToStorage<T>(key: string, data: T[]): void {
   } catch {}
 }
 
+// Mattress catalog (full object with metadata, used by admin + pdfParser)
+export interface MattressCatalog {
+  lastUpdated: string | null;
+  uploadedFileName: string | null;
+  totalProducts: number;
+  products: MattressRaw[];
+}
+
+export function getMattressCatalog(): MattressCatalog {
+  if (typeof window === "undefined") return mattressesData as MattressCatalog;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.mattress + "_catalog");
+    if (raw) return JSON.parse(raw) as MattressCatalog;
+  } catch {}
+  return mattressesData as MattressCatalog;
+}
+
+export function saveMattressCatalog(cat: MattressCatalog): void {
+  localStorage.setItem(STORAGE_KEYS.mattress + "_catalog", JSON.stringify(cat));
+  saveToStorage(STORAGE_KEYS.mattress, cat.products);
+  window.dispatchEvent(new Event("mbg-catalog-changed"));
+}
+
+export function resetMattressCatalog(): void {
+  localStorage.removeItem(STORAGE_KEYS.mattress + "_catalog");
+  localStorage.removeItem(STORAGE_KEYS.mattress);
+  window.dispatchEvent(new Event("mbg-catalog-changed"));
+}
+
+export function isUsingMattressSeed(): boolean {
+  if (typeof window === "undefined") return true;
+  return !localStorage.getItem(STORAGE_KEYS.mattress + "_catalog");
+}
+
 // Mattresses
 export function getMattresses(): MattressRaw[] {
-  return loadFromStorage<MattressRaw>(STORAGE_KEYS.mattress, (mattressesData as { products: MattressRaw[] }).products);
+  return getMattressCatalog().products;
 }
 export function saveMattresses(data: MattressRaw[]): void {
   saveToStorage(STORAGE_KEYS.mattress, data);
@@ -311,8 +393,156 @@ export function getAllShopItems(category?: CategoryKey): ShopItem[] {
   return items;
 }
 
+// Aliases used by AdminDashboard
+export function getTopperProducts(): TopperRaw[] { return getToppers(); }
+export function saveTopperProducts(data: TopperRaw[]): void { saveToppers(data); }
+export function deleteTopperRaw(code: string): void {
+  saveToppers(getToppers().filter((t) => t.code !== code));
+}
+export function getPillowProducts(): SimpleProduct[] { return getPillows(); }
+export function getBabyProductsList(): SimpleProduct[] { return getBabyProducts(); }
+export function getLeisureProductsList(): SimpleProduct[] { return getLeisureProducts(); }
+export function getLifestyleProductsList(): SimpleProduct[] { return getLifestyleProducts(); }
+
+export type SimpleProductRaw = SimpleProduct;
+export type BeddingProductRaw = BeddingProduct;
+
+export function addSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", product: SimpleProduct): void {
+  if (cat === "pillow") addPillow(product);
+  else if (cat === "baby") addBabyProduct(product);
+  else if (cat === "lifestyle") addLifestyleProduct(product);
+  else addLeisureProduct(product);
+}
+
+export function updateSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", updated: SimpleProduct): void {
+  if (cat === "pillow") updatePillow(updated.id, updated);
+  else if (cat === "baby") updateBabyProduct(updated.id, updated);
+  else if (cat === "lifestyle") updateLifestyleProduct(updated.id, updated);
+  else updateLeisureProduct(updated.id, updated);
+}
+
+export function deleteSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", id: string): void {
+  if (cat === "pillow") deletePillow(id);
+  else if (cat === "baby") deleteBabyProduct(id);
+  else if (cat === "lifestyle") deleteLifestyleProduct(id);
+  else deleteLeisureProduct(id);
+}
+
+export function deleteMattressRaw(code: string): void {
+  const cat = getMattressCatalog();
+  const products = cat.products.filter((p) => p.code !== code);
+  saveMattressCatalog({ ...cat, products, totalProducts: products.length });
+}
+
+export function updateMattressRaw(updated: MattressRaw): void {
+  const cat = getMattressCatalog();
+  const products = cat.products.map((p) => p.code === updated.code ? updated : p);
+  saveMattressCatalog({ ...cat, products });
+}
+
 export function getTotalSKUCount(): number {
   return getMattresses().length + getToppers().length + getPillows().length +
     getBabyProducts().length + getLifestyleProducts().length +
     getLeisureProducts().length + getBeddingProducts().length;
+}
+
+// Grouped shop items — mattresses/toppers are grouped by grade, others are per-product
+export interface GroupedShopItem {
+  id: string;
+  category: CategoryKey;
+  categoryLabel: string;
+  name: string;
+  shortDesc: string;
+  description: string;
+  image: string | null;
+  minPrice: number;
+  grade?: string;
+  badgeClass?: string;
+  sizes: { label: string; price: number }[];
+}
+
+export function getGroupedShopItems(): GroupedShopItem[] {
+  const items: GroupedShopItem[] = [];
+
+  // Mattresses — group by grade
+  const byGrade: Record<string, MattressRaw[]> = {};
+  for (const r of getMattresses()) {
+    (byGrade[r.grade] ||= []).push(r);
+  }
+  for (const [grade, raws] of Object.entries(byGrade)) {
+    const sorted = raws.filter((r) => r.price > 0).sort((a, b) => a.price - b.price);
+    if (!sorted.length) continue;
+    const id = grade.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    items.push({
+      id,
+      category: "mattress",
+      categoryLabel: CATEGORY_LABELS.mattress,
+      name: `${grade} Mattress`,
+      shortDesc: GRADE_SHORT_DESC[grade] ?? `${grade} mattress.`,
+      description: GRADE_SHORT_DESC[grade] ?? `${grade} foam mattress by Vitafoam.`,
+      image: null,
+      minPrice: sorted[0].price,
+      grade,
+      badgeClass: GRADE_BADGE[grade] ?? "bg-gray-100 text-gray-800",
+      sizes: sorted.map((r) => ({ label: r.displaySize, price: r.price })),
+    });
+  }
+
+  // Toppers — group as one product with sizes
+  const toppers = getToppers().filter((t) => t.price > 0).sort((a, b) => a.price - b.price);
+  if (toppers.length) {
+    items.push({
+      id: "memory-topper",
+      category: "topper",
+      categoryLabel: CATEGORY_LABELS.topper,
+      name: "Vitafoam Memory Topper",
+      shortDesc: GRADE_SHORT_DESC["Memory Topper"],
+      description: "Premium memory foam topper that molds to your body shape, reducing pressure points and transforming your existing mattress into a luxury sleep surface.",
+      image: null,
+      minPrice: toppers[0].price,
+      grade: "Memory Topper",
+      badgeClass: GRADE_BADGE["Memory Topper"],
+      sizes: toppers.map((t) => ({ label: t.displaySize, price: t.price })),
+    });
+  }
+
+  // Simple products
+  const addSimples = (prods: SimpleProduct[], cat: "pillow" | "baby" | "lifestyle" | "leisure") => {
+    for (const p of prods) {
+      items.push({
+        id: p.id,
+        category: cat,
+        categoryLabel: CATEGORY_LABELS[cat],
+        name: p.name,
+        shortDesc: p.shortDesc,
+        description: p.description,
+        image: p.image,
+        minPrice: p.price,
+        sizes: [{ label: "Standard", price: p.price }],
+      });
+    }
+  };
+  addSimples(getPillows(), "pillow");
+  addSimples(getBabyProducts(), "baby");
+  addSimples(getLifestyleProducts(), "lifestyle");
+  addSimples(getLeisureProducts(), "leisure");
+
+  // Bedding
+  for (const p of getBeddingProducts()) {
+    const sorted = [...p.variants].sort((a, b) => a.price - b.price);
+    if (!sorted.length) continue;
+    items.push({
+      id: p.id,
+      category: "bedding",
+      categoryLabel: CATEGORY_LABELS.bedding,
+      name: p.name,
+      shortDesc: p.shortDesc,
+      description: p.description,
+      image: p.image,
+      minPrice: sorted[0].price,
+      sizes: sorted.map((v) => ({ label: v.sizeName, price: v.price })),
+    });
+  }
+
+  return items;
 }

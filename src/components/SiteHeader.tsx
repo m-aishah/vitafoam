@@ -3,17 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
 import { cartCount } from "@/lib/cart";
-import { getProducts, GRADE_OPTIONS } from "@/lib/products";
+import { getAllShopItems } from "@/lib/catalog";
+import { GRADE_OPTIONS } from "@/lib/products";
 
 const NAV_CATEGORIES = [
-  { label: "MATTRESS", to: "/shop", hasDropdown: true },
-  { label: "PILLOW", to: "/shop", hasDropdown: false },
-  { label: "BEDDING", to: "/shop", hasDropdown: false },
-  { label: "FURNITURE", to: "/shop", hasDropdown: false },
-  { label: "MOTHER & CHILD", to: "/shop", hasDropdown: false },
-  { label: "LIFESTYLE", to: "/shop", hasDropdown: false },
-  { label: "DO MORE", to: "/shop", hasDropdown: false },
-  { label: "SPECIAL OFFERS", to: "/shop", hasDropdown: false },
+  { label: "MATTRESSES", cat: "mattress", to: "/shop?category=mattress", hasDropdown: true },
+  { label: "TOPPERS", cat: "topper", to: "/shop?category=topper", hasDropdown: false },
+  { label: "PILLOWS", cat: "pillow", to: "/shop?category=pillow", hasDropdown: false },
+  { label: "BEDDING", cat: "bedding", to: "/shop?category=bedding", hasDropdown: false },
+  { label: "LIFESTYLE", cat: "lifestyle", to: "/shop?category=lifestyle", hasDropdown: false },
+  { label: "LEISURE", cat: "leisure", to: "/shop?category=leisure", hasDropdown: false },
+  { label: "BABY & MOTHER", cat: "baby", to: "/shop?category=baby", hasDropdown: false },
 ];
 
 export const SiteHeader = () => {
@@ -21,7 +21,7 @@ export const SiteHeader = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<ReturnType<typeof getProducts>>([]);
+  const [searchResults, setSearchResults] = useState<ReturnType<typeof getAllShopItems>>([]);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -44,8 +44,8 @@ export const SiteHeader = () => {
   useEffect(() => {
     if (searchQuery.trim().length < 2) { setSearchResults([]); setSearchOpen(false); return; }
     const q = searchQuery.toLowerCase();
-    const results = getProducts().filter(
-      (p) => p.name.toLowerCase().includes(q) || p.grade.toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)
+    const results = getAllShopItems().filter(
+      (p) => p.name.toLowerCase().includes(q) || (p.grade ?? "").toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)
     ).slice(0, 6);
     setSearchResults(results);
     setSearchOpen(results.length > 0);
@@ -78,7 +78,8 @@ export const SiteHeader = () => {
     dropdownTimer.current = setTimeout(() => setActiveDropdown(null), 150);
   };
 
-  const activeCategory = loc.pathname === "/shop" ? "MATTRESS" : "";
+  const searchParams = new URLSearchParams(loc.search);
+  const activeCat = loc.pathname === "/shop" ? (searchParams.get("category") ?? "") : "";
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -117,12 +118,12 @@ export const SiteHeader = () => {
                   {searchResults.map((p) => (
                     <Link
                       key={p.id}
-                      to={`/product/${p.id}`}
+                      to={`/shop?category=${p.category}&search=${encodeURIComponent(p.name)}`}
                       className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm"
                       onClick={() => setSearchOpen(false)}
                     >
                       <span className="text-primary font-semibold">{p.name}</span>
-                      <span className="text-gray-400 text-xs">{p.grade}</span>
+                      <span className="text-gray-400 text-xs">{p.categoryLabel}</span>
                     </Link>
                   ))}
                 </div>
@@ -174,13 +175,13 @@ export const SiteHeader = () => {
                 <Link
                   to={cat.to}
                   className={`inline-block px-4 py-3 text-[13px] font-semibold tracking-wide transition-colors hover:text-primary ${
-                    activeCategory === cat.label ? "text-primary border-b-2 border-primary" : "text-white"
+                    activeCat === cat.cat ? "text-primary border-b-2 border-primary" : "text-white"
                   }`}
                 >
                   {cat.label}
                 </Link>
 
-                {/* Grade dropdown */}
+                {/* Grade dropdown (mattresses only) */}
                 {cat.hasDropdown && activeDropdown === cat.label && (
                   <div
                     className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-xl z-50 min-w-[200px] py-2"
@@ -191,7 +192,7 @@ export const SiteHeader = () => {
                     {GRADE_OPTIONS.map((grade) => (
                       <Link
                         key={grade}
-                        to={`/shop?search=${encodeURIComponent(grade)}`}
+                        to={`/shop?category=mattress&grade=${encodeURIComponent(grade)}`}
                         className="block px-4 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
                       >
                         {grade}
@@ -199,7 +200,7 @@ export const SiteHeader = () => {
                     ))}
                     <div className="border-t border-gray-100 mt-1 pt-1">
                       <Link
-                        to="/shop"
+                        to="/shop?category=mattress"
                         className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-gray-50 transition-colors"
                       >
                         View All Mattresses →
@@ -223,7 +224,7 @@ export const SiteHeader = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search mattresses..."
+                placeholder="Search products..."
                 className="flex-1 h-10 px-3 text-sm focus:outline-none"
               />
               <button type="submit" className="h-10 w-10 flex items-center justify-center text-gray-400">
@@ -233,7 +234,11 @@ export const SiteHeader = () => {
           </div>
           <div className="py-2">
             {NAV_CATEGORIES.map((cat) => (
-              <Link key={cat.label} to={cat.to} className="block px-5 py-3 text-sm font-semibold text-gray-800 hover:text-primary hover:bg-gray-50 border-b border-gray-50">
+              <Link
+                key={cat.label}
+                to={cat.to}
+                className={`block px-5 py-3 text-sm font-semibold border-b border-gray-50 hover:text-primary hover:bg-gray-50 ${activeCat === cat.cat ? "text-primary" : "text-gray-800"}`}
+              >
                 {cat.label}
               </Link>
             ))}
