@@ -1,40 +1,35 @@
 import { Link } from "react-router-dom";
 import { Product, formatNaira } from "@/lib/products";
 import MattressIllustration from "./MattressIllustration";
-import { ArrowRight } from "lucide-react";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const min = product.sizes[0]?.price ?? 0;
   return (
-    <Link
-      to={`/product/${product.id}`}
-      className="group flex flex-col rounded-xl border border-border bg-card shadow-card transition-smooth hover:-translate-y-1 hover:shadow-card-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <div className="relative overflow-hidden rounded-t-xl bg-gradient-to-br from-primary-soft to-secondary p-6 aspect-[4/3] flex items-center justify-center">
-        <span className={`absolute top-3 left-3 z-10 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide ${product.badgeClass}`}>
-          {product.grade}
-        </span>
+    <div className="group border border-gray-200 rounded bg-white shadow-sm hover:shadow-md transition-shadow">
+      {/* Image */}
+      <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center p-4">
         {product.image ? (
-          <img src={product.image} alt={product.name} className="h-full w-full object-contain transition-smooth group-hover:scale-105" loading="lazy" />
+          <img src={product.image} alt={product.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" />
         ) : (
-          <MattressIllustration className="mt-6" />
+          <MattressIllustration className="w-full" />
         )}
       </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-xl font-semibold text-primary">{product.name}</h3>
-        <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{product.shortDesc}</p>
-        <div className="mt-4 flex items-end justify-between gap-3">
-          <div>
-            <div className="text-[11px] uppercase tracking-wide text-muted-foreground">From</div>
-            <div className="font-display text-xl font-bold text-primary">{formatNaira(min)}</div>
-          </div>
-          <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent transition-smooth group-hover:gap-2.5">
-            View Options <ArrowRight className="h-4 w-4" />
-          </span>
-        </div>
-        <div className="mt-2 text-[10px] uppercase tracking-wide text-muted-foreground">7.5% VAT inclusive</div>
+      {/* Info */}
+      <div className="p-4 border-t border-gray-100">
+        <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">MATTRESS</p>
+        <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">{product.name}</h3>
+        <p className="text-xs text-gray-500 mb-3 line-clamp-2">{product.shortDesc}</p>
+        <p className="text-sm text-gray-700 mb-4">
+          FROM <span className="font-bold text-gray-900">{formatNaira(min)}</span>
+        </p>
+        <Link
+          to={`/product/${product.id}`}
+          className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
+        >
+          SELECT OPTIONS
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 };
 

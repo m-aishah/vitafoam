@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import logo from "@/assets/logo.jpg";
+import logo from "@/assets/vitafoam-logo-1.svg";
 import { adminLogin, isAdminAuthed } from "@/lib/admin";
 import { toast } from "@/hooks/use-toast";
 
@@ -30,9 +30,9 @@ const AdminLogin = () => {
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
       <div className="hidden lg:flex bg-primary text-primary-foreground items-center justify-center p-12">
         <div className="max-w-md text-center">
-          <img src={logo} alt="Multibiz.global Venture" className="mx-auto h-24 w-24 rounded-xl bg-white p-2" />
+          <img src={logo} alt="Vitafoam" className="mx-auto h-20 w-auto bg-white rounded-lg p-2" />
           <h1 className="mt-8 font-display text-4xl font-bold">Admin Console</h1>
-          <p className="mt-3 text-primary-foreground/70">Manage your Multibiz.global catalog and pricing.</p>
+          <p className="mt-3 text-primary-foreground/70">Manage your Vitafoam catalog and pricing.</p>
         </div>
       </div>
       <div className="flex items-center justify-center p-6 sm:p-12">
