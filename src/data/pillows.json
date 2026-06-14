@@ -1,0 +1,9 @@
+{
+  "lastUpdated": "2026-03-30T00:00:00.000Z",
+  "products": [
+    { "id": "vitafoam-pillow-standard", "name": "Vitafoam Standard Pillow", "shortDesc": "Soft, supportive everyday pillow.", "description": "Classic Vitafoam comfort pillow with high-resilience foam filling for everyday restful sleep.", "price": 8500, "image": null },
+    { "id": "vitafoam-pillow-ortho", "name": "Vitafoam Orthopaedic Pillow", "shortDesc": "Contoured support for neck alignment.", "description": "Ergonomically contoured to support the neck and shoulders for a pain-free night's sleep.", "price": 15000, "image": null },
+    { "id": "vitafoam-pillow-fiber", "name": "Vitafoam Fibre Pillow", "shortDesc": "Lightweight, hypoallergenic fibre fill.", "description": "Fluffy fibre-filled pillow with hypoallergenic properties, ideal for sensitive sleepers.", "price": 10000, "image": null },
+    { "id": "vitafoam-pillow-king", "name": "Vitafoam King Pillow", "shortDesc": "Oversized pillow for king-size beds.", "description": "Extra-large king pillow delivering full-width support for king-size mattresses.", "price": 18000, "image": null }
+  ]
+}

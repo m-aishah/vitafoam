@@ -19,7 +19,12 @@ export type GradeKey =
   | "Vita Galaxy Classic"
   | "Galaxy Orthopaedic"
   | "Vita Spring Flex"
-  | "Vita Spring Firm";
+  | "Vita Spring Firm"
+  | "Twill Single"
+  | "Twill Double"
+  | "Vitaluxe"
+  | "Vitahelix"
+  | "Memory Topper";
 
 export interface SizeOption {
   size: string;
@@ -138,6 +143,36 @@ const META: Record<GradeKey, { name: string; short: string; desc: string; badge:
     desc: "Vita Spring Firm pairs sturdy springs with firm Vitafoam layers for hotel-grade firm support. The pinnacle of supportive sleep for those who love a firm, structured bed.",
     badge: "bg-amber-900/10 text-amber-900",
   },
+  "Twill Single": {
+    name: "Twill Single Mattress",
+    short: "Classic single-layer twill foam comfort.",
+    desc: "The Twill Single offers reliable everyday comfort in a single-layer foam build, ideal for guest rooms and student accommodation.",
+    badge: "bg-slate-100 text-slate-700",
+  },
+  "Twill Double": {
+    name: "Twill Double Mattress",
+    short: "Double-sided twill foam for extended life.",
+    desc: "Twill Double delivers double-sided foam construction for extended mattress life and balanced comfort for couples.",
+    badge: "bg-slate-100 text-slate-700",
+  },
+  Vitaluxe: {
+    name: "Vitaluxe Mattress",
+    short: "Luxury Vitafoam comfort at a mid-range price.",
+    desc: "Vitaluxe bridges the gap between premium and affordable, offering luxury comfort foam layers at a price that makes sense.",
+    badge: "bg-violet-100 text-violet-800",
+  },
+  Vitahelix: {
+    name: "Vitahelix Mattress",
+    short: "Helix spring technology meets Vitafoam comfort.",
+    desc: "Vitahelix combines innovative helix spring technology with Vitafoam's renowned comfort foam for unparalleled motion isolation and support.",
+    badge: "bg-cyan-100 text-cyan-800",
+  },
+  "Memory Topper": {
+    name: "Memory Foam Topper",
+    short: "Pressure-relief memory foam mattress topper.",
+    desc: "Transform any mattress with Vitafoam's viscoelastic memory topper. Conforms to your body shape for zero-pressure-point sleep.",
+    badge: "bg-indigo-100 text-indigo-800",
+  },
 };
 
 const gradeToId: Record<GradeKey, string> = {
@@ -152,6 +187,11 @@ const gradeToId: Record<GradeKey, string> = {
   "Galaxy Orthopaedic": "galaxy-orthopaedic",
   "Vita Spring Flex": "vita-spring-flex",
   "Vita Spring Firm": "vita-spring-firm",
+  "Twill Single": "twill-single",
+  "Twill Double": "twill-double",
+  Vitaluxe: "vitaluxe",
+  Vitahelix: "vitahelix",
+  "Memory Topper": "memory-topper",
 };
 
 const SEED_CATALOG = productsData as CatalogFile;
@@ -248,6 +288,7 @@ export const GRADE_OPTIONS: GradeKey[] = [
   "Deluxe", "Shine", "Corona", "Grand", "Sizzler",
   "Vita Haven", "Supreme", "Vita Galaxy Classic",
   "Galaxy Orthopaedic", "Vita Spring Flex", "Vita Spring Firm",
+  "Twill Single", "Twill Double", "Vitaluxe", "Vitahelix", "Memory Topper",
 ];
 
 export const THICKNESS_OPTIONS = [3, 4, 6, 8, 10, 12, 14, 16, 18, 20];
@@ -256,6 +297,8 @@ export const GRADE_SUFFIX: Record<GradeKey, string> = {
   Deluxe: "DE", Shine: "SH", Corona: "CP", Grand: "SG", Sizzler: "SS",
   "Vita Haven": "VH", Supreme: "VS", "Vita Galaxy Classic": "GS",
   "Galaxy Orthopaedic": "RQ", "Vita Spring Flex": "SX", "Vita Spring Firm": "SF",
+  "Twill Single": "TS", "Twill Double": "TD", Vitaluxe: "VL", Vitahelix: "VX",
+  "Memory Topper": "MT",
 };
 
 export const SUFFIX_TO_GRADE: Record<string, GradeKey> = Object.fromEntries(

@@ -1,0 +1,8 @@
+{
+  "lastUpdated": "2026-03-30T00:00:00.000Z",
+  "products": [
+    { "id": "vitafoam-camping-mat", "name": "Vitafoam Camping Mat", "shortDesc": "Lightweight comfort for outdoor sleep.", "description": "Compact, lightweight foam camping mat that rolls up easily for outdoor adventures and travel.", "price": 7500, "image": null },
+    { "id": "vitafoam-gym-mat", "name": "Vitafoam Gym Mat", "shortDesc": "Cushioned surface for workouts.", "description": "High-density foam gym mat providing joint protection and cushioning during home workouts.", "price": 12000, "image": null },
+    { "id": "vitafoam-pool-float", "name": "Vitafoam Pool Float", "shortDesc": "Buoyant relaxation on the water.", "description": "Closed-cell foam pool float for relaxing and recreational water activities.", "price": 18500, "image": null }
+  ]
+}

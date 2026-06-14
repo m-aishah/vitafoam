@@ -1,0 +1,47 @@
+{
+  "lastUpdated": "2026-03-30T00:00:00.000Z",
+  "products": [
+    {
+      "id": "vitafoam-bedsheet-white",
+      "name": "Vitafoam Cotton Bed Sheet Set",
+      "shortDesc": "Pure cotton sheets for a crisp, cool sleep.",
+      "description": "Premium 100% cotton bed sheet set including flat sheet, fitted sheet and two pillowcases.",
+      "image": null,
+      "variants": [
+        { "sizeName": "Single", "L": 75, "W": 30, "price": 15000 },
+        { "sizeName": "Standard", "L": 75, "W": 36, "price": 18000 },
+        { "sizeName": "Double", "L": 75, "W": 42, "price": 22000 },
+        { "sizeName": "Queen", "L": 75, "W": 54, "price": 28000 },
+        { "sizeName": "King", "L": 75, "W": 72, "price": 35000 },
+        { "sizeName": "King Long", "L": 84, "W": 72, "price": 40000 },
+        { "sizeName": "Super King", "L": 84, "W": 84, "price": 48000 }
+      ]
+    },
+    {
+      "id": "vitafoam-duvet-light",
+      "name": "Vitafoam Lightweight Duvet",
+      "shortDesc": "Airy all-season comfort duvet.",
+      "description": "Breathable lightweight duvet with microfibre fill, suitable for year-round comfort in Nigerian climates.",
+      "image": null,
+      "variants": [
+        { "sizeName": "Single", "L": 75, "W": 30, "price": 22000 },
+        { "sizeName": "Double", "L": 75, "W": 42, "price": 32000 },
+        { "sizeName": "Queen", "L": 75, "W": 54, "price": 40000 },
+        { "sizeName": "King", "L": 75, "W": 72, "price": 50000 }
+      ]
+    },
+    {
+      "id": "vitafoam-duvet-thick",
+      "name": "Vitafoam Premium Thick Duvet",
+      "shortDesc": "Plush warmth for cool nights.",
+      "description": "Thick premium duvet with enhanced fill weight for cold-season comfort and hotel-quality warmth.",
+      "image": null,
+      "variants": [
+        { "sizeName": "Single", "L": 75, "W": 30, "price": 35000 },
+        { "sizeName": "Double", "L": 75, "W": 42, "price": 50000 },
+        { "sizeName": "Queen", "L": 75, "W": 54, "price": 62000 },
+        { "sizeName": "King", "L": 75, "W": 72, "price": 75000 }
+      ]
+    }
+  ]
+}
