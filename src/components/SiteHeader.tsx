@@ -3,17 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
 import { cartCount } from "@/lib/cart";
-import { getProducts } from "@/lib/products";
+import { getProducts, GRADE_OPTIONS } from "@/lib/products";
 
 const NAV_CATEGORIES = [
-  { label: "MATTRESS", to: "/shop" },
-  { label: "PILLOW", to: "/shop" },
-  { label: "BEDDING", to: "/shop" },
-  { label: "FURNITURE", to: "/shop" },
-  { label: "MOTHER & CHILD", to: "/shop" },
-  { label: "LIFESTYLE", to: "/shop" },
-  { label: "DO MORE", to: "/shop" },
-  { label: "SPECIAL OFFERS", to: "/shop" },
+  { label: "MATTRESS", to: "/shop", hasDropdown: true },
+  { label: "PILLOW", to: "/shop", hasDropdown: false },
+  { label: "BEDDING", to: "/shop", hasDropdown: false },
+  { label: "FURNITURE", to: "/shop", hasDropdown: false },
+  { label: "MOTHER & CHILD", to: "/shop", hasDropdown: false },
+  { label: "LIFESTYLE", to: "/shop", hasDropdown: false },
+  { label: "DO MORE", to: "/shop", hasDropdown: false },
+  { label: "SPECIAL OFFERS", to: "/shop", hasDropdown: false },
 ];
 
 export const SiteHeader = () => {
@@ -22,7 +22,9 @@ export const SiteHeader = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<ReturnType<typeof getProducts>>([]);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const loc = useLocation();
   const navigate = useNavigate();
 
@@ -37,7 +39,7 @@ export const SiteHeader = () => {
     };
   }, []);
 
-  useEffect(() => { setMobileOpen(false); setSearchQuery(""); setSearchOpen(false); }, [loc.pathname]);
+  useEffect(() => { setMobileOpen(false); setSearchQuery(""); setSearchOpen(false); setActiveDropdown(null); }, [loc.pathname]);
 
   useEffect(() => {
     if (searchQuery.trim().length < 2) { setSearchResults([]); setSearchOpen(false); return; }
@@ -65,6 +67,15 @@ export const SiteHeader = () => {
       navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
     }
+  };
+
+  const openDropdown = (label: string) => {
+    if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
+    setActiveDropdown(label);
+  };
+
+  const closeDropdown = () => {
+    dropdownTimer.current = setTimeout(() => setActiveDropdown(null), 150);
   };
 
   const activeCategory = loc.pathname === "/shop" ? "MATTRESS" : "";
@@ -150,11 +161,16 @@ export const SiteHeader = () => {
       </div>
 
       {/* Black category nav */}
-      <nav className="bg-[#1a1a1a] text-white hidden md:block">
+      <nav className="bg-[#1a1a1a] text-white hidden md:block relative">
         <div className="container mx-auto container-px">
           <ul className="flex items-center gap-0">
             {NAV_CATEGORIES.map((cat) => (
-              <li key={cat.label}>
+              <li
+                key={cat.label}
+                className="relative"
+                onMouseEnter={() => cat.hasDropdown && openDropdown(cat.label)}
+                onMouseLeave={closeDropdown}
+              >
                 <Link
                   to={cat.to}
                   className={`inline-block px-4 py-3 text-[13px] font-semibold tracking-wide transition-colors hover:text-primary ${
@@ -163,6 +179,34 @@ export const SiteHeader = () => {
                 >
                   {cat.label}
                 </Link>
+
+                {/* Grade dropdown */}
+                {cat.hasDropdown && activeDropdown === cat.label && (
+                  <div
+                    className="absolute top-full left-0 bg-white border border-gray-200 rounded shadow-xl z-50 min-w-[200px] py-2"
+                    onMouseEnter={() => openDropdown(cat.label)}
+                    onMouseLeave={closeDropdown}
+                  >
+                    <p className="px-4 py-1.5 text-[10px] uppercase tracking-widest text-gray-400 font-bold border-b border-gray-100 mb-1">Shop by Grade</p>
+                    {GRADE_OPTIONS.map((grade) => (
+                      <Link
+                        key={grade}
+                        to={`/shop?search=${encodeURIComponent(grade)}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
+                      >
+                        {grade}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-1 pt-1">
+                      <Link
+                        to="/shop"
+                        className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-gray-50 transition-colors"
+                      >
+                        View All Mattresses →
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </li>
             ))}
           </ul>

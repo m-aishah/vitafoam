@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Montserrat"', "Inter", "system-ui", "sans-serif"],
+        display: ['"Poppins"', "Inter", "system-ui", "sans-serif"],
         body: ['Inter', "system-ui", "sans-serif"],
       },
       colors: {

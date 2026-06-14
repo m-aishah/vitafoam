@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProductCard from "@/components/ProductCard";
@@ -6,7 +7,10 @@ import Reveal from "@/components/Reveal";
 import { getProducts } from "@/lib/products";
 import { Truck, Clock, CreditCard, CheckCircle2, Settings, Star } from "lucide-react";
 import freeDeliveryImg from "@/assets/Vitafoam-Free-Delivery.jpg";
+import gdnsImg from "@/assets/vitafoam-GDNs-07-scaled.jpg";
 import mattressesImg from "@/assets/vitafoam-mattresses.png";
+
+const HERO_SLIDES = [freeDeliveryImg, gdnsImg];
 
 const WHY_FEATURES = [
   {
@@ -43,30 +47,39 @@ const CATEGORIES = [
 const Index = () => {
   const products = getProducts();
   const featured = products.slice(0, 6);
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), 4000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
 
-      {/* HERO BANNER */}
+      {/* HERO SLIDER */}
       <section className="relative overflow-hidden bg-gray-900">
-        <img
-          src={freeDeliveryImg}
-          alt="Free Delivery Within Lagos"
-          className="w-full h-[420px] md:h-[520px] object-cover object-center"
-          loading="eager"
-        />
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="absolute inset-0 flex flex-col items-start justify-center container mx-auto container-px">
-          <div className="animate-fade-up">
-            <p className="text-white text-xl md:text-2xl font-semibold italic mb-1">Enjoy</p>
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black text-primary uppercase leading-none mb-2">
-              FREE DELIVERY
-            </h1>
-            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-black text-white uppercase leading-none">
-              WITHIN LAGOS
-            </h2>
-            <p className="mt-4 text-white/80 text-sm">FOR ORDERS OF 50K AND ABOVE</p>
+        <div className="relative w-full h-[420px] md:h-[540px]">
+          {HERO_SLIDES.map((src, i) => (
+            <img
+              key={src}
+              src={src}
+              alt="Vitafoam"
+              className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
+              loading={i === 0 ? "eager" : "lazy"}
+            />
+          ))}
+          {/* Dot indicators */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {HERO_SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlide(i)}
+                className={`h-2 rounded-full transition-all ${i === slide ? "w-6 bg-white" : "w-2 bg-white/50"}`}
+                aria-label={`Slide ${i + 1}`}
+              />
+            ))}
           </div>
         </div>
       </section>

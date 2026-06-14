@@ -71,7 +71,7 @@
     font-size: 16px;
   }
   h1, h2, h3, h4, h5 {
-    font-family: 'Montserrat', 'Inter', system-ui, sans-serif;
+    font-family: 'Poppins', 'Inter', system-ui, sans-serif;
     font-weight: 700;
     @apply tracking-tight;
   }
@@ -82,7 +82,7 @@
 }
 
 @layer utilities {
-  .font-display { font-family: 'Montserrat', 'Inter', system-ui, sans-serif; }
+  .font-display { font-family: 'Poppins', 'Inter', system-ui, sans-serif; }
   .font-body { font-family: 'Inter', system-ui, sans-serif; }
 
   .bg-nav-dark { background: hsl(var(--nav-dark)); }
