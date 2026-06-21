@@ -11,7 +11,7 @@ import {
   getBeddingProducts,
   addSimpleProduct, updateSimpleProduct, deleteSimpleProduct,
   addBeddingProduct, updateBeddingProduct, deleteBeddingProduct,
-  deleteMattressRaw, updateMattressRaw,
+  deleteMattressRaw, updateMattressRaw, addMattressRaw,
   MattressRaw, SimpleProductRaw, BeddingProductRaw,
 } from "@/lib/catalog";
 import { formatNaira, GRADE_OPTIONS } from "@/lib/products";
@@ -152,20 +152,30 @@ function SimpleProductTable({
 function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRefresh: () => void }) {
   const [gradeFilter, setGradeFilter] = useState("all");
   const [editTarget, setEditTarget] = useState<MattressRaw | null>(null);
-  const [form, setForm] = useState<MattressRaw | null>(null);
+  const [adding, setAdding] = useState(false);
+  const emptyForm: MattressRaw = { code: "", grade: "Corona", gradeSuffix: "CP", dimensionRaw: "", lengthInches: 75, widthInches: 60, thicknessInches: 6, price: 0, displaySize: "", displayLabel: "" };
+  const [form, setForm] = useState<MattressRaw>(emptyForm);
 
   const rows = useMemo(() => {
     const list = gradeFilter === "all" ? products : products.filter((p) => p.grade === gradeFilter);
-    return [...list].sort((a, b) => a.grade.localeCompare(b.grade) || a.price - b.price);
+    return [...list].sort((a, b) => a.grade.localeCompare(b.grade) || a.widthInches - b.widthInches || a.thicknessInches - b.thicknessInches);
   }, [products, gradeFilter]);
 
   const openEdit = (r: MattressRaw) => { setForm({ ...r }); setEditTarget(r); };
+  const openAdd = () => { setForm({ ...emptyForm, code: `MAN-${Date.now()}` }); setAdding(true); };
+
   const save = () => {
-    if (form) { updateMattressRaw(form); onRefresh(); toast({ title: "Saved" }); }
-    setEditTarget(null);
+    const f = { ...form, displaySize: form.displaySize || `${form.lengthInches}x${form.widthInches}x${form.thicknessInches}` };
+    if (adding) { addMattressRaw(f); setAdding(false); }
+    else { updateMattressRaw(f); setEditTarget(null); }
+    onRefresh();
+    toast({ title: "Saved" });
   };
 
   const del = (code: string) => { deleteMattressRaw(code); onRefresh(); toast({ title: "Deleted" }); };
+
+  const modalOpen = !!editTarget || adding;
+  const closeModal = () => { setEditTarget(null); setAdding(false); };
 
   return (
     <>
@@ -179,7 +189,10 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
             </SelectContent>
           </Select>
         </div>
-        <p className="text-xs text-muted-foreground">{rows.length} of {products.length} SKUs</p>
+        <div className="flex items-center gap-3">
+          <p className="text-xs text-muted-foreground">{rows.length} of {products.length} SKUs</p>
+          <Button size="sm" variant="navy" onClick={openAdd}><Plus className="h-4 w-4" /> Add SKU</Button>
+        </div>
       </div>
       <div className="overflow-x-auto rounded-lg border border-border">
         <table className="w-full text-sm">
@@ -226,22 +239,33 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
         </table>
       </div>
 
-      {editTarget && form && (
-        <Dialog open onOpenChange={(o) => !o && setEditTarget(null)}>
-          <DialogContent>
-            <DialogHeader><DialogTitle>Edit SKU</DialogTitle></DialogHeader>
-            <div className="space-y-3 py-2">
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Grade</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.grade} onChange={(e) => setForm({ ...form, grade: e.target.value })} /></div>
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Display Size</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.displaySize} onChange={(e) => setForm({ ...form, displaySize: e.target.value })} /></div>
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+      <Dialog open={modalOpen} onOpenChange={(o) => !o && closeModal()}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>{adding ? "Add SKU" : "Edit SKU"}</DialogTitle></DialogHeader>
+          <div className="space-y-3 py-2">
+            <div>
+              <label className="text-xs font-semibold uppercase text-muted-foreground">Grade</label>
+              <Select value={form.grade} onValueChange={(v) => setForm({ ...form, grade: v })}>
+                <SelectTrigger className="mt-1 h-9"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {GRADE_OPTIONS.map((g) => <SelectItem key={g} value={g}>{g}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setEditTarget(null)}>Cancel</Button>
-              <Button variant="navy" onClick={save}>Save</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      )}
+            <div className="grid grid-cols-3 gap-2">
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Length (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.lengthInches} onChange={(e) => setForm({ ...form, lengthInches: Number(e.target.value) })} /></div>
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Width (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.widthInches} onChange={(e) => setForm({ ...form, widthInches: Number(e.target.value) })} /></div>
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Thickness (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.thicknessInches} onChange={(e) => setForm({ ...form, thicknessInches: Number(e.target.value) })} /></div>
+            </div>
+            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Display Size Label</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" placeholder="e.g. 6' × 5' × 6&quot; (auto-filled if blank)" value={form.displaySize} onChange={(e) => setForm({ ...form, displaySize: e.target.value })} /></div>
+            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeModal}>Cancel</Button>
+            <Button variant="navy" onClick={save}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
@@ -352,7 +376,7 @@ function BeddingTable({ products, onRefresh }: { products: BeddingProductRaw[]; 
   const openAdd = () => { setForm({ ...emptyForm, id: `bedding-${Date.now()}` }); setAdding(true); };
 
   const save = () => {
-    if (editTarget) { updateBeddingProduct(form); setEditTarget(null); }
+    if (editTarget) { updateBeddingProduct(form.id, form); setEditTarget(null); }
     else { addBeddingProduct(form); setAdding(false); }
     onRefresh();
     toast({ title: "Saved" });

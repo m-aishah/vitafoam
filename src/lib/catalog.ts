@@ -440,6 +440,12 @@ export function updateMattressRaw(updated: MattressRaw): void {
   saveMattressCatalog({ ...cat, products });
 }
 
+export function addMattressRaw(raw: MattressRaw): void {
+  const cat = getMattressCatalog();
+  const products = [...cat.products, raw];
+  saveMattressCatalog({ ...cat, products, totalProducts: products.length });
+}
+
 export function getTotalSKUCount(): number {
   return getMattresses().length + getToppers().length + getPillows().length +
     getBabyProducts().length + getLifestyleProducts().length +
