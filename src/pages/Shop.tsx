@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useCatalogReady } from "@/hooks/useCatalog";
 import { useSearchParams, Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -221,12 +223,13 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
 }
 
 const Shop = () => {
+  const catalogTick = useCatalogReady();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const categoryParam = (searchParams.get("category") || "all") as CategoryKey | "all";
   const gradeParam = searchParams.get("grade") || "";
 
-  const all = useMemo(() => getGroupedShopItems(), []);
+  const all = useMemo(() => getGroupedShopItems(), [catalogTick]);
 
   const priceRange = useMemo(() => {
     let min = Infinity, max = 0;
@@ -348,6 +351,17 @@ const Shop = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre</title>
+        <meta name="description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
+        <meta property="og:title" content="Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre" />
+        <meta property="og:description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
+        <meta property="og:url" content="https://vitafoamcomfortcentre.com/shop" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre" />
+        <meta name="twitter:description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
+      </Helmet>
       <SiteHeader />
 
       <section className="bg-primary text-white py-8">

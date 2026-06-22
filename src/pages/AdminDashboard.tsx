@@ -11,7 +11,7 @@ import {
   addSimpleProduct, updateSimpleProduct, deleteSimpleProduct,
   addBeddingProduct, updateBeddingProduct, deleteBeddingProduct,
   deleteMattressRaw, updateMattressRaw, addMattressRaw,
-  getGradeImages, setGradeImage,
+  getGradeImages, setGradeImage, initCatalog,
   MattressRaw, SimpleProductRaw, BeddingProductRaw,
 } from "@/lib/catalog";
 import { formatNaira, GRADE_OPTIONS, calcDisplaySize } from "@/lib/products";
@@ -609,6 +609,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     const onChange = () => refresh();
     window.addEventListener("mbg-catalog-changed", onChange);
+    // Re-fetch from Supabase on mount in case the module-level load
+    // completed before this component's listener was registered
+    initCatalog();
     return () => window.removeEventListener("mbg-catalog-changed", onChange);
   }, []);
 

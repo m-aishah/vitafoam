@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -70,6 +71,16 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{product.name} | Vitafoam Comfort Centre</title>
+        <meta name="description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
+        <meta property="og:title" content={`${product.name} | Vitafoam Comfort Centre`} />
+        <meta property="og:description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${product.name} | Vitafoam Comfort Centre`} />
+        <meta name="twitter:description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
+      </Helmet>
       <SiteHeader />
 
       <section className="bg-primary text-white py-10 text-center relative overflow-hidden">

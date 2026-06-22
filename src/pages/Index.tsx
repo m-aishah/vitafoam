@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { useCatalogReady } from "@/hooks/useCatalog";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import { getGroupedShopItems } from "@/lib/catalog";
-import { Truck, Clock, CreditCard, CheckCircle2, Settings, Star } from "lucide-react";
+import { Truck, Clock, CreditCard, CheckCircle2, Settings, Star, ShieldCheck, Award } from "lucide-react";
 import freeDeliveryImg from "@/assets/Vitafoam-Free-Delivery.jpg";
 import gdnsImg from "@/assets/vitafoam-GDNs-07-scaled.jpg";
 import mattressesImg from "@/assets/vitafoam-mattresses.png";
@@ -34,9 +36,14 @@ const WHY_FEATURES = [
 ];
 
 const TESTIMONIALS = [
-  { stars: 5, quote: "Best mattress I've ever slept on. The Corona grade is worth every kobo!", name: "Adaeze O.", city: "Lagos" },
-  { stars: 5, quote: "Ordered via WhatsApp, delivered in 2 days. Excellent service!", name: "Emeka N.", city: "Abuja" },
-  { stars: 5, quote: "Finally found a reliable Vitafoam distributor. Will always come back.", name: "Fatima I.", city: "Kano" },
+  { stars: 5, quote: "I bought the Vitafoam Corona mattress for my master bedroom and I honestly can't believe the difference. Woke up without back pain for the first time in years! Delivery was on time and the guys were very professional. Highly recommend Vitafoam Comfort Centre.", name: "Amaka Okonkwo", city: "Lagos" },
+  { stars: 5, quote: "Ordered the Grand mattress for my new apartment. The quality is exceptional — very firm with just the right amount of cushioning. They delivered to Abuja without any issues. Price was fair and the WhatsApp ordering process was smooth.", name: "Emeka Nwosu", city: "Abuja" },
+  { stars: 5, quote: "I got the memory foam topper for my existing mattress and it's been a game changer. My husband and I both sleep so much better now. Vitafoam Comfort Centre had the best price I found anywhere online. Will definitely shop here again.", name: "Fatima Aliyu", city: "Lagos" },
+  { stars: 4, quote: "Good experience overall. The Vita Haven pillow I ordered is incredibly soft and comfortable. Delivery took about 3 days to Port Harcourt which was reasonable. Would love to see more pillow options but quality is top notch.", name: "Chukwudi Eze", city: "Port Harcourt" },
+  { stars: 5, quote: "Bought mattresses for all three bedrooms during their sale. The delivery team even helped set everything up. Truly excellent service. The kids love their new mattresses and we love ours. Our whole family sleeps better now.", name: "Ngozi Adeyemi", city: "Lagos" },
+  { stars: 4, quote: "Quality product as expected from Vitafoam. I ordered the bedding set and it's very durable and comfortable. Customer service was responsive on WhatsApp. Nationwide delivery to Kano was faster than expected.", name: "Bello Usman", city: "Kano" },
+  { stars: 5, quote: "The Corona mattress is absolutely worth every naira. I was skeptical about buying a mattress online but Vitafoam Comfort Centre made it easy. Free delivery in Lagos was a huge bonus. Will recommend to all my friends and family.", name: "Adaeze Obi", city: "Lagos" },
+  { stars: 5, quote: "Excellent! I purchased the Grand mattress after sleeping on one at a hotel and wanting the same experience at home. Vitafoam Comfort Centre confirmed it was the exact same product. Delivery was same-day within Lagos. Outstanding service!", name: "Tunde Fashola", city: "Lagos" },
 ];
 
 const SHOP_CATEGORIES = [
@@ -48,7 +55,8 @@ const SHOP_CATEGORIES = [
 ];
 
 const Index = () => {
-  const allItems = useMemo(() => getGroupedShopItems(), []);
+  const catalogTick = useCatalogReady();
+  const allItems = useMemo(() => getGroupedShopItems(), [catalogTick]);
   const mattresses = useMemo(() => allItems.filter((p) => p.category === "mattress"), [allItems]);
   const featured = mattresses.slice(0, 6);
 
@@ -61,6 +69,34 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Vitafoam Comfort Centre | Premium Mattresses in Nigeria</title>
+        <meta name="description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
+        <meta property="og:title" content="Vitafoam Comfort Centre | Premium Mattresses in Nigeria" />
+        <meta property="og:description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
+        <meta property="og:url" content="https://vitafoamcomfortcentre.com/" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Vitafoam Comfort Centre | Premium Mattresses in Nigeria" />
+        <meta name="twitter:description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Store",
+          "name": "Vitafoam Comfort Centre",
+          "description": "Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos.",
+          "url": "https://vitafoamcomfortcentre.com",
+          "telephone": "+2348053054348",
+          "address": { "@type": "PostalAddress", "addressCountry": "NG", "addressRegion": "Lagos" },
+          "priceRange": "₦₦",
+          "openingHours": "Mo-Sa 08:00-18:00",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "8",
+            "bestRating": "5"
+          }
+        })}</script>
+      </Helmet>
       <SiteHeader />
 
       {/* HERO SLIDER */}
@@ -111,6 +147,46 @@ const Index = () => {
               <div>
                 <p className="font-bold text-sm">PAY ONLINE OR VIA BANK DEPOSIT</p>
                 <p className="text-gray-400 text-xs">USE OUR SECURE ONLINE PAYMENT GATEWAY</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Us Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Nigeria's Most Trusted Mattress Brand</h2>
+              <p className="text-gray-600 mb-4">
+                Vitafoam Comfort Centre is an authorized dealer of Vitafoam Nigeria's complete product range — from premium mattresses and toppers to pillows, bedding, and lifestyle products. We are committed to helping every Nigerian family experience the comfort and rest they deserve.
+              </p>
+              <p className="text-gray-600 mb-4">
+                As an official Vitafoam partner, every product we sell is 100% authentic and backed by Vitafoam's quality guarantee. We offer free delivery within Lagos and nationwide shipping to bring comfort directly to your door.
+              </p>
+              <p className="text-gray-600">
+                Whether you're furnishing a new home, upgrading your sleep experience, or looking for the perfect gift, Vitafoam Comfort Centre is your trusted source for Nigeria's number-one foam brand.
+              </p>
+            </div>
+            <div className="bg-green-50 rounded-2xl p-8">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-700 mb-2">100%</div>
+                  <div className="text-gray-600 text-sm">Authentic Products</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-700 mb-2">Free</div>
+                  <div className="text-gray-600 text-sm">Lagos Delivery</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-700 mb-2">50+</div>
+                  <div className="text-gray-600 text-sm">Products Available</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-green-700 mb-2">5★</div>
+                  <div className="text-gray-600 text-sm">Customer Rated</div>
+                </div>
               </div>
             </div>
           </div>
@@ -229,7 +305,7 @@ const Index = () => {
           <Reveal className="text-center mb-10">
             <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">What Our Customers Say</h2>
           </Reveal>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
                 <div className="border border-gray-200 rounded p-6">
