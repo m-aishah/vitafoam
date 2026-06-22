@@ -93,6 +93,13 @@ function ImageUploader({
 function GradeImagesPanel({ onRefresh }: { onRefresh: () => void }) {
   const [images, setImages] = useState<Record<string, string | null>>(getGradeImages);
 
+  useEffect(() => {
+    const refresh = () => setImages(getGradeImages());
+    window.addEventListener("mbg-catalog-changed", refresh);
+    initCatalog();
+    return () => window.removeEventListener("mbg-catalog-changed", refresh);
+  }, []);
+
   const handleChange = (grade: string, url: string | null) => {
     setGradeImage(grade, url);
     setImages((prev) => ({ ...prev, [grade]: url }));
