@@ -1,7 +1,0 @@
-{
-  "lastUpdated": null,
-  "totalProducts": 1,
-  "products": [
-    { "code": "SAMPLE-MT", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x60x4", "lengthInches": 75, "widthInches": 60, "thicknessInches": 4, "price": 90000, "displaySize": "6' × 5' × 4\"", "displayLabel": "Memory Topper — 6' × 5' × 4\"", "image": null }
-  ]
-}

@@ -1,10 +1,3 @@
-import mattressesData from "@/data/mattresses.json";
-import toppersData from "@/data/toppers.json";
-import pillowsData from "@/data/pillows.json";
-import babyData from "@/data/baby.json";
-import lifestyleData from "@/data/lifestyle.json";
-import leisureData from "@/data/leisure.json";
-import beddingData from "@/data/bedding.json";
 import { supabase } from "./supabase";
 
 export type CategoryKey = "mattress" | "topper" | "pillow" | "baby" | "lifestyle" | "leisure" | "bedding";
@@ -114,6 +107,7 @@ export interface MattressCatalog {
   uploadedFileName: string | null;
   totalProducts: number;
   products: MattressRaw[];
+  gradeImages: Record<string, string | null>;
 }
 
 export interface ShopItem {
@@ -154,13 +148,13 @@ const cache: {
   leisure: SimpleProduct[];
   bedding: BeddingProduct[];
 } = {
-  mattresses: mattressesData as MattressCatalog,
-  toppers: (toppersData as { products: TopperRaw[] }).products,
-  pillows: (pillowsData as { products: SimpleProduct[] }).products,
-  baby: (babyData as { products: SimpleProduct[] }).products,
-  lifestyle: (lifestyleData as { products: SimpleProduct[] }).products,
-  leisure: (leisureData as { products: SimpleProduct[] }).products,
-  bedding: (beddingData as { products: BeddingProduct[] }).products,
+  mattresses: { lastUpdated: null, uploadedFileName: null, totalProducts: 0, products: [], gradeImages: {} },
+  toppers: [],
+  pillows: [],
+  baby: [],
+  lifestyle: [],
+  leisure: [],
+  bedding: [],
 };
 
 // ─── Supabase helpers ───────────────────────────────────────────────────────
@@ -215,12 +209,21 @@ export function saveMattressCatalog(cat: MattressCatalog): void {
   persist("mattresses", cat);
 }
 
-export function resetMattressCatalog(): void {
-  cache.mattresses = mattressesData as MattressCatalog;
-  dispatch();
-  supabase.from("catalog").delete().eq("key", "mattresses").then(({ error }) => {
-    if (error) console.error("[catalog] reset failed:", error);
+export function getGradeImages(): Record<string, string | null> {
+  return cache.mattresses.gradeImages ?? {};
+}
+
+export function setGradeImage(grade: string, url: string | null): void {
+  saveMattressCatalog({
+    ...cache.mattresses,
+    gradeImages: { ...(cache.mattresses.gradeImages ?? {}), [grade]: url },
   });
+}
+
+export function resetMattressCatalog(): void {
+  cache.mattresses = { lastUpdated: null, uploadedFileName: null, totalProducts: 0, products: [], gradeImages: {} };
+  dispatch();
+  persist("mattresses", cache.mattresses);
 }
 
 export function isUsingMattressSeed(): boolean {
@@ -448,7 +451,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       name: `${grade} Mattress`,
       shortDesc: GRADE_SHORT_DESC[grade] ?? `${grade} mattress.`,
       description: GRADE_SHORT_DESC[grade] ?? `${grade} foam mattress by Vitafoam.`,
-      image: null,
+      image: cache.mattresses.gradeImages?.[grade] ?? null,
       minPrice: Math.min(...sorted.map((r) => r.price)),
       grade,
       badgeClass: GRADE_BADGE[grade] ?? "bg-gray-100 text-gray-800",

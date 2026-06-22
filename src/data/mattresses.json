@@ -1,8 +1,0 @@
-{
-  "lastUpdated": null,
-  "uploadedFileName": null,
-  "totalProducts": 1,
-  "products": [
-    { "code": "SAMPLE-DE", "grade": "Deluxe", "gradeSuffix": "DE", "dimensionRaw": "75x60x6", "lengthInches": 75, "widthInches": 60, "thicknessInches": 6, "price": 50000, "displaySize": "6' × 5' × 6\"", "displayLabel": "Deluxe — 6' × 5' × 6\"" }
-  ]
-}
