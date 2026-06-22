@@ -65,13 +65,15 @@ const Index = () => {
 
       {/* HERO SLIDER */}
       <section className="relative overflow-hidden" style={{ backgroundColor: HERO_SLIDES[slide].bg, transition: "background-color 0.7s ease" }}>
-        <div className="relative w-full aspect-[4/3] sm:aspect-[16/7]">
+        <div className="relative w-full">
+          {/* invisible spacer so container height = current slide's natural height */}
+          <img src={HERO_SLIDES[slide].src} alt="" className="w-full h-auto invisible block" aria-hidden />
           {HERO_SLIDES.map(({ src }, i) => (
             <img
               key={src}
               src={src}
               alt="Vitafoam"
-              className={`absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
               loading={i === 0 ? "eager" : "lazy"}
             />
           ))}
@@ -80,7 +82,7 @@ const Index = () => {
               <button
                 key={i}
                 onClick={() => setSlide(i)}
-                className={`h-2 rounded-full transition-all ${i === slide ? "w-6 bg-white" : "w-2 bg-white/50"}`}
+                className={`h-2 rounded-full transition-all ${i === slide ? "w-6 bg-gray-700" : "w-2 bg-gray-400/70"}`}
                 aria-label={`Slide ${i + 1}`}
               />
             ))}
