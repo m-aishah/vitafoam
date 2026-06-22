@@ -10,7 +10,10 @@ import freeDeliveryImg from "@/assets/Vitafoam-Free-Delivery.jpg";
 import gdnsImg from "@/assets/vitafoam-GDNs-07-scaled.jpg";
 import mattressesImg from "@/assets/vitafoam-mattresses.png";
 
-const HERO_SLIDES = [freeDeliveryImg, gdnsImg];
+const HERO_SLIDES = [
+  { src: freeDeliveryImg, bg: "#ffffff" },
+  { src: gdnsImg,         bg: "#f5e6c8" },
+];
 
 const WHY_FEATURES = [
   {
@@ -61,9 +64,9 @@ const Index = () => {
       <SiteHeader />
 
       {/* HERO SLIDER */}
-      <section className="relative overflow-hidden bg-white">
+      <section className="relative overflow-hidden" style={{ backgroundColor: HERO_SLIDES[slide].bg, transition: "background-color 0.7s ease" }}>
         <div className="relative w-full aspect-[4/3] sm:aspect-[16/7]">
-          {HERO_SLIDES.map((src, i) => (
+          {HERO_SLIDES.map(({ src }, i) => (
             <img
               key={src}
               src={src}
@@ -73,7 +76,7 @@ const Index = () => {
             />
           ))}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {HERO_SLIDES.map((_, i) => (
+            {HERO_SLIDES.map((_s, i) => (
               <button
                 key={i}
                 onClick={() => setSlide(i)}
