@@ -245,15 +245,15 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
             <div className="grid grid-cols-3 gap-2">
               <div>
                 <label className="text-xs font-semibold uppercase text-muted-foreground">Length (in)</label>
-                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.lengthInches} onChange={(e) => updateDims({ lengthInches: Number(e.target.value) })} />
+                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.lengthInches || ""} onChange={(e) => updateDims({ lengthInches: Number(e.target.value) })} />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase text-muted-foreground">Width (in)</label>
-                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.widthInches} onChange={(e) => updateDims({ widthInches: Number(e.target.value) })} />
+                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.widthInches || ""} onChange={(e) => updateDims({ widthInches: Number(e.target.value) })} />
               </div>
               <div>
                 <label className="text-xs font-semibold uppercase text-muted-foreground">Thick (in)</label>
-                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.thicknessInches} onChange={(e) => updateDims({ thicknessInches: Number(e.target.value) })} />
+                <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.thicknessInches || ""} onChange={(e) => updateDims({ thicknessInches: Number(e.target.value) })} />
               </div>
             </div>
             <div>
@@ -262,7 +262,7 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
             </div>
             <div>
               <label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label>
-              <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
+              <input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price || ""} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
             </div>
             <div>
               <label className="text-xs font-semibold uppercase text-muted-foreground">Code <span className="normal-case font-normal text-muted-foreground">(optional — auto-generated if blank)</span></label>
@@ -372,12 +372,12 @@ function TopperTable({ products, onRefresh }: { products: MattressRaw[]; onRefre
           <DialogHeader><DialogTitle>{adding ? "Add Topper Size" : "Edit Topper Size"}</DialogTitle></DialogHeader>
           <div className="space-y-3 py-2">
             <div className="grid grid-cols-3 gap-2">
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Length (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.lengthInches} onChange={(e) => updateDims({ lengthInches: Number(e.target.value) })} /></div>
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Width (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.widthInches} onChange={(e) => updateDims({ widthInches: Number(e.target.value) })} /></div>
-              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Thick (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.thicknessInches} onChange={(e) => updateDims({ thicknessInches: Number(e.target.value) })} /></div>
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Length (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.lengthInches || ""} onChange={(e) => updateDims({ lengthInches: Number(e.target.value) })} /></div>
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Width (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.widthInches || ""} onChange={(e) => updateDims({ widthInches: Number(e.target.value) })} /></div>
+              <div><label className="text-xs font-semibold uppercase text-muted-foreground">Thick (in)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.thicknessInches || ""} onChange={(e) => updateDims({ thicknessInches: Number(e.target.value) })} /></div>
             </div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Display Size <span className="normal-case font-normal">(auto-filled)</span></label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm bg-surface" value={form.displaySize} readOnly /></div>
-            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price || ""} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Code <span className="normal-case font-normal">(optional)</span></label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} placeholder="e.g. MT304" /></div>
           </div>
           <DialogFooter>
@@ -475,7 +475,7 @@ function SimpleProductTable({
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Name</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Short Description</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.shortDesc} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Description</label><textarea className="mt-1 w-full border border-border rounded px-3 py-2 text-sm h-20 resize-none" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
-            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
+            <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price || ""} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={closeModal}>Cancel</Button>
@@ -574,7 +574,7 @@ function BeddingTable({ products, onRefresh }: { products: BeddingProductRaw[]; 
               {form.variants.map((v, i) => (
                 <div key={i} className="flex gap-2 mb-2 items-center">
                   <input className="flex-1 border border-border rounded px-2 h-8 text-xs" placeholder="Size name e.g. Queen" value={v.sizeName} onChange={(e) => { const vv = [...form.variants]; vv[i] = { ...v, sizeName: e.target.value }; setForm({ ...form, variants: vv }); }} />
-                  <input type="number" className="w-24 border border-border rounded px-2 h-8 text-xs" placeholder="Price ₦" value={v.price} onChange={(e) => { const vv = [...form.variants]; vv[i] = { ...v, price: Number(e.target.value) }; setForm({ ...form, variants: vv }); }} />
+                  <input type="number" className="w-24 border border-border rounded px-2 h-8 text-xs" placeholder="Price ₦" value={v.price || ""} onChange={(e) => { const vv = [...form.variants]; vv[i] = { ...v, price: Number(e.target.value) }; setForm({ ...form, variants: vv }); }} />
                   <Button size="sm" variant="outline" className="text-red-600" onClick={() => setForm({ ...form, variants: form.variants.filter((_, j) => j !== i) })}><Trash2 className="h-3 w-3" /></Button>
                 </div>
               ))}

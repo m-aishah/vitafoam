@@ -10,7 +10,10 @@ import freeDeliveryImg from "@/assets/Vitafoam-Free-Delivery.jpg";
 import gdnsImg from "@/assets/vitafoam-GDNs-07-scaled.jpg";
 import mattressesImg from "@/assets/vitafoam-mattresses.png";
 
-const HERO_SLIDES = [freeDeliveryImg, gdnsImg];
+const HERO_SLIDES = [
+  { src: freeDeliveryImg, bg: "#ffffff" },
+  { src: gdnsImg,         bg: "#f5e6c8" },
+];
 
 const WHY_FEATURES = [
   {
@@ -61,9 +64,9 @@ const Index = () => {
       <SiteHeader />
 
       {/* HERO SLIDER */}
-      <section className="relative overflow-hidden bg-gray-900">
-        <div className="relative w-full h-[420px] md:h-[540px]">
-          {HERO_SLIDES.map((src, i) => (
+      <section className="relative overflow-hidden bg-white">
+        <div className="relative w-full h-[50vw] max-h-[540px] min-h-[180px]">
+          {HERO_SLIDES.map(({ src }, i) => (
             <img
               key={src}
               src={src}
@@ -73,11 +76,11 @@ const Index = () => {
             />
           ))}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {HERO_SLIDES.map((_, i) => (
+            {HERO_SLIDES.map((_s, i) => (
               <button
                 key={i}
                 onClick={() => setSlide(i)}
-                className={`h-2 rounded-full transition-all ${i === slide ? "w-6 bg-white" : "w-2 bg-white/50"}`}
+                className={`h-2 rounded-full transition-all ${i === slide ? "w-6 bg-gray-700" : "w-2 bg-gray-400/70"}`}
                 aria-label={`Slide ${i + 1}`}
               />
             ))}
