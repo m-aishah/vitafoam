@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,10 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-background">
+      <Helmet>
+        <title>Admin Login | Vitafoam Comfort Centre</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="hidden lg:flex bg-primary text-primary-foreground items-center justify-center p-12">
         <div className="max-w-md text-center">
           <img src={logo} alt="Vitafoam" className="mx-auto h-20 w-auto bg-white rounded-lg p-2" />

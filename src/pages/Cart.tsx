@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -28,6 +29,11 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Your Cart | Vitafoam Comfort Centre</title>
+        <meta name="description" content="Review your selected Vitafoam products and proceed to checkout." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <SiteHeader />
 
       {/* Orange banner */}
