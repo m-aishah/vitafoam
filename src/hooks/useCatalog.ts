@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
-import { initCatalog } from "@/lib/catalog";
+import { initCatalog, catalogLoaded } from "@/lib/catalog";
 
-/**
- * Triggers a Supabase reload on mount and returns a tick that increments
- * each time the catalog changes, so callers can use it as a useMemo dep.
- */
 export function useCatalogReady(): number {
-  const [tick, setTick] = useState(0);
+  // Start at 1 if data is already loaded (e.g. navigating from another page)
+  const [tick, setTick] = useState(() => (catalogLoaded ? 1 : 0));
+
   useEffect(() => {
     const handler = () => setTick((t) => t + 1);
     window.addEventListener("mbg-catalog-changed", handler);
+    // Always call initCatalog — if already loaded it dispatches immediately,
+    // otherwise it fires the fetch (deduplicated if one is already in flight)
     initCatalog();
     return () => window.removeEventListener("mbg-catalog-changed", handler);
   }, []);
+
   return tick;
 }

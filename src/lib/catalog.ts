@@ -172,26 +172,44 @@ function persist(key: string, value: unknown): void {
     });
 }
 
+export let catalogLoaded = false;
+let inflightFetch: Promise<void> | null = null;
+
 // Load everything from Supabase once and update cache
-export async function initCatalog(): Promise<void> {
-  try {
-    const { data, error } = await supabase.from("catalog").select("key, value");
-    if (error) throw error;
-    if (data) {
-      for (const { key, value } of data) {
-        if (key === "mattresses") cache.mattresses = value as MattressCatalog;
-        else if (key === "toppers") cache.toppers = value as TopperRaw[];
-        else if (key === "pillows") cache.pillows = value as SimpleProduct[];
-        else if (key === "baby") cache.baby = value as SimpleProduct[];
-        else if (key === "lifestyle") cache.lifestyle = value as SimpleProduct[];
-        else if (key === "leisure") cache.leisure = value as SimpleProduct[];
-        else if (key === "bedding") cache.bedding = value as BeddingProduct[];
-      }
-    }
-  } catch (e) {
-    console.warn("[catalog] Could not load from Supabase, using seed data:", e);
+export function initCatalog(): Promise<void> {
+  // If data is already in cache, notify any newly-registered listeners immediately
+  if (catalogLoaded) {
+    dispatch();
+    return Promise.resolve();
   }
-  dispatch();
+  // Deduplicate concurrent calls — return the same promise to all callers
+  if (inflightFetch) return inflightFetch;
+
+  inflightFetch = (async () => {
+    try {
+      const { data, error } = await supabase.from("catalog").select("key, value");
+      if (error) throw error;
+      if (data) {
+        for (const { key, value } of data) {
+          if (key === "mattresses") cache.mattresses = value as MattressCatalog;
+          else if (key === "toppers") cache.toppers = value as TopperRaw[];
+          else if (key === "pillows") cache.pillows = value as SimpleProduct[];
+          else if (key === "baby") cache.baby = value as SimpleProduct[];
+          else if (key === "lifestyle") cache.lifestyle = value as SimpleProduct[];
+          else if (key === "leisure") cache.leisure = value as SimpleProduct[];
+          else if (key === "bedding") cache.bedding = value as BeddingProduct[];
+        }
+        catalogLoaded = true;
+      }
+    } catch (e) {
+      console.warn("[catalog] Could not load from Supabase:", e);
+    } finally {
+      inflightFetch = null;
+    }
+    dispatch();
+  })();
+
+  return inflightFetch;
 }
 
 // Trigger on module load (fire-and-forget; components re-render via event)
