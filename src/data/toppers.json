@@ -1,12 +1,7 @@
 {
-  "lastUpdated": "2026-03-30T00:00:00.000Z",
-  "uploadedFileName": "Vitafoam Comfort Centre Price List - March 2026.pdf",
-  "totalProducts": 5,
+  "lastUpdated": null,
+  "totalProducts": 1,
   "products": [
-    { "code": "MT154", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x30x4", "lengthInches": 75, "widthInches": 30, "thicknessInches": 4, "price": 45000, "displaySize": "6' × 2½' × 4\"", "displayLabel": "Memory Topper — 6' × 2½' × 4\"" },
-    { "code": "MT184", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x36x4", "lengthInches": 75, "widthInches": 36, "thicknessInches": 4, "price": 54000, "displaySize": "6' × 3' × 4\"", "displayLabel": "Memory Topper — 6' × 3' × 4\"" },
-    { "code": "MT214", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x42x4", "lengthInches": 75, "widthInches": 42, "thicknessInches": 4, "price": 63000, "displaySize": "6' × 3½' × 4\"", "displayLabel": "Memory Topper — 6' × 3½' × 4\"" },
-    { "code": "MT244", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x48x4", "lengthInches": 75, "widthInches": 48, "thicknessInches": 4, "price": 72000, "displaySize": "6' × 4' × 4\"", "displayLabel": "Memory Topper — 6' × 4' × 4\"" },
-    { "code": "MT304", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x60x4", "lengthInches": 75, "widthInches": 60, "thicknessInches": 4, "price": 90000, "displaySize": "6' × 5' × 4\"", "displayLabel": "Memory Topper — 6' × 5' × 4\"" }
+    { "code": "SAMPLE-MT", "grade": "Memory Topper", "gradeSuffix": "MT", "dimensionRaw": "75x60x4", "lengthInches": 75, "widthInches": 60, "thicknessInches": 4, "price": 90000, "displaySize": "6' × 5' × 4\"", "displayLabel": "Memory Topper — 6' × 5' × 4\"", "image": null }
   ]
 }

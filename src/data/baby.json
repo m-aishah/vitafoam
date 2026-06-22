@@ -1,8 +1,6 @@
 {
-  "lastUpdated": "2026-03-30T00:00:00.000Z",
+  "lastUpdated": null,
   "products": [
-    { "id": "vitafoam-baby-cot", "name": "Vitafoam Baby Cot Mattress", "shortDesc": "Safe, firm support for newborns.", "description": "Specially designed firm foam mattress for baby cots, ensuring safe and healthy development for newborns and toddlers.", "price": 12000, "image": null },
-    { "id": "vitafoam-baby-toddler", "name": "Vitafoam Toddler Mattress", "shortDesc": "Transition mattress for growing toddlers.", "description": "Medium-firm toddler mattress sized for junior beds, providing the right support as your child grows.", "price": 18500, "image": null },
-    { "id": "vitafoam-baby-pillow", "name": "Vitafoam Baby Pillow", "shortDesc": "Gentle head support for babies.", "description": "Ultra-soft baby pillow with hypoallergenic foam designed to cradle a baby's delicate head.", "price": 5500, "image": null }
+    { "id": "sample-baby", "name": "Vitafoam Baby Cot Mattress", "shortDesc": "Safe, firm support for newborns.", "description": "Firm foam mattress for baby cots.", "price": 12000, "image": null }
   ]
 }

@@ -105,6 +105,7 @@ export interface TopperRaw {
   price: number;
   displaySize: string;
   displayLabel: string;
+  image?: string | null;
 }
 
 // Unified ShopItem for the shop page
@@ -497,8 +498,9 @@ export function getGroupedShopItems(): GroupedShopItem[] {
   }
 
   // Toppers — group as one product with sizes
-  const toppers = getToppers().filter((t) => t.price > 0).sort((a, b) => a.price - b.price);
+  const toppers = getToppers().filter((t) => t.price > 0).sort((a, b) => a.widthInches !== b.widthInches ? a.widthInches - b.widthInches : a.thicknessInches - b.thicknessInches);
   if (toppers.length) {
+    const topperImg = toppers.find((t) => t.image)?.image ?? null;
     items.push({
       id: "memory-topper",
       category: "topper",
@@ -506,8 +508,8 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       name: "Vitafoam Memory Topper",
       shortDesc: GRADE_SHORT_DESC["Memory Topper"],
       description: "Premium memory foam topper that molds to your body shape, reducing pressure points and transforming your existing mattress into a luxury sleep surface.",
-      image: null,
-      minPrice: toppers[0].price,
+      image: topperImg,
+      minPrice: Math.min(...toppers.map((t) => t.price)),
       grade: "Memory Topper",
       badgeClass: GRADE_BADGE["Memory Topper"],
       sizes: toppers.map((t) => ({ label: t.displaySize, L: t.lengthInches, W: t.widthInches, T: t.thicknessInches, price: t.price })),

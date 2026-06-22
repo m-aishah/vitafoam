@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import logo from "@/assets/vitafoam-logo-1.svg";
 import { adminLogout, isAdminAuthed } from "@/lib/admin";
 import { parsePriceListPdf, formatLastUpdated } from "@/lib/pdfParser";
+import { compressImage } from "@/lib/imageUtils";
 import {
   getMattressCatalog, saveMattressCatalog, resetMattressCatalog, isUsingMattressSeed,
   getTopperProducts, saveTopperProducts, deleteTopperRaw,
@@ -39,6 +40,68 @@ type UploadStatus =
   | { kind: "success"; count: number; filename: string; iso: string }
   | { kind: "warn"; message: string }
   | { kind: "error"; message: string };
+
+// ---- Image uploader ----
+
+function ImageUploader({ value, onChange }: { value: string | null; onChange: (url: string | null) => void }) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleFile = async (file: File) => {
+    if (!file.type.startsWith("image/")) return;
+    setLoading(true);
+    try {
+      const url = await compressImage(file);
+      onChange(url);
+    } catch {
+      // silently ignore
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <label className="text-xs font-semibold uppercase text-muted-foreground">Image</label>
+      <div className="mt-1 flex items-start gap-3">
+        {value ? (
+          <div className="relative h-20 w-20 flex-shrink-0 rounded border border-border overflow-hidden bg-surface">
+            <img src={value} alt="preview" className="h-full w-full object-cover" />
+            <button
+              type="button"
+              onClick={() => onChange(null)}
+              className="absolute top-0.5 right-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-black/60 text-white text-[10px] hover:bg-red-600"
+            >✕</button>
+          </div>
+        ) : (
+          <div className="h-20 w-20 flex-shrink-0 rounded border-2 border-dashed border-border flex items-center justify-center text-gray-300 bg-surface">
+            <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth={1.5}><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </div>
+        )}
+        <div className="flex-1">
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            disabled={loading}
+            onClick={() => ref.current?.click()}
+            className="w-full"
+          >
+            {loading ? "Compressing…" : value ? "Change Image" : "Upload Image"}
+          </Button>
+          <p className="mt-1 text-[11px] text-muted-foreground">JPG, PNG, WEBP — auto-compressed</p>
+          <input
+            ref={ref}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ""; }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ---- Simple product CRUD ----
 
@@ -132,6 +195,7 @@ function SimpleProductTable({
         <DialogContent>
           <DialogHeader><DialogTitle>{editTarget ? "Edit Item" : "Add Item"}</DialogTitle></DialogHeader>
           <div className="space-y-3 py-2">
+            <ImageUploader value={form.image} onChange={(url) => setForm({ ...form, image: url })} />
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Name</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Short Description</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.shortDesc} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Description</label><textarea className="mt-1 w-full border border-border rounded px-3 py-2 text-sm h-20 resize-none" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
@@ -349,6 +413,7 @@ function TopperTable({ products, onRefresh }: { products: MattressRaw[]; onRefre
           <DialogHeader><DialogTitle>{adding ? "Add Topper Size" : "Edit Topper"}</DialogTitle></DialogHeader>
           {form && (
             <div className="space-y-3 py-2">
+              <ImageUploader value={form.image ?? null} onChange={(url) => setForm({ ...form, image: url })} />
               <div><label className="text-xs font-semibold uppercase text-muted-foreground">Code</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} /></div>
               <div><label className="text-xs font-semibold uppercase text-muted-foreground">Display Size</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.displaySize} onChange={(e) => setForm({ ...form, displaySize: e.target.value })} /></div>
               <div><label className="text-xs font-semibold uppercase text-muted-foreground">Price (₦)</label><input type="number" className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
@@ -436,6 +501,7 @@ function BeddingTable({ products, onRefresh }: { products: BeddingProductRaw[]; 
         <DialogContent className="max-w-lg">
           <DialogHeader><DialogTitle>{editTarget ? "Edit Bedding Product" : "Add Bedding Product"}</DialogTitle></DialogHeader>
           <div className="space-y-3 py-2 max-h-[60vh] overflow-y-auto">
+            <ImageUploader value={form.image} onChange={(url) => setForm({ ...form, image: url })} />
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Name</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Short Description</label><input className="mt-1 w-full border border-border rounded px-3 h-9 text-sm" value={form.shortDesc} onChange={(e) => setForm({ ...form, shortDesc: e.target.value })} /></div>
             <div><label className="text-xs font-semibold uppercase text-muted-foreground">Description</label><textarea className="mt-1 w-full border border-border rounded px-3 py-2 text-sm h-20 resize-none" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>

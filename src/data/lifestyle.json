@@ -1,8 +1,6 @@
 {
-  "lastUpdated": "2026-03-30T00:00:00.000Z",
+  "lastUpdated": null,
   "products": [
-    { "id": "vitafoam-sofa-cushion", "name": "Vitafoam Sofa Seat Cushion", "shortDesc": "Revive your sofa with premium foam.", "description": "High-resilience foam sofa seat replacement cushions, cut to your sofa dimensions for a perfect fit.", "price": 22000, "image": null },
-    { "id": "vitafoam-floor-mat", "name": "Vitafoam Floor Mat", "shortDesc": "Comfortable, durable floor padding.", "description": "Multi-purpose foam floor mat ideal for yoga, play areas, and general home use.", "price": 9500, "image": null },
-    { "id": "vitafoam-car-seat", "name": "Vitafoam Car Seat Cushion", "shortDesc": "Drive in comfort on long journeys.", "description": "Ergonomic foam car seat cushion to reduce fatigue and discomfort on long drives.", "price": 14000, "image": null }
+    { "id": "sample-lifestyle", "name": "Vitafoam Sofa Seat Cushion", "shortDesc": "Revive your sofa with premium foam.", "description": "High-resilience foam sofa seat cushion.", "price": 22000, "image": null }
   ]
 }
