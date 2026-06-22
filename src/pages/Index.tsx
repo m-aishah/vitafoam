@@ -53,26 +53,43 @@ const Index = () => {
   const featured = mattresses.slice(0, 6);
 
   const [slide, setSlide] = useState(0);
+  const [ratios, setRatios] = useState<number[]>(HERO_SLIDES.map(() => 9 / 21));
 
   useEffect(() => {
     const t = setInterval(() => setSlide((s) => (s + 1) % HERO_SLIDES.length), 4000);
     return () => clearInterval(t);
   }, []);
 
+  function handleImgLoad(i: number, e: React.SyntheticEvent<HTMLImageElement>) {
+    const { naturalWidth, naturalHeight } = e.currentTarget;
+    if (!naturalWidth) return;
+    setRatios((prev) => {
+      const next = [...prev];
+      next[i] = naturalHeight / naturalWidth;
+      return next;
+    });
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
 
       {/* HERO SLIDER */}
-      <section className="relative overflow-hidden" style={{ backgroundColor: HERO_SLIDES[slide].bg, transition: "background-color 0.7s ease" }}>
-        <div className="relative w-full">
-          {/* invisible spacer so container height = current slide's natural height */}
-          <img src={HERO_SLIDES[slide].src} alt="" className="w-full h-auto invisible block" aria-hidden />
+      <section
+        className="relative overflow-hidden"
+        style={{ backgroundColor: HERO_SLIDES[slide].bg, transition: "background-color 0.7s ease" }}
+      >
+        {/* padding-bottom trick: height = width × ratio, transitions smoothly */}
+        <div
+          className="relative w-full"
+          style={{ paddingBottom: `${ratios[slide] * 100}%`, transition: "padding-bottom 0.7s ease" }}
+        >
           {HERO_SLIDES.map(({ src }, i) => (
             <img
               key={src}
               src={src}
               alt="Vitafoam"
+              onLoad={(e) => handleImgLoad(i, e)}
               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
               loading={i === 0 ? "eager" : "lazy"}
             />
