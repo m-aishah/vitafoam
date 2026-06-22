@@ -43,12 +43,12 @@ export const SiteFooter = () => {
             <div>
               <h4 className="font-display text-sm font-bold text-white mb-4 uppercase tracking-wide">Products</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Mattresses</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Pillows</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Bedding</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Lifestyle</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Furniture</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Mother & Child</Link></li>
+                <li><Link to="/shop?category=mattress" className="hover:text-primary transition-colors">Mattresses</Link></li>
+                <li><Link to="/shop?category=pillow" className="hover:text-primary transition-colors">Pillows</Link></li>
+                <li><Link to="/shop?category=bedding" className="hover:text-primary transition-colors">Bedding</Link></li>
+                <li><Link to="/shop?category=lifestyle" className="hover:text-primary transition-colors">Lifestyle</Link></li>
+                <li><Link to="/shop?category=leisure" className="hover:text-primary transition-colors">Leisure</Link></li>
+                <li><Link to="/shop?category=baby" className="hover:text-primary transition-colors">Mother & Child</Link></li>
               </ul>
             </div>
 
@@ -56,14 +56,14 @@ export const SiteFooter = () => {
             <div>
               <h4 className="font-display text-sm font-bold text-white mb-4 uppercase tracking-wide">Support</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">Contact Us</a></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Comfort Centres</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Distributors</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Ordering Centres</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Buy Right Guide</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Become a Distributor</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">FAQs</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Site Map</Link></li>
+                <li><Link to="/contact" className="hover:text-primary transition-colors">Contact Us</Link></li>
+                <li><Link to="/locations" className="hover:text-primary transition-colors">Comfort Centres</Link></li>
+                <li><Link to="/locations" className="hover:text-primary transition-colors">Distributors</Link></li>
+                <li><Link to="/locations" className="hover:text-primary transition-colors">Ordering Centres</Link></li>
+                <li><Link to="/buy-right-guide" className="hover:text-primary transition-colors">Buy Right Guide</Link></li>
+                <li><Link to="/become-a-distributor" className="hover:text-primary transition-colors">Become a Distributor</Link></li>
+                <li><Link to="/faqs" className="hover:text-primary transition-colors">FAQs</Link></li>
+                <li><a href="/sitemap.xml" className="hover:text-primary transition-colors">Site Map</a></li>
               </ul>
             </div>
 
@@ -71,13 +71,13 @@ export const SiteFooter = () => {
             <div>
               <h4 className="font-display text-sm font-bold text-white mb-4 uppercase tracking-wide">Resources</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/shop" className="hover:text-primary transition-colors">About Us</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Blog</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Reviews</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">How to Shop on Vitafoam</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">How to Find Products</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Product Brochure</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Corporate Information</Link></li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">About Us</Link></li>
+                <li><Link to="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
+                <li><a href="/#testimonials" className="hover:text-primary transition-colors">Reviews</a></li>
+                <li><Link to="/how-to-shop" className="hover:text-primary transition-colors">How to Shop on Vitafoam</Link></li>
+                <li><Link to="/buy-right-guide" className="hover:text-primary transition-colors">How to Find Products</Link></li>
+                <li><a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">Product Brochure</a></li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">Corporate Information</Link></li>
               </ul>
             </div>
 
@@ -85,13 +85,13 @@ export const SiteFooter = () => {
             <div>
               <h4 className="font-display text-sm font-bold text-white mb-4 uppercase tracking-wide">Information</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Quality Policy</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Privacy Notice</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Cookies Policy</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Terms & Conditions</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Warranty</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Return Policy</Link></li>
-                <li><Link to="/shop" className="hover:text-primary transition-colors">Delivery Information</Link></li>
+                <li><Link to="/quality-policy" className="hover:text-primary transition-colors">Quality Policy</Link></li>
+                <li><Link to="/privacy" className="hover:text-primary transition-colors">Privacy Notice</Link></li>
+                <li><Link to="/cookies" className="hover:text-primary transition-colors">Cookies Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-primary transition-colors">Terms & Conditions</Link></li>
+                <li><Link to="/warranty" className="hover:text-primary transition-colors">Warranty</Link></li>
+                <li><Link to="/returns" className="hover:text-primary transition-colors">Return Policy</Link></li>
+                <li><Link to="/delivery" className="hover:text-primary transition-colors">Delivery Information</Link></li>
               </ul>
             </div>
 
@@ -142,9 +142,9 @@ export const SiteFooter = () => {
           <div className="mt-10 pt-6 border-t border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <div className="flex items-center gap-4">
               <img src={vitafoamLogo} alt="Vitafoam" className="h-8 w-auto brightness-0 invert opacity-60" />
-              <span>© 2026 Vitafoam Comfort Centre. All Rights Reserved</span>
+              <span>© 2026 Vitafoam Mattress Nigeria. All Rights Reserved</span>
             </div>
-            <div className="text-gray-500 text-xs">Authorized Vitafoam Comfort Centre</div>
+            <div className="text-gray-500 text-xs">Authorized Vitafoam Dealer</div>
           </div>
         </div>
       </div>
