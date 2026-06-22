@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { useCatalogReady } from "@/hooks/useCatalog";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProductCard from "@/components/ProductCard";
@@ -48,7 +49,8 @@ const SHOP_CATEGORIES = [
 ];
 
 const Index = () => {
-  const allItems = useMemo(() => getGroupedShopItems(), []);
+  const catalogTick = useCatalogReady();
+  const allItems = useMemo(() => getGroupedShopItems(), [catalogTick]);
   const mattresses = useMemo(() => allItems.filter((p) => p.category === "mattress"), [allItems]);
   const featured = mattresses.slice(0, 6);
 

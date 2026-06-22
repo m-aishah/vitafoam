@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useCatalogReady } from "@/hooks/useCatalog";
 import { useSearchParams, Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -221,12 +222,13 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
 }
 
 const Shop = () => {
+  const catalogTick = useCatalogReady();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const categoryParam = (searchParams.get("category") || "all") as CategoryKey | "all";
   const gradeParam = searchParams.get("grade") || "";
 
-  const all = useMemo(() => getGroupedShopItems(), []);
+  const all = useMemo(() => getGroupedShopItems(), [catalogTick]);
 
   const priceRange = useMemo(() => {
     let min = Infinity, max = 0;
