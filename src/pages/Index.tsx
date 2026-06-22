@@ -61,14 +61,14 @@ const Index = () => {
       <SiteHeader />
 
       {/* HERO SLIDER */}
-      <section className="relative overflow-hidden bg-gray-900">
-        <div className="relative w-full h-[420px] md:h-[540px]">
+      <section className="relative overflow-hidden bg-white">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[16/7]">
           {HERO_SLIDES.map((src, i) => (
             <img
               key={src}
               src={src}
               alt="Vitafoam"
-              className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
+              className={`absolute inset-0 w-full h-full object-contain object-center transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
               loading={i === 0 ? "eager" : "lazy"}
             />
           ))}
