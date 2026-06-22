@@ -5,6 +5,7 @@ import babyData from "@/data/baby.json";
 import lifestyleData from "@/data/lifestyle.json";
 import leisureData from "@/data/leisure.json";
 import beddingData from "@/data/bedding.json";
+import { supabase } from "./supabase";
 
 export type CategoryKey = "mattress" | "topper" | "pillow" | "baby" | "lifestyle" | "leisure" | "bedding";
 
@@ -108,7 +109,13 @@ export interface TopperRaw {
   image?: string | null;
 }
 
-// Unified ShopItem for the shop page
+export interface MattressCatalog {
+  lastUpdated: string | null;
+  uploadedFileName: string | null;
+  totalProducts: number;
+  products: MattressRaw[];
+}
+
 export interface ShopItem {
   id: string;
   category: CategoryKey;
@@ -122,338 +129,6 @@ export interface ShopItem {
   sizes?: { label: string; price: number }[];
 }
 
-const STORAGE_KEYS: Record<CategoryKey, string> = {
-  mattress: "vitafoam_mattresses",
-  topper: "vitafoam_toppers",
-  pillow: "vitafoam_pillows",
-  baby: "vitafoam_baby",
-  lifestyle: "vitafoam_lifestyle",
-  leisure: "vitafoam_leisure",
-  bedding: "vitafoam_bedding",
-};
-
-function loadFromStorage<T>(key: string, fallback: T[]): T[] {
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as T[];
-  } catch {}
-  return fallback;
-}
-
-function saveToStorage<T>(key: string, data: T[]): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(data));
-  } catch {}
-}
-
-// Mattress catalog (full object with metadata, used by admin + pdfParser)
-export interface MattressCatalog {
-  lastUpdated: string | null;
-  uploadedFileName: string | null;
-  totalProducts: number;
-  products: MattressRaw[];
-}
-
-export function getMattressCatalog(): MattressCatalog {
-  if (typeof window === "undefined") return mattressesData as MattressCatalog;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.mattress + "_catalog");
-    if (raw) return JSON.parse(raw) as MattressCatalog;
-  } catch {}
-  return mattressesData as MattressCatalog;
-}
-
-export function saveMattressCatalog(cat: MattressCatalog): void {
-  localStorage.setItem(STORAGE_KEYS.mattress + "_catalog", JSON.stringify(cat));
-  saveToStorage(STORAGE_KEYS.mattress, cat.products);
-  window.dispatchEvent(new Event("mbg-catalog-changed"));
-}
-
-export function resetMattressCatalog(): void {
-  localStorage.removeItem(STORAGE_KEYS.mattress + "_catalog");
-  localStorage.removeItem(STORAGE_KEYS.mattress);
-  window.dispatchEvent(new Event("mbg-catalog-changed"));
-}
-
-export function isUsingMattressSeed(): boolean {
-  if (typeof window === "undefined") return true;
-  return !localStorage.getItem(STORAGE_KEYS.mattress + "_catalog");
-}
-
-// Mattresses
-export function getMattresses(): MattressRaw[] {
-  return getMattressCatalog().products;
-}
-export function saveMattresses(data: MattressRaw[]): void {
-  saveToStorage(STORAGE_KEYS.mattress, data);
-}
-export function updateMattress(index: number, updated: MattressRaw): void {
-  const items = getMattresses();
-  items[index] = updated;
-  saveMattresses(items);
-}
-export function deleteMattress(index: number): void {
-  const items = getMattresses();
-  items.splice(index, 1);
-  saveMattresses(items);
-}
-
-// Toppers
-export function getToppers(): TopperRaw[] {
-  return loadFromStorage<TopperRaw>(STORAGE_KEYS.topper, (toppersData as { products: TopperRaw[] }).products);
-}
-export function saveToppers(data: TopperRaw[]): void {
-  saveToStorage(STORAGE_KEYS.topper, data);
-}
-export function updateTopper(index: number, updated: TopperRaw): void {
-  const items = getToppers();
-  items[index] = updated;
-  saveToppers(items);
-}
-export function deleteTopper(index: number): void {
-  const items = getToppers();
-  items.splice(index, 1);
-  saveToppers(items);
-}
-
-// Pillows
-export function getPillows(): SimpleProduct[] {
-  return loadFromStorage<SimpleProduct>(STORAGE_KEYS.pillow, (pillowsData as { products: SimpleProduct[] }).products);
-}
-export function savePillows(data: SimpleProduct[]): void {
-  saveToStorage(STORAGE_KEYS.pillow, data);
-}
-export function updatePillow(id: string, updated: SimpleProduct): void {
-  const items = getPillows();
-  const idx = items.findIndex(p => p.id === id);
-  if (idx >= 0) { items[idx] = updated; savePillows(items); }
-}
-export function deletePillow(id: string): void {
-  savePillows(getPillows().filter(p => p.id !== id));
-}
-export function addPillow(item: SimpleProduct): void {
-  const items = getPillows();
-  items.push(item);
-  savePillows(items);
-}
-
-// Baby
-export function getBabyProducts(): SimpleProduct[] {
-  return loadFromStorage<SimpleProduct>(STORAGE_KEYS.baby, (babyData as { products: SimpleProduct[] }).products);
-}
-export function saveBabyProducts(data: SimpleProduct[]): void {
-  saveToStorage(STORAGE_KEYS.baby, data);
-}
-export function updateBabyProduct(id: string, updated: SimpleProduct): void {
-  const items = getBabyProducts();
-  const idx = items.findIndex(p => p.id === id);
-  if (idx >= 0) { items[idx] = updated; saveBabyProducts(items); }
-}
-export function deleteBabyProduct(id: string): void {
-  saveBabyProducts(getBabyProducts().filter(p => p.id !== id));
-}
-export function addBabyProduct(item: SimpleProduct): void {
-  const items = getBabyProducts();
-  items.push(item);
-  saveBabyProducts(items);
-}
-
-// Lifestyle
-export function getLifestyleProducts(): SimpleProduct[] {
-  return loadFromStorage<SimpleProduct>(STORAGE_KEYS.lifestyle, (lifestyleData as { products: SimpleProduct[] }).products);
-}
-export function saveLifestyleProducts(data: SimpleProduct[]): void {
-  saveToStorage(STORAGE_KEYS.lifestyle, data);
-}
-export function updateLifestyleProduct(id: string, updated: SimpleProduct): void {
-  const items = getLifestyleProducts();
-  const idx = items.findIndex(p => p.id === id);
-  if (idx >= 0) { items[idx] = updated; saveLifestyleProducts(items); }
-}
-export function deleteLifestyleProduct(id: string): void {
-  saveLifestyleProducts(getLifestyleProducts().filter(p => p.id !== id));
-}
-export function addLifestyleProduct(item: SimpleProduct): void {
-  const items = getLifestyleProducts();
-  items.push(item);
-  saveLifestyleProducts(items);
-}
-
-// Leisure
-export function getLeisureProducts(): SimpleProduct[] {
-  return loadFromStorage<SimpleProduct>(STORAGE_KEYS.leisure, (leisureData as { products: SimpleProduct[] }).products);
-}
-export function saveLeisureProducts(data: SimpleProduct[]): void {
-  saveToStorage(STORAGE_KEYS.leisure, data);
-}
-export function updateLeisureProduct(id: string, updated: SimpleProduct): void {
-  const items = getLeisureProducts();
-  const idx = items.findIndex(p => p.id === id);
-  if (idx >= 0) { items[idx] = updated; saveLeisureProducts(items); }
-}
-export function deleteLeisureProduct(id: string): void {
-  saveLeisureProducts(getLeisureProducts().filter(p => p.id !== id));
-}
-export function addLeisureProduct(item: SimpleProduct): void {
-  const items = getLeisureProducts();
-  items.push(item);
-  saveLeisureProducts(items);
-}
-
-// Bedding
-export function getBeddingProducts(): BeddingProduct[] {
-  return loadFromStorage<BeddingProduct>(STORAGE_KEYS.bedding, (beddingData as { products: BeddingProduct[] }).products);
-}
-export function saveBeddingProducts(data: BeddingProduct[]): void {
-  saveToStorage(STORAGE_KEYS.bedding, data);
-}
-export function updateBeddingProduct(id: string, updated: BeddingProduct): void {
-  const items = getBeddingProducts();
-  const idx = items.findIndex(p => p.id === id);
-  if (idx >= 0) { items[idx] = updated; saveBeddingProducts(items); }
-}
-export function deleteBeddingProduct(id: string): void {
-  saveBeddingProducts(getBeddingProducts().filter(p => p.id !== id));
-}
-export function addBeddingProduct(item: BeddingProduct): void {
-  const items = getBeddingProducts();
-  items.push(item);
-  saveBeddingProducts(items);
-}
-
-// Unified shop items
-export function getAllShopItems(category?: CategoryKey): ShopItem[] {
-  const items: ShopItem[] = [];
-
-  const addMattresses = () => {
-    getMattresses().forEach((m, i) => {
-      items.push({
-        id: `mattress-${m.code || i}`,
-        category: "mattress",
-        name: m.displayLabel,
-        shortDesc: `${m.grade} mattress`,
-        description: `${m.grade} foam mattress — ${m.displaySize}`,
-        minPrice: m.price,
-        grade: m.grade,
-      });
-    });
-  };
-
-  const addToppers = () => {
-    getToppers().forEach((t, i) => {
-      items.push({
-        id: `topper-${t.code || i}`,
-        category: "topper",
-        name: t.displayLabel,
-        shortDesc: `${t.grade}`,
-        description: `${t.grade} — ${t.displaySize}`,
-        minPrice: t.price,
-        grade: t.grade,
-      });
-    });
-  };
-
-  const addSimple = (prods: SimpleProduct[], cat: CategoryKey) => {
-    prods.forEach(p => {
-      items.push({
-        id: p.id,
-        category: cat,
-        name: p.name,
-        shortDesc: p.shortDesc,
-        description: p.description,
-        image: p.image,
-        minPrice: p.price,
-      });
-    });
-  };
-
-  const addBedding = () => {
-    getBeddingProducts().forEach(p => {
-      const minPrice = Math.min(...p.variants.map(v => v.price));
-      items.push({
-        id: p.id,
-        category: "bedding",
-        name: p.name,
-        shortDesc: p.shortDesc,
-        description: p.description,
-        image: p.image,
-        minPrice,
-        sizes: p.variants.map(v => ({ label: v.sizeName, price: v.price })),
-      });
-    });
-  };
-
-  if (!category || category === "mattress") addMattresses();
-  if (!category || category === "topper") addToppers();
-  if (!category || category === "pillow") addSimple(getPillows(), "pillow");
-  if (!category || category === "baby") addSimple(getBabyProducts(), "baby");
-  if (!category || category === "lifestyle") addSimple(getLifestyleProducts(), "lifestyle");
-  if (!category || category === "leisure") addSimple(getLeisureProducts(), "leisure");
-  if (!category || category === "bedding") addBedding();
-
-  return items;
-}
-
-// Aliases used by AdminDashboard
-export function getTopperProducts(): TopperRaw[] { return getToppers(); }
-export function saveTopperProducts(data: TopperRaw[]): void { saveToppers(data); }
-export function deleteTopperRaw(code: string): void {
-  saveToppers(getToppers().filter((t) => t.code !== code));
-}
-export function getPillowProducts(): SimpleProduct[] { return getPillows(); }
-export function getBabyProductsList(): SimpleProduct[] { return getBabyProducts(); }
-export function getLeisureProductsList(): SimpleProduct[] { return getLeisureProducts(); }
-export function getLifestyleProductsList(): SimpleProduct[] { return getLifestyleProducts(); }
-
-export type SimpleProductRaw = SimpleProduct;
-export type BeddingProductRaw = BeddingProduct;
-
-export function addSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", product: SimpleProduct): void {
-  if (cat === "pillow") addPillow(product);
-  else if (cat === "baby") addBabyProduct(product);
-  else if (cat === "lifestyle") addLifestyleProduct(product);
-  else addLeisureProduct(product);
-}
-
-export function updateSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", updated: SimpleProduct): void {
-  if (cat === "pillow") updatePillow(updated.id, updated);
-  else if (cat === "baby") updateBabyProduct(updated.id, updated);
-  else if (cat === "lifestyle") updateLifestyleProduct(updated.id, updated);
-  else updateLeisureProduct(updated.id, updated);
-}
-
-export function deleteSimpleProduct(cat: "pillow" | "baby" | "lifestyle" | "leisure", id: string): void {
-  if (cat === "pillow") deletePillow(id);
-  else if (cat === "baby") deleteBabyProduct(id);
-  else if (cat === "lifestyle") deleteLifestyleProduct(id);
-  else deleteLeisureProduct(id);
-}
-
-export function deleteMattressRaw(code: string): void {
-  const cat = getMattressCatalog();
-  const products = cat.products.filter((p) => p.code !== code);
-  saveMattressCatalog({ ...cat, products, totalProducts: products.length });
-}
-
-export function updateMattressRaw(updated: MattressRaw): void {
-  const cat = getMattressCatalog();
-  const products = cat.products.map((p) => p.code === updated.code ? updated : p);
-  saveMattressCatalog({ ...cat, products });
-}
-
-export function addMattressRaw(raw: MattressRaw): void {
-  const cat = getMattressCatalog();
-  const products = [...cat.products, raw];
-  saveMattressCatalog({ ...cat, products, totalProducts: products.length });
-}
-
-export function getTotalSKUCount(): number {
-  return getMattresses().length + getToppers().length + getPillows().length +
-    getBabyProducts().length + getLifestyleProducts().length +
-    getLeisureProducts().length + getBeddingProducts().length;
-}
-
-// Grouped shop items — mattresses/toppers are grouped by grade, others are per-product
 export interface GroupedShopItem {
   id: string;
   category: CategoryKey;
@@ -467,6 +142,290 @@ export interface GroupedShopItem {
   badgeClass?: string;
   sizes: { label: string; L: number; W: number; T: number; price: number }[];
 }
+
+// ─── In-memory cache (seeded from JSON, overwritten by Supabase on load) ───
+
+const cache: {
+  mattresses: MattressCatalog;
+  toppers: TopperRaw[];
+  pillows: SimpleProduct[];
+  baby: SimpleProduct[];
+  lifestyle: SimpleProduct[];
+  leisure: SimpleProduct[];
+  bedding: BeddingProduct[];
+} = {
+  mattresses: mattressesData as MattressCatalog,
+  toppers: (toppersData as { products: TopperRaw[] }).products,
+  pillows: (pillowsData as { products: SimpleProduct[] }).products,
+  baby: (babyData as { products: SimpleProduct[] }).products,
+  lifestyle: (lifestyleData as { products: SimpleProduct[] }).products,
+  leisure: (leisureData as { products: SimpleProduct[] }).products,
+  bedding: (beddingData as { products: BeddingProduct[] }).products,
+};
+
+// ─── Supabase helpers ───────────────────────────────────────────────────────
+
+function dispatch() {
+  window.dispatchEvent(new Event("mbg-catalog-changed"));
+}
+
+function persist(key: string, value: unknown): void {
+  supabase
+    .from("catalog")
+    .upsert({ key, value, updated_at: new Date().toISOString() })
+    .then(({ error }) => {
+      if (error) console.error("[catalog] Supabase save failed:", key, error);
+    });
+}
+
+// Load everything from Supabase once and update cache
+export async function initCatalog(): Promise<void> {
+  try {
+    const { data, error } = await supabase.from("catalog").select("key, value");
+    if (error) throw error;
+    if (data) {
+      for (const { key, value } of data) {
+        if (key === "mattresses") cache.mattresses = value as MattressCatalog;
+        else if (key === "toppers") cache.toppers = value as TopperRaw[];
+        else if (key === "pillows") cache.pillows = value as SimpleProduct[];
+        else if (key === "baby") cache.baby = value as SimpleProduct[];
+        else if (key === "lifestyle") cache.lifestyle = value as SimpleProduct[];
+        else if (key === "leisure") cache.leisure = value as SimpleProduct[];
+        else if (key === "bedding") cache.bedding = value as BeddingProduct[];
+      }
+    }
+  } catch (e) {
+    console.warn("[catalog] Could not load from Supabase, using seed data:", e);
+  }
+  dispatch();
+}
+
+// Trigger on module load (fire-and-forget; components re-render via event)
+initCatalog();
+
+// ─── Mattresses ─────────────────────────────────────────────────────────────
+
+export function getMattressCatalog(): MattressCatalog {
+  return cache.mattresses;
+}
+
+export function saveMattressCatalog(cat: MattressCatalog): void {
+  cache.mattresses = cat;
+  dispatch();
+  persist("mattresses", cat);
+}
+
+export function resetMattressCatalog(): void {
+  cache.mattresses = mattressesData as MattressCatalog;
+  dispatch();
+  supabase.from("catalog").delete().eq("key", "mattresses").then(({ error }) => {
+    if (error) console.error("[catalog] reset failed:", error);
+  });
+}
+
+export function isUsingMattressSeed(): boolean {
+  return cache.mattresses.lastUpdated === null;
+}
+
+export function getMattresses(): MattressRaw[] {
+  return cache.mattresses.products;
+}
+
+export function saveMattresses(data: MattressRaw[]): void {
+  saveMattressCatalog({ ...cache.mattresses, products: data, totalProducts: data.length });
+}
+
+export function updateMattressRaw(updated: MattressRaw): void {
+  saveMattresses(getMattresses().map((p) => p.code === updated.code ? updated : p));
+}
+
+export function addMattressRaw(raw: MattressRaw): void {
+  saveMattresses([...getMattresses(), raw]);
+}
+
+export function deleteMattressRaw(code: string): void {
+  saveMattresses(getMattresses().filter((p) => p.code !== code));
+}
+
+// ─── Toppers ─────────────────────────────────────────────────────────────────
+
+export function getToppers(): TopperRaw[] { return cache.toppers; }
+
+function saveToppers(data: TopperRaw[]): void {
+  cache.toppers = data;
+  dispatch();
+  persist("toppers", data);
+}
+
+export function getTopperProducts(): TopperRaw[] { return getToppers(); }
+export function saveTopperProducts(data: TopperRaw[]): void { saveToppers(data); }
+export function deleteTopperRaw(code: string): void {
+  saveToppers(getToppers().filter((t) => t.code !== code));
+}
+
+// ─── Generic simple-product factory ─────────────────────────────────────────
+
+type SimpleCat = "pillow" | "baby" | "lifestyle" | "leisure";
+
+function getSimple(cat: SimpleCat): SimpleProduct[] { return cache[cat === "pillow" ? "pillows" : cat === "baby" ? "baby" : cat === "lifestyle" ? "lifestyle" : "leisure"]; }
+function saveSimple(cat: SimpleCat, data: SimpleProduct[]): void {
+  const key = cat === "pillow" ? "pillows" : cat;
+  (cache as any)[key === "pillows" ? "pillows" : key] = data;
+  dispatch();
+  persist(key === "pillows" ? "pillows" : key, data);
+}
+
+// Fix: map cat key to cache key correctly
+function cacheKey(cat: SimpleCat): keyof typeof cache {
+  if (cat === "pillow") return "pillows";
+  return cat as keyof typeof cache;
+}
+
+function getSimpleCat(cat: SimpleCat): SimpleProduct[] {
+  return cache[cacheKey(cat)] as SimpleProduct[];
+}
+
+function saveSimpleCat(cat: SimpleCat, data: SimpleProduct[]): void {
+  const ck = cacheKey(cat);
+  (cache as any)[ck] = data;
+  dispatch();
+  const supaKey = cat === "pillow" ? "pillows" : cat;
+  persist(supaKey, data);
+}
+
+// ─── Pillows ─────────────────────────────────────────────────────────────────
+
+export function getPillows(): SimpleProduct[] { return cache.pillows; }
+export function getPillowProducts(): SimpleProduct[] { return getPillows(); }
+export function savePillows(data: SimpleProduct[]): void { saveSimpleCat("pillow", data); }
+export function addPillow(item: SimpleProduct): void { savePillows([...getPillows(), item]); }
+export function updatePillow(id: string, updated: SimpleProduct): void {
+  savePillows(getPillows().map((p) => p.id === id ? updated : p));
+}
+export function deletePillow(id: string): void {
+  savePillows(getPillows().filter((p) => p.id !== id));
+}
+
+// ─── Baby ─────────────────────────────────────────────────────────────────────
+
+export function getBabyProducts(): SimpleProduct[] { return cache.baby; }
+export function saveBabyProducts(data: SimpleProduct[]): void { saveSimpleCat("baby", data); }
+export function addBabyProduct(item: SimpleProduct): void { saveBabyProducts([...getBabyProducts(), item]); }
+export function updateBabyProduct(id: string, updated: SimpleProduct): void {
+  saveBabyProducts(getBabyProducts().map((p) => p.id === id ? updated : p));
+}
+export function deleteBabyProduct(id: string): void {
+  saveBabyProducts(getBabyProducts().filter((p) => p.id !== id));
+}
+
+// ─── Lifestyle ────────────────────────────────────────────────────────────────
+
+export function getLifestyleProducts(): SimpleProduct[] { return cache.lifestyle; }
+export function saveLifestyleProducts(data: SimpleProduct[]): void { saveSimpleCat("lifestyle", data); }
+export function addLifestyleProduct(item: SimpleProduct): void { saveLifestyleProducts([...getLifestyleProducts(), item]); }
+export function updateLifestyleProduct(id: string, updated: SimpleProduct): void {
+  saveLifestyleProducts(getLifestyleProducts().map((p) => p.id === id ? updated : p));
+}
+export function deleteLifestyleProduct(id: string): void {
+  saveLifestyleProducts(getLifestyleProducts().filter((p) => p.id !== id));
+}
+
+// ─── Leisure ─────────────────────────────────────────────────────────────────
+
+export function getLeisureProducts(): SimpleProduct[] { return cache.leisure; }
+export function saveLeisureProducts(data: SimpleProduct[]): void { saveSimpleCat("leisure", data); }
+export function addLeisureProduct(item: SimpleProduct): void { saveLeisureProducts([...getLeisureProducts(), item]); }
+export function updateLeisureProduct(id: string, updated: SimpleProduct): void {
+  saveLeisureProducts(getLeisureProducts().map((p) => p.id === id ? updated : p));
+}
+export function deleteLeisureProduct(id: string): void {
+  saveLeisureProducts(getLeisureProducts().filter((p) => p.id !== id));
+}
+
+// ─── Bedding ─────────────────────────────────────────────────────────────────
+
+export function getBeddingProducts(): BeddingProduct[] { return cache.bedding; }
+export function saveBeddingProducts(data: BeddingProduct[]): void {
+  cache.bedding = data;
+  dispatch();
+  persist("bedding", data);
+}
+export function addBeddingProduct(item: BeddingProduct): void {
+  saveBeddingProducts([...getBeddingProducts(), item]);
+}
+export function updateBeddingProduct(id: string, updated: BeddingProduct): void {
+  saveBeddingProducts(getBeddingProducts().map((p) => p.id === id ? updated : p));
+}
+export function deleteBeddingProduct(id: string): void {
+  saveBeddingProducts(getBeddingProducts().filter((p) => p.id !== id));
+}
+
+// ─── Admin aliases ────────────────────────────────────────────────────────────
+
+export type SimpleProductRaw = SimpleProduct;
+export type BeddingProductRaw = BeddingProduct;
+
+export function addSimpleProduct(cat: SimpleCat, product: SimpleProduct): void {
+  if (cat === "pillow") addPillow(product);
+  else if (cat === "baby") addBabyProduct(product);
+  else if (cat === "lifestyle") addLifestyleProduct(product);
+  else addLeisureProduct(product);
+}
+
+export function updateSimpleProduct(cat: SimpleCat, updated: SimpleProduct): void {
+  if (cat === "pillow") updatePillow(updated.id, updated);
+  else if (cat === "baby") updateBabyProduct(updated.id, updated);
+  else if (cat === "lifestyle") updateLifestyleProduct(updated.id, updated);
+  else updateLeisureProduct(updated.id, updated);
+}
+
+export function deleteSimpleProduct(cat: SimpleCat, id: string): void {
+  if (cat === "pillow") deletePillow(id);
+  else if (cat === "baby") deleteBabyProduct(id);
+  else if (cat === "lifestyle") deleteLifestyleProduct(id);
+  else deleteLeisureProduct(id);
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+
+export function getTotalSKUCount(): number {
+  return getMattresses().length + getToppers().length + getPillows().length +
+    getBabyProducts().length + getLifestyleProducts().length +
+    getLeisureProducts().length + getBeddingProducts().length;
+}
+
+// ─── Shop: individual items (for search) ─────────────────────────────────────
+
+export function getAllShopItems(category?: CategoryKey): ShopItem[] {
+  const items: ShopItem[] = [];
+
+  if (!category || category === "mattress") {
+    getMattresses().forEach((m, i) => {
+      items.push({ id: `mattress-${m.code || i}`, category: "mattress", name: m.displayLabel, shortDesc: `${m.grade} mattress`, description: `${m.grade} foam mattress — ${m.displaySize}`, minPrice: m.price, grade: m.grade });
+    });
+  }
+  if (!category || category === "topper") {
+    getToppers().forEach((t, i) => {
+      items.push({ id: `topper-${t.code || i}`, category: "topper", name: t.displayLabel, shortDesc: `${t.grade}`, description: `${t.grade} — ${t.displaySize}`, minPrice: t.price, grade: t.grade });
+    });
+  }
+  const addSimples = (prods: SimpleProduct[], cat: CategoryKey) => {
+    prods.forEach((p) => items.push({ id: p.id, category: cat, name: p.name, shortDesc: p.shortDesc, description: p.description, image: p.image, minPrice: p.price }));
+  };
+  if (!category || category === "pillow") addSimples(getPillows(), "pillow");
+  if (!category || category === "baby") addSimples(getBabyProducts(), "baby");
+  if (!category || category === "lifestyle") addSimples(getLifestyleProducts(), "lifestyle");
+  if (!category || category === "leisure") addSimples(getLeisureProducts(), "leisure");
+  if (!category || category === "bedding") {
+    getBeddingProducts().forEach((p) => {
+      const minPrice = Math.min(...p.variants.map((v) => v.price));
+      items.push({ id: p.id, category: "bedding", name: p.name, shortDesc: p.shortDesc, description: p.description, image: p.image, minPrice, sizes: p.variants.map((v) => ({ label: v.sizeName, price: v.price })) });
+    });
+  }
+  return items;
+}
+
+// ─── Shop: grouped items (for shop grid) ─────────────────────────────────────
 
 export function getGroupedShopItems(): GroupedShopItem[] {
   const items: GroupedShopItem[] = [];
@@ -497,8 +456,9 @@ export function getGroupedShopItems(): GroupedShopItem[] {
     });
   }
 
-  // Toppers — group as one product with sizes
-  const toppers = getToppers().filter((t) => t.price > 0).sort((a, b) => a.widthInches !== b.widthInches ? a.widthInches - b.widthInches : a.thicknessInches - b.thicknessInches);
+  // Toppers — grouped as one product
+  const toppers = getToppers().filter((t) => t.price > 0)
+    .sort((a, b) => a.widthInches !== b.widthInches ? a.widthInches - b.widthInches : a.thicknessInches - b.thicknessInches);
   if (toppers.length) {
     const topperImg = toppers.find((t) => t.image)?.image ?? null;
     items.push({
@@ -539,7 +499,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
 
   // Bedding
   for (const p of getBeddingProducts()) {
-    const sorted = [...p.variants].sort((a, b) => a.price - b.price);
+    const sorted = [...p.variants].sort((a, b) => a.W - b.W);
     if (!sorted.length) continue;
     items.push({
       id: p.id,
@@ -549,7 +509,7 @@ export function getGroupedShopItems(): GroupedShopItem[] {
       shortDesc: p.shortDesc,
       description: p.description,
       image: p.image,
-      minPrice: sorted[0].price,
+      minPrice: Math.min(...sorted.map((v) => v.price)),
       sizes: sorted.map((v) => ({ label: v.sizeName, L: v.L, W: v.W, T: 0, price: v.price })),
     });
   }
