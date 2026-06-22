@@ -44,6 +44,8 @@ const TESTIMONIALS = [
   { stars: 4, quote: "Quality product as expected from Vitafoam. I ordered the bedding set and it's very durable and comfortable. Customer service was responsive on WhatsApp. Nationwide delivery to Kano was faster than expected.", name: "Bello Usman", city: "Kano" },
   { stars: 5, quote: "The Corona mattress is absolutely worth every naira. I was skeptical about buying a mattress online but Vitafoam Comfort Centre made it easy. Free delivery in Lagos was a huge bonus. Will recommend to all my friends and family.", name: "Adaeze Obi", city: "Lagos" },
   { stars: 5, quote: "Excellent! I purchased the Grand mattress after sleeping on one at a hotel and wanting the same experience at home. Vitafoam Comfort Centre confirmed it was the exact same product. Delivery was same-day within Lagos. Outstanding service!", name: "Tunde Fashola", city: "Lagos" },
+  { stars: 5, quote: "I was not sure they delivered to Ogun State but they did! Got my Sizzler mattress delivered to Sagamu within 4 days. Very professional service and the mattress quality is outstanding. Will definitely order again.", name: "Yetunde Akinsanya", city: "Sagamu, Ogun" },
+  { stars: 5, quote: "Ordered two mattresses for my new house in Abeokuta. Vitafoam Mattress Nigeria had the best prices online and delivery was smooth. The Deluxe grade is perfect for the guest room. Very happy customer!", name: "Segun Oladele", city: "Abeokuta, Ogun" },
 ];
 
 const SHOP_CATEGORIES = [
@@ -70,25 +72,32 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
-        <title>Vitafoam Comfort Centre | Premium Mattresses in Nigeria</title>
-        <meta name="description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
-        <meta property="og:title" content="Vitafoam Comfort Centre | Premium Mattresses in Nigeria" />
-        <meta property="og:description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
-        <meta property="og:url" content="https://vitafoamcomfortcentre.com/" />
+        <title>Vitafoam Mattress Nigeria | Buy Vitafoam in Lagos & Ogun State</title>
+        <meta name="description" content="Buy genuine Vitafoam mattresses in Lagos and Ogun State. Authorized Vitafoam dealer — Corona, Grand, Deluxe, Sizzler and more. Free delivery in Lagos for orders ₦50,000+." />
+        <meta name="keywords" content="vitafoam mattress Nigeria, vitafoam Lagos, vitafoam Ogun, buy mattress Lagos, buy mattress Ogun State, Vitafoam dealer Nigeria, mattress Lagos, mattress Nigeria, vitafoam corona mattress, vitafoam grand mattress" />
+        <meta property="og:title" content="Vitafoam Mattress Nigeria | Buy Vitafoam in Lagos & Ogun State" />
+        <meta property="og:description" content="Buy genuine Vitafoam mattresses in Lagos and Ogun State. Authorized Vitafoam dealer — Corona, Grand, Deluxe, Sizzler and more. Free delivery in Lagos for orders ₦50,000+." />
+        <meta property="og:url" content="https://vitafoammattress.com/" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Vitafoam Comfort Centre | Premium Mattresses in Nigeria" />
-        <meta name="twitter:description" content="Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos." />
+        <meta name="twitter:title" content="Vitafoam Mattress Nigeria | Buy Vitafoam in Lagos & Ogun State" />
+        <meta name="twitter:description" content="Buy genuine Vitafoam mattresses in Lagos and Ogun State. Authorized Vitafoam dealer — Corona, Grand, Deluxe, Sizzler and more. Free delivery in Lagos for orders ₦50,000+." />
+        <link rel="canonical" href="https://vitafoammattress.com/" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Store",
-          "name": "Vitafoam Comfort Centre",
-          "description": "Authorized Vitafoam dealer in Nigeria offering premium mattresses, toppers, pillows, bedding and lifestyle products with free delivery within Lagos.",
-          "url": "https://vitafoamcomfortcentre.com",
+          "name": "Vitafoam Mattress Nigeria",
+          "description": "Authorized Vitafoam dealer selling genuine Vitafoam mattresses, toppers, pillows, bedding and lifestyle products in Lagos and Ogun State, Nigeria.",
+          "url": "https://vitafoammattress.com",
           "telephone": "+2348053054348",
           "address": { "@type": "PostalAddress", "addressCountry": "NG", "addressRegion": "Lagos" },
+          "areaServed": [
+            { "@type": "State", "name": "Lagos State", "addressCountry": "NG" },
+            { "@type": "State", "name": "Ogun State", "addressCountry": "NG" }
+          ],
           "priceRange": "₦₦",
           "openingHours": "Mo-Sa 08:00-18:00",
+          "sameAs": ["https://vitafoammattress.com"],
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
@@ -131,7 +140,7 @@ const Index = () => {
             <div className="flex items-center gap-3 py-3 md:py-2 md:px-6 first:md:pl-0">
               <Truck className="h-8 w-8 text-primary flex-shrink-0" />
               <div>
-                <p className="font-bold text-sm">FREE DELIVERY WITHIN LAGOS ONLY</p>
+                <p className="font-bold text-sm">FREE DELIVERY IN LAGOS & OGUN STATE</p>
                 <p className="text-gray-400 text-xs">FOR ORDERS OF 50K AND ABOVE · SEE TERMS & CONDITIONS</p>
               </div>
             </div>
@@ -139,7 +148,7 @@ const Index = () => {
               <Clock className="h-8 w-8 text-primary flex-shrink-0" />
               <div>
                 <p className="font-bold text-sm">DELIVERY WITHIN 3-5 WORKING DAYS</p>
-                <p className="text-gray-400 text-xs">IN LAGOS ONLY · FREE DELIVERY INFORMATION</p>
+                <p className="text-gray-400 text-xs">LAGOS & OGUN STATE · NATIONWIDE SHIPPING AVAILABLE</p>
               </div>
             </div>
             <div className="flex items-center gap-3 py-3 md:py-2 md:px-6">
@@ -158,15 +167,15 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Nigeria's Most Trusted Mattress Brand</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Lagos & Ogun's Most Trusted Vitafoam Dealer</h2>
               <p className="text-gray-600 mb-4">
-                Vitafoam Comfort Centre is an authorized dealer of Vitafoam Nigeria's complete product range — from premium mattresses and toppers to pillows, bedding, and lifestyle products. We are committed to helping every Nigerian family experience the comfort and rest they deserve.
+                We are an authorized Vitafoam dealer serving Lagos State and Ogun State, offering the complete Vitafoam Nigeria product range — from premium mattresses like the Corona, Grand, Deluxe and Sizzler, to toppers, pillows, bedding, and lifestyle products.
               </p>
               <p className="text-gray-600 mb-4">
-                As an official Vitafoam partner, every product we sell is 100% authentic and backed by Vitafoam's quality guarantee. We offer free delivery within Lagos and nationwide shipping to bring comfort directly to your door.
+                Every product we sell is 100% genuine Vitafoam, backed by the brand's quality guarantee. We offer free delivery across Lagos and Ogun State for qualifying orders, and nationwide shipping throughout Nigeria.
               </p>
               <p className="text-gray-600">
-                Whether you're furnishing a new home, upgrading your sleep experience, or looking for the perfect gift, Vitafoam Comfort Centre is your trusted source for Nigeria's number-one foam brand.
+                Looking to buy Vitafoam in Lagos or Ogun State? We are your closest authorized source — no middlemen, no fakes, just the real Vitafoam comfort you deserve.
               </p>
             </div>
             <div className="bg-green-50 rounded-2xl p-8">
@@ -177,7 +186,7 @@ const Index = () => {
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-green-700 mb-2">Free</div>
-                  <div className="text-gray-600 text-sm">Lagos Delivery</div>
+                  <div className="text-gray-600 text-sm">Lagos & Ogun Delivery</div>
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-green-700 mb-2">50+</div>

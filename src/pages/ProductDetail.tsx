@@ -72,14 +72,14 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
-        <title>{product.name} | Vitafoam Comfort Centre</title>
-        <meta name="description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
-        <meta property="og:title" content={`${product.name} | Vitafoam Comfort Centre`} />
-        <meta property="og:description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
+        <title>{product.name} | Buy in Lagos & Ogun — Vitafoam Mattress Nigeria</title>
+        <meta name="description" content={`Buy ${product.name} in Lagos & Ogun State. ${product.shortDesc}. Authorized Vitafoam dealer with free delivery for orders ₦50,000+.`} />
+        <meta property="og:title" content={`${product.name} | Vitafoam Mattress Nigeria`} />
+        <meta property="og:description" content={`Buy ${product.name} in Lagos & Ogun State. ${product.shortDesc}. Authorized Vitafoam dealer with free delivery for orders ₦50,000+.`} />
         <meta property="og:type" content="product" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${product.name} | Vitafoam Comfort Centre`} />
-        <meta name="twitter:description" content={`${product.name} — ${product.shortDesc}. Shop at Vitafoam Comfort Centre, Nigeria's authorized Vitafoam dealer.`} />
+        <meta name="twitter:title" content={`${product.name} | Vitafoam Mattress Nigeria`} />
+        <meta name="twitter:description" content={`Buy ${product.name} in Lagos & Ogun State. ${product.shortDesc}. Authorized Vitafoam dealer with free delivery for orders ₦50,000+.`} />
       </Helmet>
       <SiteHeader />
 

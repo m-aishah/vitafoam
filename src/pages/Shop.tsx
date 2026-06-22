@@ -352,15 +352,17 @@ const Shop = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
-        <title>Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre</title>
-        <meta name="description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
-        <meta property="og:title" content="Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre" />
-        <meta property="og:description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
-        <meta property="og:url" content="https://vitafoamcomfortcentre.com/shop" />
+        <title>Buy Vitafoam Mattresses in Lagos & Ogun State | Shop Online</title>
+        <meta name="description" content="Shop genuine Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Serving Lagos and Ogun State. Free delivery for orders ₦50,000+." />
+        <meta name="keywords" content="buy vitafoam mattress Lagos, vitafoam mattress price Nigeria, vitafoam Ogun State, vitafoam corona mattress, vitafoam grand mattress, vitafoam deluxe mattress, mattress Lagos" />
+        <meta property="og:title" content="Buy Vitafoam Mattresses in Lagos & Ogun State | Shop Online" />
+        <meta property="og:description" content="Shop genuine Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Serving Lagos and Ogun State. Free delivery for orders ₦50,000+." />
+        <meta property="og:url" content="https://vitafoammattress.com/shop" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Shop Mattresses, Pillows &amp; Bedding | Vitafoam Comfort Centre" />
-        <meta name="twitter:description" content="Browse our full range of Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Authorized dealer with free delivery within Lagos." />
+        <meta name="twitter:title" content="Buy Vitafoam Mattresses in Lagos & Ogun State | Shop Online" />
+        <meta name="twitter:description" content="Shop genuine Vitafoam mattresses, toppers, pillows, bedding and lifestyle products. Serving Lagos and Ogun State. Free delivery for orders ₦50,000+." />
+        <link rel="canonical" href="https://vitafoammattress.com/shop" />
       </Helmet>
       <SiteHeader />
 
