@@ -384,7 +384,7 @@ const Index = () => {
               </p>
               <Link
                 to="/shop?category=mattress"
-                className="inline-block bg-white text-gray-900 text-sm font-bold px-6 py-2.5 rounded hover:bg-gray-100 transition-colors uppercase tracking-wide"
+                className="inline-block bg-white text-gray-900 text-sm font-bold px-6 py-2.5 rounded-xl hover:bg-gray-100 transition-colors uppercase tracking-wide"
               >
                 FIND THE RIGHT MATTRESS
               </Link>
@@ -454,7 +454,7 @@ const Index = () => {
           <div className="mt-10 text-center">
             <Link
               to="/shop"
-              className="inline-block bg-[#1a1a1a] text-white text-sm font-bold px-8 py-3 rounded hover:bg-gray-800 transition-colors uppercase tracking-wide"
+              className="inline-block bg-[#1a1a1a] text-white text-sm font-bold px-8 py-3 rounded-xl hover:bg-gray-800 transition-colors uppercase tracking-wide"
             >
               VIEW ALL PRODUCTS
             </Link>
@@ -473,7 +473,7 @@ const Index = () => {
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
-                <div className="border border-gray-200 rounded p-6">
+                <div className="border border-gray-200 rounded-xl p-6">
                   <div className="flex gap-1 text-primary mb-4">
                     {Array.from({ length: t.stars }).map((_, j) => (
                       <Star key={j} className="h-4 w-4 fill-current" />
