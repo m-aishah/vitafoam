@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { CartItem, cartTotal, clearCart, getCart, removeItem, updateQty } from "@/lib/cart";
@@ -13,6 +13,7 @@ import { ShoppingBag, Trash2 } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [items, setItems] = useState<CartItem[]>([]);
   useEffect(() => {
     const refresh = () => setItems(getCart());
@@ -49,6 +50,13 @@ const Cart = () => {
 
       <section className="py-12 flex-1 bg-white">
         <div className="container mx-auto container-px">
+          <button
+            onClick={() => navigate(-1)}
+            className="md:hidden flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-primary mb-6 -mt-4 transition-colors"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Continue Shopping
+          </button>
           {items.length === 0 ? (
             <div className="max-w-md mx-auto text-center py-16">
               <ShoppingBag className="mx-auto h-12 w-12 text-gray-300 mb-4" />

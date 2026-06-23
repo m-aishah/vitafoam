@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MattressIllustration from "@/components/MattressIllustration";
@@ -107,6 +107,7 @@ function ReviewsSection({ category }: { category: string }) {
 
 const ProductDetail = () => {
   const { id = "" } = useParams();
+  const navigate = useNavigate();
   const all = useMemo(() => getGroupedShopItems(), []);
   const product = useMemo(() => all.find((p) => p.id === id), [all, id]);
   const related = useMemo(
@@ -184,6 +185,14 @@ const ProductDetail = () => {
 
       <section className="py-8 md:py-10 flex-1 bg-white">
         <div className="container mx-auto container-px">
+          {/* Mobile back button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="md:hidden flex items-center gap-1.5 text-sm font-semibold text-gray-600 hover:text-primary mb-5 -mt-2 transition-colors"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+            Back
+          </button>
           <div className="grid gap-8 lg:gap-10 lg:grid-cols-2">
             {/* Image */}
             <div className="border border-gray-200 rounded-2xl bg-gray-50 aspect-square flex items-center justify-center p-6 md:p-8">
