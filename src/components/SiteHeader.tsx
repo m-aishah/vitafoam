@@ -15,13 +15,26 @@ const NAV_CATEGORIES = [
   { label: "BABY & MOTHER", cat: "baby", to: "/shop?category=baby" },
 ];
 
+const SEARCH_CATS = [
+  { label: "All", value: "" },
+  { label: "Mattress", value: "mattress" },
+  { label: "Topper", value: "topper" },
+  { label: "Pillow", value: "pillow" },
+  { label: "Bedding", value: "bedding" },
+  { label: "Lifestyle", value: "lifestyle" },
+  { label: "Leisure", value: "leisure" },
+  { label: "Baby", value: "baby" },
+];
+
 export const SiteHeader = () => {
   const [count, setCount] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchCat, setSearchCat] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchResults, setSearchResults] = useState<ReturnType<typeof getAllShopItems>>([]);
   const searchRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
   const loc = useLocation();
   const navigate = useNavigate();
 
@@ -41,16 +54,20 @@ export const SiteHeader = () => {
   useEffect(() => {
     if (searchQuery.trim().length < 2) { setSearchResults([]); setSearchOpen(false); return; }
     const q = searchQuery.toLowerCase();
-    const results = getAllShopItems().filter(
-      (p) => p.name.toLowerCase().includes(q) || (p.grade ?? "").toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)
-    ).slice(0, 6);
+    const results = getAllShopItems().filter((p) => {
+      if (searchCat && p.category !== searchCat) return false;
+      return p.name.toLowerCase().includes(q) || (p.grade ?? "").toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q);
+    }).slice(0, 7);
     setSearchResults(results);
     setSearchOpen(results.length > 0);
-  }, [searchQuery]);
+  }, [searchQuery, searchCat]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+      if (
+        searchRef.current && !searchRef.current.contains(e.target as Node) &&
+        mobileSearchRef.current && !mobileSearchRef.current.contains(e.target as Node)
+      ) {
         setSearchOpen(false);
       }
     };
@@ -61,13 +78,41 @@ export const SiteHeader = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      const params = new URLSearchParams();
+      params.set("search", searchQuery.trim());
+      if (searchCat) params.set("category", searchCat);
+      navigate(`/shop?${params.toString()}`);
       setSearchOpen(false);
     }
   };
 
   const searchParams = new URLSearchParams(loc.search);
   const activeCat = loc.pathname === "/shop" ? (searchParams.get("category") ?? "") : "";
+
+  const ResultsDropdown = () => (
+    <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 overflow-hidden">
+      {searchResults.map((p) => (
+        <Link
+          key={p.id}
+          to={`/shop/${p.id}`}
+          className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-primary/5 transition-colors text-sm border-b border-gray-100 last:border-0"
+          onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+        >
+          <div>
+            <span className="font-semibold text-gray-900">{p.name}</span>
+            {p.grade && <span className="ml-2 text-xs text-gray-400">{p.grade}</span>}
+          </div>
+          <span className="text-xs text-primary font-semibold capitalize flex-shrink-0">{p.categoryLabel}</span>
+        </Link>
+      ))}
+      <button
+        onClick={handleSearchSubmit}
+        className="w-full px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/5 transition-colors text-left"
+      >
+        See all results for "{searchQuery}" →
+      </button>
+    </div>
+  );
 
   return (
     <header className="sticky top-0 z-40 w-full">
@@ -79,43 +124,31 @@ export const SiteHeader = () => {
             <img src={vitafoamLogo} alt="Vitafoam" className="h-10 sm:h-12 w-auto" />
           </Link>
 
-          {/* Search */}
+          {/* Desktop Search */}
           <div className="flex-1 max-w-xl mx-4 hidden md:block" ref={searchRef}>
             <form onSubmit={handleSearchSubmit} className="relative">
-              <div className="flex items-center border border-gray-300 rounded overflow-hidden focus-within:border-primary transition-colors">
-                <select className="h-10 px-2 text-sm border-r border-gray-300 bg-gray-50 text-gray-600 focus:outline-none">
-                  <option>All</option>
-                  <option>Mattress</option>
-                  <option>Pillow</option>
-                  <option>Bedding</option>
+              <div className="flex items-center border border-gray-300 rounded-2xl overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all bg-white">
+                <select
+                  value={searchCat}
+                  onChange={(e) => setSearchCat(e.target.value)}
+                  className="h-11 pl-3 pr-2 text-sm border-r border-gray-200 bg-gray-50 text-gray-600 focus:outline-none rounded-l-2xl"
+                >
+                  {SEARCH_CATS.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
                 </select>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Hello, what are you looking for today?"
-                  className="flex-1 h-10 px-3 text-sm focus:outline-none"
+                  placeholder="What are you looking for today?"
+                  className="flex-1 h-11 px-3 text-sm focus:outline-none bg-transparent"
                 />
-                <button type="submit" className="h-10 w-10 flex items-center justify-center text-gray-400 hover:text-primary transition-colors">
+                <button type="submit" className="h-11 w-11 flex items-center justify-center bg-primary text-white hover:bg-primary/90 transition-colors rounded-r-2xl flex-shrink-0">
                   <Search className="h-4 w-4" />
                 </button>
               </div>
-              {/* Search dropdown */}
-              {searchOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded shadow-lg z-50">
-                  {searchResults.map((p) => (
-                    <Link
-                      key={p.id}
-                      to={`/shop?category=${p.category}&search=${encodeURIComponent(p.name)}`}
-                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-sm"
-                      onClick={() => setSearchOpen(false)}
-                    >
-                      <span className="text-primary font-semibold">{p.name}</span>
-                      <span className="text-gray-400 text-xs">{p.categoryLabel}</span>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              {searchOpen && <ResultsDropdown />}
             </form>
           </div>
 
@@ -173,18 +206,21 @@ export const SiteHeader = () => {
       {mobileOpen && (
         <div className="bg-white border-t border-gray-200 md:hidden shadow-lg">
           {/* Mobile search */}
-          <div className="p-3 border-b border-gray-100">
-            <form onSubmit={handleSearchSubmit} className="flex items-center border border-gray-300 rounded overflow-hidden">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products..."
-                className="flex-1 h-10 px-3 text-sm focus:outline-none"
-              />
-              <button type="submit" className="h-10 w-10 flex items-center justify-center text-gray-400">
-                <Search className="h-4 w-4" />
-              </button>
+          <div className="p-3 border-b border-gray-100" ref={mobileSearchRef}>
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <div className="flex items-center border border-gray-300 rounded-2xl overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products..."
+                  className="flex-1 h-11 px-4 text-sm focus:outline-none"
+                />
+                <button type="submit" className="h-11 w-11 flex items-center justify-center bg-primary text-white hover:bg-primary/90 transition-colors rounded-r-2xl flex-shrink-0">
+                  <Search className="h-4 w-4" />
+                </button>
+              </div>
+              {searchOpen && <ResultsDropdown />}
             </form>
           </div>
           <div className="py-2">
