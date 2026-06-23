@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useCatalogReady } from "@/hooks/useCatalog";
 import { useSearchParams, Link } from "react-router-dom";
@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { formatNaira, GRADE_OPTIONS } from "@/lib/products";
 import { getGroupedShopItems, GroupedShopItem, CATEGORY_LABELS, CategoryKey } from "@/lib/catalog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Filter, ChevronDown, ShoppingCart } from "lucide-react";
+import { Filter, ChevronDown, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+
+const SHOP_PAGE_SIZE = 24;
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -225,6 +227,44 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
   );
 }
 
+function ShopPagination({ page, total, onChange }: { page: number; total: number; onChange: (p: number) => void }) {
+  const pages = Math.max(1, Math.ceil(total / SHOP_PAGE_SIZE));
+  if (pages <= 1) return null;
+  const from = (page - 1) * SHOP_PAGE_SIZE + 1;
+  const to = Math.min(page * SHOP_PAGE_SIZE, total);
+  const pageNums = Array.from({ length: pages }, (_, i) => i + 1)
+    .filter((p) => p === 1 || p === pages || Math.abs(p - page) <= 1)
+    .reduce<(number | "…")[]>((acc, p, i, arr) => {
+      if (i > 0 && (p as number) - (arr[i - 1] as number) > 1) acc.push("…");
+      acc.push(p);
+      return acc;
+    }, []);
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-10 pt-6 border-t border-gray-200">
+      <p className="text-sm text-gray-500">Showing {from}–{to} of {total} products</p>
+      <div className="flex items-center gap-1.5">
+        <button onClick={() => { onChange(page - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={page === 1}
+          className="h-9 w-9 flex items-center justify-center rounded-xl border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+          <ChevronLeft className="h-4 w-4" />
+        </button>
+        {pageNums.map((p, i) =>
+          p === "…" ? <span key={`e${i}`} className="px-1 text-sm text-gray-400">…</span> : (
+            <button key={p} onClick={() => { onChange(p as number); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+              className={`h-9 min-w-9 px-2.5 rounded-xl text-sm font-semibold border transition-colors ${page === p ? "bg-primary text-white border-primary" : "border-gray-300 hover:bg-gray-50 text-gray-700"}`}>
+              {p}
+            </button>
+          )
+        )}
+        <button onClick={() => { onChange(page + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }} disabled={page === pages}
+          className="h-9 w-9 flex items-center justify-center rounded-xl border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+          <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 const Shop = () => {
   const catalogTick = useCatalogReady();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -246,6 +286,7 @@ const Shop = () => {
   const [priceMin, setPriceMin] = useState<number | null>(null);
   const [priceMax, setPriceMax] = useState<number | null>(null);
   const [sort, setSort] = useState<SortKey>("price-asc");
+  const [page, setPage] = useState(1);
 
   const effectiveLow = priceMin ?? priceRange.min;
   const effectiveHigh = priceMax ?? priceRange.max;
@@ -285,7 +326,12 @@ const Shop = () => {
     setSearchParams(next);
   };
 
-  const clearAll = () => { setSelectedGrades(new Set()); setPriceMin(null); setPriceMax(null); };
+  const clearAll = () => { setSelectedGrades(new Set()); setPriceMin(null); setPriceMax(null); setPage(1); };
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => { setPage(1); }, [categoryParam, searchQuery, sort, selectedGrades, priceMin, priceMax]);
+
+  const paginated = useMemo(() => filtered.slice((page - 1) * SHOP_PAGE_SIZE, page * SHOP_PAGE_SIZE), [filtered, page]);
 
   const showGradeFilter = categoryParam === "mattress" || categoryParam === "all";
 
@@ -410,7 +456,7 @@ const Shop = () => {
                     <div className="mt-6 overflow-y-auto px-1"><FilterPanel /></div>
                   </SheetContent>
                 </Sheet>
-                <p className="text-sm text-gray-500">{filtered.length} {filtered.length === 1 ? "product" : "products"}</p>
+                <p className="text-sm text-gray-500">{filtered.length} {filtered.length === 1 ? "product" : "products"}{filtered.length > SHOP_PAGE_SIZE ? ` · page ${page} of ${Math.ceil(filtered.length / SHOP_PAGE_SIZE)}` : ""}</p>
               </div>
               <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
                 <SelectTrigger className="w-full sm:w-48 h-10 text-sm"><SelectValue /></SelectTrigger>
@@ -431,9 +477,12 @@ const Shop = () => {
                 )}
               </div>
             ) : (
-              <div className="grid gap-3 sm:gap-5 grid-cols-2 xl:grid-cols-3">
-                {filtered.map((item) => <ShopItemCard key={item.id} item={item} />)}
-              </div>
+              <>
+                <div className="grid gap-3 sm:gap-5 grid-cols-2 xl:grid-cols-3">
+                  {paginated.map((item) => <ShopItemCard key={item.id} item={item} />)}
+                </div>
+                <ShopPagination page={page} total={filtered.length} onChange={setPage} />
+              </>
             )}
           </div>
         </div>
