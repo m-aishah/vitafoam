@@ -87,7 +87,10 @@ function AccordionSection({ title, children, defaultOpen = false }: { title: str
 function ShopItemCard({ item }: { item: GroupedShopItem }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const selected = item.sizes[selectedIdx] ?? item.sizes[0];
+  const sortedSizes = [...item.sizes].sort((a, b) =>
+    a.L !== b.L ? a.L - b.L : a.W !== b.W ? a.W - b.W : a.T - b.T
+  );
+  const selected = sortedSizes[selectedIdx] ?? sortedSizes[0];
   const isMattress = item.category === "mattress";
 
   const handleAdd = () => {
@@ -99,7 +102,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
         description: item.description,
         grade: (item.grade ?? item.categoryLabel) as any,
         badgeClass: item.badgeClass ?? "",
-        sizes: item.sizes.map((s) => ({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price })),
+        sizes: sortedSizes.map((s) => ({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price })),
         image: item.image ?? undefined,
       },
       { size: selected?.label ?? "", L: selected?.L ?? 0, W: selected?.W ?? 0, T: selected?.T ?? 0, price: selected?.price ?? 0 },
@@ -200,7 +203,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
                       onChange={(e) => setSelectedIdx(Number(e.target.value))}
                       className="w-full h-10 border border-gray-300 rounded-xl px-3 text-sm focus:outline-none focus:border-primary"
                     >
-                      {item.sizes.map((s, i) => (
+                      {sortedSizes.map((s, i) => (
                         <option key={i} value={i}>{s.label} — {formatNaira(s.price)}</option>
                       ))}
                     </select>
