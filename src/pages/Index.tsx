@@ -110,7 +110,7 @@ const Index = () => {
 
       {/* HERO SLIDER */}
       <section className="relative overflow-hidden bg-white">
-        <div className="relative w-full h-[50vw] max-h-[540px] min-h-[180px]">
+        <div className="relative w-full h-[56vw] sm:h-[50vw] max-h-[540px] min-h-[180px]">
           {HERO_SLIDES.map(({ src }, i) => (
             <img
               key={src}
@@ -164,10 +164,10 @@ const Index = () => {
 
       {/* About Us Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto container-px">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Lagos & Ogun's Most Trusted Vitafoam Dealer</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Lagos & Ogun's Most Trusted Vitafoam Dealer</h2>
               <p className="text-gray-600 mb-4">
                 We are an authorized Vitafoam dealer serving Lagos State and Ogun State, offering the complete Vitafoam Nigeria product range — from premium mattresses like the Corona, Grand, Deluxe and Sizzler, to toppers, pillows, bedding, and lifestyle products.
               </p>
@@ -206,7 +206,7 @@ const Index = () => {
       <section className="py-16 lg:py-24 bg-white">
         <div className="container mx-auto container-px">
           <Reveal className="text-center mb-12">
-            <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">Why Vitafoam is Best for You</h2>
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">Why Vitafoam is Best for You</h2>
           </Reveal>
           <div className="grid gap-8 md:grid-cols-3">
             {WHY_FEATURES.map((f, i) => (
@@ -228,8 +228,8 @@ const Index = () => {
       <section className="py-8 bg-white">
         <div className="container mx-auto container-px">
           <div className="rounded-lg bg-primary p-8 md:p-10 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
-            <div className="flex-1 text-white">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="flex-1 text-white text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                 <CheckCircle2 className="h-7 w-7" />
                 <h3 className="font-display text-2xl md:text-3xl font-bold">Buy Right</h3>
               </div>
@@ -243,8 +243,8 @@ const Index = () => {
                 FIND THE RIGHT MATTRESS
               </Link>
             </div>
-            <div className="flex-shrink-0 md:absolute md:right-8 md:bottom-0">
-              <img src={mattressesImg} alt="Vitafoam Mattresses" className="h-40 md:h-52 w-auto object-contain" />
+            <div className="flex-shrink-0 md:absolute md:right-8 md:bottom-0 flex justify-center">
+              <img src={mattressesImg} alt="Vitafoam Mattresses" className="h-36 sm:h-40 md:h-52 w-auto object-contain max-w-full" />
             </div>
           </div>
         </div>
@@ -254,7 +254,7 @@ const Index = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto container-px">
           <Reveal className="text-center mb-10">
-            <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">Products of the Week</h2>
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">Products of the Week</h2>
           </Reveal>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.slice(0, 3).map((p, i) => (
@@ -270,7 +270,7 @@ const Index = () => {
       <section className="py-16 bg-surface">
         <div className="container mx-auto container-px">
           <Reveal className="text-center mb-8">
-            <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">Shop By Category</h2>
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">Shop By Category</h2>
           </Reveal>
 
           <div className="flex flex-wrap gap-0 border-b border-gray-200 mb-8">
@@ -312,9 +312,9 @@ const Index = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto container-px">
           <Reveal className="text-center mb-10">
-            <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">What Our Customers Say</h2>
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">What Our Customers Say</h2>
           </Reveal>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
                 <div className="border border-gray-200 rounded p-6">

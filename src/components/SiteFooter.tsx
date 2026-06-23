@@ -38,7 +38,7 @@ export const SiteFooter = () => {
       {/* Main footer */}
       <div className="bg-[#1a1a1a] text-gray-300">
         <div className="container mx-auto container-px py-12">
-          <div className="grid gap-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             {/* Products */}
             <div>
               <h4 className="font-display text-sm font-bold text-white mb-4 uppercase tracking-wide">Products</h4>

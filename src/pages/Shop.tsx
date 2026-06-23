@@ -368,7 +368,7 @@ const Shop = () => {
 
       <section className="bg-primary text-white py-8">
         <div className="container mx-auto container-px">
-          <h1 className="font-display text-3xl lg:text-4xl font-bold">{pageTitle}</h1>
+          <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold">{pageTitle}</h1>
           <p className="mt-2 text-white/70 text-sm">
             <Link to="/" className="hover:text-white">Home</Link>
             {" / "}
@@ -394,7 +394,7 @@ const Shop = () => {
           </aside>
 
           <div>
-            <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
               <div className="flex items-center gap-3">
                 <Sheet>
                   <SheetTrigger asChild>
@@ -410,7 +410,7 @@ const Shop = () => {
                 <p className="text-sm text-gray-500">{filtered.length} {filtered.length === 1 ? "product" : "products"}</p>
               </div>
               <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-                <SelectTrigger className="w-[200px] h-10 text-sm"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-full sm:w-[200px] h-10 text-sm"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="price-asc">Default sorting</SelectItem>
                   <SelectItem value="price-desc">Price: High to Low</SelectItem>

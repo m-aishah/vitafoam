@@ -94,7 +94,7 @@ const Cart = () => {
 
               {/* Order summary */}
               <aside>
-                <div className="sticky top-36 border border-gray-200 rounded p-6">
+                <div className="lg:sticky lg:top-36 border border-gray-200 rounded p-6">
                   <h3 className="font-display font-bold text-lg text-gray-900 mb-5">Order Summary</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">

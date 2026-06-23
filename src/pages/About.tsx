@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import { CheckCircle2, Truck, Star, ShieldCheck } from "lucide-react";
+import { CheckCircle2, Truck, Star, ShieldCheck, Heart, Award, Users, Zap } from "lucide-react";
 
 const FEATURES = [
   { icon: ShieldCheck, title: "100% Authentic Products", body: "Every product we sell is sourced directly from Vitafoam Nigeria. You will never receive a counterfeit or substandard item when you order from us." },
@@ -11,18 +11,25 @@ const FEATURES = [
   { icon: Star, title: "Expert Guidance", body: "Not sure which mattress is right for you? Our team is available on WhatsApp to help you pick the perfect grade and size for your needs and budget." },
 ];
 
+const VALUES = [
+  { icon: ShieldCheck, title: "Integrity", body: "We sell only 100% genuine Vitafoam products. No counterfeits, no imitations - ever." },
+  { icon: Heart, title: "Customer First", body: "Your satisfaction drives everything we do. From first inquiry to post-delivery, we are here for you." },
+  { icon: Award, title: "Quality", body: "We never compromise on the Vitafoam standard. Every product carries the manufacturer's quality guarantee." },
+  { icon: Zap, title: "Accessibility", body: "Great sleep should not cost a fortune. We offer fair, transparent pricing across all budget levels." },
+];
+
 const About = () => (
   <div className="min-h-screen flex flex-col">
     <Helmet>
       <title>About Us | Vitafoam Mattress Nigeria</title>
-      <meta name="description" content="Vitafoam Mattress Nigeria is an authorized Vitafoam dealer serving Lagos and Ogun State with genuine Vitafoam mattresses, toppers, pillows and bedding." />
+      <meta name="description" content="Vitafoam Mattress Nigeria is an authorized Vitafoam dealer serving Lagos and Ogun State with genuine Vitafoam mattresses, toppers, pillows and bedding. Learn about our mission and values." />
       <link rel="canonical" href="https://vitafoammattress.com/about" />
     </Helmet>
     <SiteHeader />
 
     <section className="bg-primary text-white py-10 text-center relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_50%,white_0%,transparent_60%)]" />
-      <h1 className="font-display text-3xl font-bold relative z-10">About Us</h1>
+      <h1 className="font-display text-2xl md:text-3xl font-bold relative z-10">About Us</h1>
       <p className="mt-2 text-white/70 text-sm relative z-10">
         <Link to="/" className="hover:text-white">Home</Link> / About Us
       </p>
@@ -30,6 +37,8 @@ const About = () => (
 
     <section className="py-16 bg-white flex-1">
       <div className="container mx-auto container-px">
+
+        {/* Who We Are */}
         <div className="max-w-3xl mx-auto mb-16">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">Who We Are</h2>
           <p className="text-gray-600 mb-4 leading-relaxed">
@@ -39,13 +48,49 @@ const About = () => (
             Vitafoam Nigeria Plc is the country's leading foam manufacturer, with over 50 years of experience producing world-class mattresses, pillows, toppers, and lifestyle products. As an authorized partner, we are proud to carry the full range of genuine Vitafoam products at fair, transparent prices.
           </p>
           <p className="text-gray-600 leading-relaxed">
-            Our mission is simple: to make quality sleep accessible to every Nigerian family. Whether you are setting up a new home, replacing an old mattress, or looking for the perfect gift, we are here to help you find the right product.
+            Whether you are setting up a new home, replacing an old mattress, or looking for the perfect gift, we are here to help you find the right product at the right price.
           </p>
         </div>
 
+        {/* Mission and Vision */}
+        <div className="mb-16">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-8 text-center">Our Mission and Vision</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="bg-primary text-white rounded-lg p-8">
+              <h3 className="font-display text-xl font-bold mb-3">Our Mission</h3>
+              <p className="text-white/85 leading-relaxed">
+                To make quality sleep accessible to every Nigerian family by providing genuine Vitafoam products at fair, transparent prices with exceptional customer service at every touchpoint.
+              </p>
+            </div>
+            <div className="bg-gray-900 text-white rounded-lg p-8">
+              <h3 className="font-display text-xl font-bold mb-3">Our Vision</h3>
+              <p className="text-white/85 leading-relaxed">
+                To be the most trusted Vitafoam dealer in South-West Nigeria, growing our network to serve every corner of Lagos, Ogun, and beyond - bringing the best of Nigerian foam manufacturing to every home.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Values */}
+        <div className="mb-16">
+          <h2 className="font-display text-2xl font-bold text-gray-900 mb-8 text-center">Our Values</h2>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {VALUES.map((v) => (
+              <div key={v.title} className="border border-gray-200 rounded-lg p-6 text-center hover:border-primary/40 transition-colors">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4">
+                  <v.icon className="h-6 w-6" />
+                </div>
+                <h3 className="font-display text-base font-bold text-gray-900 mb-2">{v.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{v.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Why Choose Us */}
         <div className="mb-16">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-8 text-center">Why Choose Us</h2>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {FEATURES.map((f) => (
               <div key={f.title} className="text-center">
                 <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-primary text-white mb-4">
@@ -58,7 +103,7 @@ const About = () => (
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-8 text-center">
+        <div className="bg-gray-50 rounded-lg p-6 md:p-8 text-center">
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-3">Ready to Sleep Better?</h2>
           <p className="text-gray-600 mb-6">Browse our full range of Vitafoam mattresses, toppers, pillows, and bedding.</p>
           <Link

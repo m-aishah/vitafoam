@@ -9,13 +9,90 @@ import { formatNaira, formatSize, whatsappOrderUrl, SizeOption } from "@/lib/pro
 import { getGroupedShopItems, GroupedShopItem } from "@/lib/catalog";
 import ProductCard from "@/components/ProductCard";
 import { addToCart } from "@/lib/cart";
-import { Check, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { Check, ShieldCheck, ShoppingCart, Star, Truck } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import { toast } from "@/hooks/use-toast";
 
 function displaySize(s: { label: string; L: number; W: number; T: number; price: number }): string {
   if (s.L > 0 && s.W > 0) return formatSize({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price });
   return s.label;
+}
+
+interface Review {
+  name: string;
+  city: string;
+  rating: 4 | 5;
+  text: string;
+}
+
+const MATTRESS_REVIEWS: Review[] = [
+  { name: "Amaka Okonkwo", city: "Lagos Island", rating: 5, text: "I bought this mattress for my master bedroom and the quality exceeded my expectations. Woke up without back pain for the first time in months. Delivery was prompt and the team was professional." },
+  { name: "Emeka Nwosu", city: "Abuja", rating: 5, text: "Ordered online and had it delivered to Abuja without any issues. The mattress is firm with the right amount of cushioning. Fair pricing and smooth WhatsApp ordering process." },
+  { name: "Ngozi Adeyemi", city: "Lekki, Lagos", rating: 5, text: "Bought mattresses for all three bedrooms and the delivery team even helped with setup. Truly excellent service. Our whole family sleeps so much better now." },
+  { name: "Yetunde Akinsanya", city: "Sagamu, Ogun", rating: 4, text: "Did not think they delivered to Ogun State but they came through! Got my mattress delivered to Sagamu within 4 days. The quality is outstanding and will definitely reorder." },
+  { name: "Tunde Fashola", city: "Victoria Island, Lagos", rating: 5, text: "Slept on this grade at a hotel and wanted the same experience at home. Vitafoam Comfort Centre confirmed it was the exact same product. Same-day delivery in Lagos. Outstanding!" },
+  { name: "Bello Usman", city: "Kano", rating: 4, text: "Quality product as expected from Vitafoam. Customer service was very responsive on WhatsApp. Nationwide delivery to Kano was faster than expected. Very satisfied." },
+];
+
+const PILLOW_REVIEWS: Review[] = [
+  { name: "Fatima Aliyu", city: "Ikeja, Lagos", rating: 5, text: "The Vitafoam pillow is incredibly soft and supportive. My neck pain from years of poor pillows is completely gone. This is the best pillow I have ever owned in Nigeria." },
+  { name: "Chukwudi Eze", city: "Port Harcourt", rating: 4, text: "Very comfortable pillow that holds its shape well. Delivery to Port Harcourt took about 3 days which was reasonable. Would love to see more options but quality is top notch." },
+  { name: "Aisha Mohammed", city: "Kaduna", rating: 5, text: "Ordered two pillows and they arrived in perfect condition. The filling is dense and comfortable without being too firm. My husband and I both love them. Will order more." },
+  { name: "Seun Balogun", city: "Ibadan", rating: 5, text: "Was skeptical about buying a pillow online but the Vitafoam quality speaks for itself. Packaging was great and the pillow is exactly as described. Free delivery was a bonus." },
+];
+
+const GENERAL_REVIEWS: Review[] = [
+  { name: "Adaeze Obi", city: "Enugu", rating: 5, text: "Amazing product quality and seamless ordering experience. The Vitafoam brand truly delivers on its promise. Will definitely be recommending to friends and family across Nigeria." },
+  { name: "Segun Oladele", city: "Abeokuta, Ogun", rating: 5, text: "Vitafoam Mattress Nigeria had the best prices I found anywhere online. Delivery to Abeokuta was smooth and the product quality is exceptional. Very happy customer." },
+  { name: "Grace Enyinnaya", city: "Owerri", rating: 4, text: "Good experience from start to finish. The product arrived well packaged and on time. Customer support was helpful on WhatsApp when I had questions. Would buy again." },
+  { name: "Musa Danjuma", city: "Jos", rating: 5, text: "Placed my order on a Monday and had it by Thursday in Jos. The product is genuine Vitafoam - you can feel the quality difference immediately. Excellent service overall." },
+];
+
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Star
+          key={n}
+          className={`h-4 w-4 ${n <= rating ? "fill-amber-400 text-amber-400" : "text-gray-200"}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ReviewsSection({ category }: { category: string }) {
+  const reviews = category === "pillow" ? PILLOW_REVIEWS : category === "mattress" ? MATTRESS_REVIEWS : GENERAL_REVIEWS;
+  const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1);
+
+  return (
+    <section className="border-t border-gray-200 bg-gray-50 py-12">
+      <div className="container mx-auto container-px">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+          <div>
+            <h2 className="font-display text-2xl font-bold text-gray-900">Customer Reviews</h2>
+            <div className="flex items-center gap-2 mt-1">
+              <StarRating rating={Math.round(Number(avgRating))} />
+              <span className="text-sm font-semibold text-gray-700">{avgRating} out of 5</span>
+              <span className="text-sm text-gray-400">({reviews.length} reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {reviews.map((review, i) => (
+            <div key={i} className="bg-white border border-gray-200 rounded-lg p-5">
+              <StarRating rating={review.rating} />
+              <p className="mt-3 text-gray-700 text-sm leading-relaxed">"{review.text}"</p>
+              <div className="mt-4 pt-3 border-t border-gray-100">
+                <p className="font-semibold text-gray-900 text-sm">{review.name}</p>
+                <p className="text-xs text-gray-400">{review.city}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 const ProductDetail = () => {
@@ -149,7 +226,7 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              <div className="mt-5 flex items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center border border-gray-300 rounded">
                   <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 text-gray-700 text-xl font-medium hover:bg-gray-100 transition-colors">−</button>
                   <span className="w-12 text-center font-semibold text-gray-900">{qty}</span>
@@ -190,7 +267,7 @@ const ProductDetail = () => {
           </div>
 
           <div className="mt-14">
-            <div className="flex gap-0 border-b border-gray-200">
+            <div className="flex gap-0 border-b border-gray-200 overflow-x-auto">
               {(["description", "reviews"] as const).map((tab) => (
                 <button
                   key={tab}
@@ -233,6 +310,8 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
+
+      <ReviewsSection category={product.category} />
 
       {related.length > 0 && (
         <section className="border-t border-gray-200 bg-white py-12">

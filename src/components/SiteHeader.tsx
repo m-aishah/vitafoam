@@ -76,7 +76,7 @@ export const SiteHeader = () => {
         <div className="container mx-auto container-px flex h-16 items-center gap-4">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-2" aria-label="Vitafoam Comfort Centre">
-            <img src={vitafoamLogo} alt="Vitafoam" className="h-12 w-auto" />
+            <img src={vitafoamLogo} alt="Vitafoam" className="h-10 sm:h-12 w-auto" />
           </Link>
 
           {/* Search */}

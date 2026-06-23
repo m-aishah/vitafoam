@@ -32,22 +32,38 @@ const GRADE_BADGE: Record<string, string> = {
 };
 
 const GRADE_SHORT_DESC: Record<string, string> = {
-  Deluxe: "Entry-level Vitafoam quality with great everyday value.",
-  Shine: "Improved comfort layers and lasting durability.",
-  Corona: "Mid-premium grade, Nigeria's most popular choice.",
-  Grand: "High-end comfort engineered to last.",
-  Sizzler: "Ultra-soft premium feel, sink in and unwind.",
-  "Vita Haven": "Orthopaedic-grade support for healthier sleep.",
-  Supreme: "Top-tier luxury comfort and craftsmanship.",
-  "Vita Galaxy Classic": "Advanced multi-zone foam technology.",
-  "Galaxy Orthopaedic": "Medical-grade orthopaedic support.",
-  "Vita Spring Flex": "Spring + foam hybrid with flexible comfort response.",
-  "Vita Spring Firm": "Spring + foam hybrid with firm orthopaedic support.",
-  "Twill Single": "Durable twill-cover single mattress.",
-  "Twill Double": "Durable twill-cover double mattress.",
-  Vitaluxe: "Ultra-luxury premium foam for the finest sleep.",
-  Vitahelix: "Innovative helix-core design for ultimate pressure relief.",
-  "Memory Topper": "Memory foam topper that transforms your mattress.",
+  Deluxe:
+    "The ideal starting point for quality sleep without compromise. Vitafoam's Deluxe grade delivers reliable everyday comfort at an accessible price point, making restful nights available to every household. Crafted with consistent foam density, it holds its shape night after night.",
+  Shine:
+    "A step up in comfort where improved foam layering meets long-lasting resilience. The Shine grade is built for sleepers who want a noticeably better night's rest without moving into premium territory. Its reinforced construction resists sagging and maintains even support across the full sleeping surface.",
+  Corona:
+    "Nigeria's most trusted mattress grade, chosen by millions for its winning balance of comfort and value. The Corona sits at the heart of the Vitafoam range, offering mid-premium foam quality refined through decades of local feedback. It adapts to a wide range of body types and sleeping positions with consistent, dependable support.",
+  Grand:
+    "Engineered for those who refuse to settle, the Grand grade combines high-density foam with precision construction for support that lasts years, not months. Every layer is selected to distribute body weight evenly and reduce pressure on joints throughout the night. This is high-end comfort built around the demands of everyday Nigerian life.",
+  Sizzler:
+    "Sink into exceptional softness with the Sizzler, Vitafoam's ultra-plush premium grade designed for sleepers who crave a cloud-like feel. Its specially formulated soft-touch foam cradles the body and melts away the tension of the day. Indulgent without sacrificing structure, the Sizzler delivers a deeply satisfying sleep experience every single night.",
+  "Vita Haven":
+    "Developed with your spinal health in mind, the Vita Haven delivers certified orthopaedic-grade support that promotes proper alignment from head to toe. Its firm, structured foam core prevents the deep sinkage that strains the lower back, while a comfort layer softens the surface for restful, posture-safe sleep. A genuine investment in long-term health and wellbeing.",
+  Supreme:
+    "The pinnacle of Vitafoam craftsmanship, the Supreme grade is reserved for those who demand the very best. Layers of premium high-resilience foam are combined with meticulous finishing to create a sleep surface that feels as refined as it performs. Every detail, from edge support to surface texture, reflects a commitment to luxury without compromise.",
+  "Vita Galaxy Classic":
+    "Powered by advanced multi-zone foam technology, the Vita Galaxy Classic maps distinct comfort zones across the mattress to match the different pressure needs of your shoulders, back, and legs. The result is a sleep surface that feels precisely tailored to your body, reducing tossing and turning through the night. Innovative engineering meets everyday sleeping comfort.",
+  "Galaxy Orthopaedic":
+    "Designed in line with orthopaedic standards, the Galaxy Orthopaedic provides medical-grade spinal support for sleepers with back concerns or those who simply prioritise posture. Its high-density core resists compression over time, maintaining therapeutic firmness across the full lifespan of the mattress. Serious support, night after night, year after year.",
+  "Vita Spring Flex":
+    "The Vita Spring Flex pairs a responsive spring system with premium foam layers for a sleep surface that moves with you. The flexible comfort response adapts naturally to shifting sleeping positions, providing cushioned support without the rigid feel of a purely firm mattress. Ideal for those who want the bounce and breathability of springs alongside the body-hugging comfort of foam.",
+  "Vita Spring Firm":
+    "Combining the structural integrity of a spring core with the therapeutic benefits of firm orthopaedic foam, the Vita Spring Firm is built for sleepers who need consistent, non-negotiable support. The innerspring layer promotes airflow and reduces heat retention while the top foam delivers the firm, corrective surface recommended for back health. A hybrid solution engineered for serious sleepers.",
+  "Twill Single":
+    "The Twill Single brings durable, hardwearing comfort to individual sleepers in a compact, easy-to-manage size. Its heavy-duty twill cover resists wear and maintains a clean appearance through years of regular use, while the foam core beneath provides reliable everyday support. Built for guest rooms, student accommodation, and children's bedrooms that need to stand the test of time.",
+  "Twill Double":
+    "Offering the same rugged twill-cover construction in a generous double size, the Twill Double is made for couples and those who like room to stretch. The reinforced cover stands up to the rigours of daily use without pilling or losing its neat finish, while the foam interior maintains consistent support across the wider sleeping surface. Practical, durable, and built to last.",
+  Vitaluxe:
+    "Ultra-luxury foam meets impeccable finishing in the Vitaluxe, Vitafoam's most opulent standard grade. Layers of premium-grade foam are precisely calibrated to deliver a sleep surface that feels sumptuous from the very first night, with a resilience that preserves that feeling for years. For those who consider their bed the centrepiece of their home, the Vitaluxe is the natural choice.",
+  Vitahelix:
+    "At the heart of the Vitahelix lies an innovative helix-core foam structure that distributes pressure more evenly than conventional foam designs. This unique architecture reduces peak pressure points at the shoulders and hips, allowing muscles to fully relax and promoting deeper, more restorative sleep. A thoughtfully engineered mattress for sleepers who wake up with aches they are ready to leave behind.",
+  "Memory Topper":
+    "Instantly upgrade your existing mattress with the Vitafoam Memory Topper, a premium memory foam layer that conforms precisely to your body's contours. It absorbs movement and reduces pressure across the full sleep surface, transforming even an ageing mattress into something noticeably more comfortable. A cost-effective way to experience the benefits of memory foam without replacing your entire bed.",
 };
 
 export interface MattressRaw {
