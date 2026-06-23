@@ -3,48 +3,47 @@ import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
-const CATEGORY_COLORS: Record<string, string> = {
-  "Buying Guide": "from-blue-500/30 to-blue-600/10",
-  "Sleep Tips": "from-green-500/30 to-green-600/10",
-  "Product Info": "from-primary/30 to-primary/10",
-  "Care Tips": "from-amber-500/30 to-amber-600/10",
-};
-
 const POSTS = [
   {
     title: "How to Choose the Right Vitafoam Mattress for Your Body Type",
     date: "June 10, 2026",
     category: "Buying Guide",
+    gradient: "from-primary/80 to-primary",
     excerpt: "Not all mattresses are created equal. Your body type, sleeping position, and weight all play a role in determining which Vitafoam grade and firmness will give you the best night's rest.",
   },
   {
     title: "5 Signs You Need a New Mattress Right Now",
     date: "May 28, 2026",
     category: "Sleep Tips",
+    gradient: "from-amber-500 to-orange-500",
     excerpt: "Waking up with aches and pains? Sagging in the middle? These are just two of the telltale signs that your current mattress has passed its best. Here is what to look out for.",
   },
   {
     title: "Vitafoam Grades Explained: Deluxe, Corona, Grand and Beyond",
     date: "May 15, 2026",
     category: "Product Info",
+    gradient: "from-blue-500 to-indigo-600",
     excerpt: "Vitafoam offers more than ten mattress grades. We break down the key differences in comfort level, materials, and price so you can make the best choice for your budget.",
   },
   {
     title: "How to Care for Your Vitafoam Mattress and Make It Last Longer",
     date: "April 30, 2026",
     category: "Care Tips",
+    gradient: "from-teal-500 to-emerald-600",
     excerpt: "A good mattress is an investment. With the right care habits, you can extend the life of your Vitafoam mattress and enjoy consistent comfort for years to come.",
   },
   {
     title: "The Benefits of Sleeping on a Quality Mattress",
     date: "April 18, 2026",
     category: "Sleep Tips",
+    gradient: "from-purple-500 to-violet-600",
     excerpt: "Sleep quality affects everything from your mood to your immune system. We explore how upgrading to a quality Vitafoam mattress can make a real difference to your daily life.",
   },
   {
     title: "Why Buying a Genuine Vitafoam Matters: Spotting Fakes",
     date: "April 5, 2026",
     category: "Buying Guide",
+    gradient: "from-rose-500 to-red-600",
     excerpt: "Counterfeit foam products flood the Nigerian market. Learn how to tell the difference between a genuine Vitafoam product and an inferior imitation, and why it matters for your health.",
   },
 ];
@@ -69,12 +68,11 @@ const Blog = () => (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {POSTS.map((post) => (
             <div key={post.title} className="border border-gray-200 rounded-lg overflow-hidden flex flex-col">
-              <div className={`bg-gradient-to-br ${CATEGORY_COLORS[post.category] ?? "from-gray-200 to-gray-100"} h-40 flex items-center justify-center`}>
-                <span className="text-gray-600 font-semibold text-sm uppercase tracking-wide">{post.category}</span>
+              <div className={`bg-gradient-to-br ${post.gradient} h-40 flex items-end p-4`}>
+                <span className="text-white/90 text-xs font-semibold uppercase tracking-wide">{post.category}</span>
               </div>
               <div className="p-5 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs bg-primary/10 text-primary font-semibold px-2 py-0.5 rounded">{post.category}</span>
                   <span className="text-xs text-gray-400">{post.date}</span>
                 </div>
                 <h2 className="font-display font-bold text-gray-900 text-sm mb-2 leading-snug">{post.title}</h2>

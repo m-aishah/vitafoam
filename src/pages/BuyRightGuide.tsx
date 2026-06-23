@@ -31,7 +31,7 @@ const BuyRightGuide = () => (
 
     <section className="bg-primary text-white py-10 text-center relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_50%,white_0%,transparent_60%)]" />
-      <h1 className="font-display text-3xl font-bold relative z-10">Buy Right Guide</h1>
+      <h1 className="font-display text-2xl sm:text-3xl font-bold relative z-10">Buy Right Guide</h1>
       <p className="mt-2 text-white/70 text-sm relative z-10">
         <Link to="/" className="hover:text-white">Home</Link> / Buy Right Guide
       </p>
@@ -57,7 +57,7 @@ const BuyRightGuide = () => (
         <div>
           <h2 className="font-display text-2xl font-bold text-gray-900 mb-2">Step 2: Choose Your Firmness</h2>
           <p className="text-gray-500 text-sm mb-6">Your preferred sleep position affects which firmness is right for you.</p>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { level: "Firm", best: "Back and stomach sleepers", desc: "Provides strong support and keeps your spine aligned. Less sinkage." },
               { level: "Medium", best: "All sleep positions", desc: "The most versatile feel. A balance of support and comfort suitable for most people." },

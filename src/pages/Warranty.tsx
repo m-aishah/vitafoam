@@ -46,7 +46,7 @@ const Warranty = () => (
 
         <div>
           <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Warranty by Grade</h2>
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
+          <div className="overflow-x-auto border border-gray-200 rounded-lg">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
