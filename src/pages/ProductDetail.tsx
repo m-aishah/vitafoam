@@ -114,7 +114,9 @@ const ProductDetail = () => {
     [all, id, product]
   );
 
-  const sortedSizes = [...(product?.sizes ?? [])].sort((a, b) => a.price - b.price);
+  const sortedSizes = [...(product?.sizes ?? [])].sort((a, b) =>
+    a.L !== b.L ? a.L - b.L : a.W !== b.W ? a.W - b.W : a.T - b.T
+  );
   const [sizeIdx, setSizeIdx] = useState(0);
   const [qty, setQty] = useState(1);
 
