@@ -24,10 +24,7 @@ const SECTIONS = [
     title: "Delivery",
     body: `Delivery timelines are estimates and not guaranteed. We are not liable for delays caused by circumstances beyond our control. Free delivery applies to qualifying orders in Lagos and Ogun State as described in our Delivery Information page.`,
   },
-  {
-    title: "Returns and Refunds",
-    body: `Returns are accepted within 7 days of delivery for eligible items. Please refer to our Return Policy page for full details. Refunds are processed within 5 to 10 business days of return approval.`,
-  },
+
   {
     title: "Intellectual Property",
     body: `All content on this website, including text, images, logos, and design, is the property of Vitafoam Mattress Nigeria or its licensors. You may not reproduce, distribute, or use any content without prior written permission.`,
@@ -46,16 +43,24 @@ const Terms = () => (
   <div className="min-h-screen flex flex-col">
     <Helmet>
       <title>Terms and Conditions | Vitafoam Mattress Nigeria</title>
-      <meta name="description" content="Read the Terms and Conditions for using Vitafoam Mattress Nigeria website and placing orders." />
+      <meta
+        name="description"
+        content="Read the Terms and Conditions for using Vitafoam Mattress Nigeria website and placing orders."
+      />
       <link rel="canonical" href="https://vitafoammattress.com/terms" />
     </Helmet>
     <SiteHeader />
 
     <section className="bg-primary text-white py-10 text-center relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_50%,white_0%,transparent_60%)]" />
-      <h1 className="font-display text-3xl font-bold relative z-10">Terms and Conditions</h1>
+      <h1 className="font-display text-3xl font-bold relative z-10">
+        Terms and Conditions
+      </h1>
       <p className="mt-2 text-white/70 text-sm relative z-10">
-        <Link to="/" className="hover:text-white">Home</Link> / Terms and Conditions
+        <Link to="/" className="hover:text-white">
+          Home
+        </Link>{" "}
+        / Terms and Conditions
       </p>
     </section>
 
@@ -65,13 +70,19 @@ const Terms = () => (
         <div className="space-y-8">
           {SECTIONS.map((s) => (
             <div key={s.title}>
-              <h2 className="font-display text-lg font-bold text-gray-900 mb-2">{s.title}</h2>
+              <h2 className="font-display text-lg font-bold text-gray-900 mb-2">
+                {s.title}
+              </h2>
               <p className="text-gray-600 leading-relaxed text-sm">{s.body}</p>
             </div>
           ))}
         </div>
         <p className="mt-10 text-gray-500 text-sm">
-          Questions about these terms? <Link to="/contact" className="text-primary hover:underline">Contact us</Link>.
+          Questions about these terms?{" "}
+          <Link to="/contact" className="text-primary hover:underline">
+            Contact us
+          </Link>
+          .
         </p>
       </div>
     </section>
