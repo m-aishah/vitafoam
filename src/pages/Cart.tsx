@@ -66,13 +66,13 @@ const Cart = () => {
                 {items.map((i) => {
                   const key = `${i.productId}-${i.size.size}`;
                   return (
-                    <div key={key} className="flex flex-col sm:flex-row gap-4 border border-gray-200 rounded-2xl p-5">
-                      <div className="flex-1">
-                        <Link to={`/product/${i.productId}`} className="font-bold text-gray-900 hover:text-primary transition-colors text-base">{i.name}</Link>
-                        <div className="mt-1 text-sm text-gray-500">{displaySize(i.size)}</div>
-                        <div className="mt-2 font-semibold text-gray-900">{formatNaira(i.size.price)} <span className="text-xs font-normal text-gray-400">/ unit · VAT incl.</span></div>
+                    <div key={key} className="flex flex-col sm:flex-row gap-3 sm:gap-4 border border-gray-200 rounded-2xl p-4 sm:p-5">
+                      <div className="flex-1 min-w-0">
+                        <Link to={`/product/${i.productId}`} className="font-bold text-gray-900 hover:text-primary transition-colors text-sm sm:text-base">{i.name}</Link>
+                        <div className="mt-1 text-xs sm:text-sm text-gray-500">{displaySize(i.size)}</div>
+                        <div className="mt-1 sm:mt-2 text-sm font-semibold text-gray-900">{formatNaira(i.size.price)} <span className="text-xs font-normal text-gray-400">/ unit · VAT incl.</span></div>
                       </div>
-                      <div className="flex sm:flex-col items-center sm:items-end gap-3 justify-between">
+                      <div className="flex sm:flex-col items-center sm:items-end gap-3 justify-between flex-shrink-0">
                         <div className="inline-flex items-center border border-gray-300 rounded-xl">
                           <button onClick={() => updateQty(i.productId, i.size.size, Math.max(1, i.qty - 1))} className="h-9 w-9 text-gray-700 hover:bg-gray-100 transition-colors">−</button>
                           <span className="w-9 text-center font-semibold text-gray-900 text-sm">{i.qty}</span>

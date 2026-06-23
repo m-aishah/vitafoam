@@ -236,7 +236,7 @@ const Index = () => {
       {/* INFO BAR */}
       <section className="bg-[#1a1a1a] text-white">
         <div className="container mx-auto container-px py-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-700">
             <div className="flex items-center gap-3 py-3 md:py-2 md:px-6 first:md:pl-0">
               <Truck className="h-8 w-8 text-primary flex-shrink-0" />
               <div>
@@ -427,7 +427,7 @@ const Index = () => {
             </h2>
           </Reveal>
 
-          <div className="flex flex-wrap gap-0 border-b border-gray-200 mb-8">
+          <div className="flex flex-wrap gap-0 border-b border-gray-200 mb-8 overflow-x-auto scrollbar-hide">
             {SHOP_CATEGORIES.map((cat, i) => (
               <Link
                 key={cat.label}
@@ -470,7 +470,7 @@ const Index = () => {
               What Our Customers Say
             </h2>
           </Reveal>
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
                 <div className="border border-gray-200 rounded-xl p-6">
