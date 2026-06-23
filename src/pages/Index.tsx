@@ -226,7 +226,7 @@ const Index = () => {
           <Reveal className="text-center mb-10">
             <h2 className="font-display text-3xl lg:text-4xl font-bold text-gray-900">What Our Customers Say</h2>
           </Reveal>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
                 <div className="border border-gray-200 rounded p-6">

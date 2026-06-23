@@ -10,7 +10,7 @@ import {
 import { getProduct, getProducts, formatNaira, formatSize, whatsappOrderUrl } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import { addToCart } from "@/lib/cart";
-import { Check, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { Check, ShieldCheck, ShoppingCart, Star, Truck } from "lucide-react";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import { toast } from "@/hooks/use-toast";
 
@@ -67,7 +67,7 @@ const ProductDetail = () => {
       {/* Product area */}
       <section className="py-10 flex-1 bg-white">
         <div className="container mx-auto container-px">
-          <div className="grid gap-10 lg:grid-cols-2">
+          <div className="grid gap-10 grid-cols-1 lg:grid-cols-2">
             {/* Image */}
             <div>
               <div className="border border-gray-200 rounded bg-gray-50 aspect-square flex items-center justify-center p-8">
@@ -113,7 +113,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Qty + Add to cart */}
-              <div className="mt-5 flex items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center border border-gray-300 rounded">
                   <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-11 text-gray-700 text-xl font-medium hover:bg-gray-100 transition-colors">−</button>
                   <span className="w-12 text-center font-semibold text-gray-900">{qty}</span>
@@ -121,7 +121,7 @@ const ProductDetail = () => {
                 </div>
                 <button
                   onClick={handleAdd}
-                  className="flex-1 h-11 bg-[#1a1a1a] text-white text-sm font-bold rounded hover:bg-primary transition-colors uppercase tracking-wide flex items-center justify-center gap-2"
+                  className="flex-1 min-w-full sm:min-w-0 h-11 bg-[#1a1a1a] text-white text-sm font-bold rounded hover:bg-primary transition-colors uppercase tracking-wide flex items-center justify-center gap-2"
                 >
                   <ShoppingCart className="h-4 w-4" /> ADD TO CART
                 </button>
@@ -232,6 +232,56 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
+
+      {/* Customer Reviews */}
+      <section className="py-12 bg-gray-50 border-t border-gray-200">
+        <div className="container mx-auto container-px">
+          <h2 className="font-display text-2xl font-bold text-gray-900 uppercase mb-8">Customer Reviews</h2>
+          {(() => {
+            type Review = { name: string; location: string; rating: number; text: string };
+            const MATTRESS_REVIEWS: Review[] = [
+              { name: "Adaobi Okafor", location: "Lagos Island", rating: 5, text: "I bought the Corona 75x54x8 three months ago and it has completely transformed my sleep. I wake up without the back pain I had for years. Worth every naira." },
+              { name: "Emeka Eze", location: "Ikeja, Lagos", rating: 5, text: "Genuine Vitafoam product, fast delivery to Lekki. The mattress is exactly as described — firm but comfortable. My whole family sleeps better now." },
+              { name: "Fatima Aliyu", location: "Abeokuta, Ogun State", rating: 5, text: "Ordered online and it was delivered to Abeokuta within 2 days. The quality is obviously superior to the fake Vitafoam products I had bought before. This is the real thing." },
+              { name: "Chukwuemeka Nwosu", location: "Surulere, Lagos", rating: 4, text: "Very good mattress for the price. I got the Grand 6x6 for our master bedroom and my wife loves it. Solid construction, smells fresh, no complaints." },
+              { name: "Ngozi Adeleke", location: "Sagamu, Ogun State", rating: 5, text: "Best purchase I have made this year. The delivery team was professional and they helped set it up. The mattress is everything the description promised." },
+            ];
+            const reviews = MATTRESS_REVIEWS;
+            const avg = (reviews.reduce((s, r) => s + r.rating, 0) / reviews.length).toFixed(1);
+            return (
+              <>
+                <div className="flex items-center gap-3 mb-8">
+                  <span className="text-3xl font-bold text-gray-900">{avg}</span>
+                  <div>
+                    <div className="flex gap-1">
+                      {[1,2,3,4,5].map((n) => (
+                        <Star key={n} className={`h-5 w-5 ${parseFloat(avg) >= n ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500 mt-0.5">out of 5</p>
+                  </div>
+                </div>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {reviews.map((r, i) => (
+                    <div key={i} className="bg-white border border-gray-200 rounded p-6">
+                      <div className="flex gap-1 mb-3">
+                        {[1,2,3,4,5].map((n) => (
+                          <Star key={n} className={`h-4 w-4 ${r.rating >= n ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
+                        ))}
+                      </div>
+                      <p className="text-gray-700 text-sm leading-relaxed">"{r.text}"</p>
+                      <div className="mt-4">
+                        <p className="font-bold text-gray-900 text-sm">{r.name}</p>
+                        <p className="text-xs text-gray-400">{r.location}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </section>
 
       <SiteFooter />
     </div>
