@@ -80,7 +80,7 @@ const BuyRightGuide = () => (
               <div key={g.grade} className="border border-gray-200 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-1">
                   <p className="font-display font-bold text-gray-900">{g.grade}</p>
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-semibold">{g.price}</span>
+                  <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-xl font-semibold">{g.price}</span>
                 </div>
                 <p className="text-xs text-gray-400 mb-2">Feel: {g.feel} &bull; Best for: {g.best}</p>
                 <p className="text-gray-600 text-sm">{g.desc}</p>
@@ -94,7 +94,7 @@ const BuyRightGuide = () => (
           <p className="text-gray-600 text-sm mb-5">Browse our full range of genuine Vitafoam mattresses in all grades and sizes.</p>
           <Link
             to="/shop?category=mattress"
-            className="inline-block bg-primary text-white font-bold px-8 py-3 rounded hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
+            className="inline-block bg-primary text-white font-bold px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
           >
             Shop Mattresses
           </Link>

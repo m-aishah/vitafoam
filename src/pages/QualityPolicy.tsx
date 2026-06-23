@@ -70,7 +70,7 @@ const QualityPolicy = () => (
         <div className="bg-gray-50 rounded-lg p-6">
           <p className="text-gray-700 font-semibold mb-2">Have a quality concern?</p>
           <p className="text-gray-600 text-sm mb-4">If you receive a product that does not meet the expected Vitafoam quality standard, contact us immediately and we will make it right.</p>
-          <Link to="/contact" className="inline-block bg-primary text-white font-bold px-6 py-2.5 rounded hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm">
+          <Link to="/contact" className="inline-block bg-primary text-white font-bold px-6 py-2.5 rounded-xl hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm">
             Contact Us
           </Link>
         </div>

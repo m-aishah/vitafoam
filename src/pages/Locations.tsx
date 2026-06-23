@@ -82,13 +82,13 @@ const Locations = () => (
               href="https://wa.me/2348053054348"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-2.5 rounded hover:bg-[#20bd5a] transition-colors text-sm"
+              className="flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#20bd5a] transition-colors text-sm"
             >
               <WhatsAppIcon className="h-4 w-4" /> Chat on WhatsApp
             </a>
             <a
               href="tel:+2348053054348"
-              className="flex items-center gap-2 bg-[#1a1a1a] text-white font-bold px-6 py-2.5 rounded hover:bg-gray-800 transition-colors text-sm"
+              className="flex items-center gap-2 bg-[#1a1a1a] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-gray-800 transition-colors text-sm"
             >
               <Phone className="h-4 w-4" /> +234 805 305 4348
             </a>

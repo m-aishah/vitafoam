@@ -96,7 +96,7 @@ function ReviewsSection({ category }: { category: string }) {
           href="https://wa.me/2348053054348?text=Hi%2C%20I%20would%20like%20to%20leave%20a%20review%20for%20a%20product%20I%20bought."
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-2.5 rounded hover:bg-[#1fba59] transition-colors text-sm"
+          className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-6 py-2.5 rounded-xl hover:bg-[#1fba59] transition-colors text-sm"
         >
           <WhatsAppIcon className="h-4 w-4" /> Leave a Review on WhatsApp
         </a>
@@ -114,6 +114,7 @@ const ProductDetail = () => {
     [all, id, product]
   );
 
+  const sortedSizes = [...(product?.sizes ?? [])].sort((a, b) => a.price - b.price);
   const [sizeIdx, setSizeIdx] = useState(0);
   const [qty, setQty] = useState(1);
 
@@ -123,7 +124,7 @@ const ProductDetail = () => {
         <SiteHeader />
         <div className="flex-1 container mx-auto container-px py-24 text-center">
           <h1 className="font-display text-3xl text-gray-900">Product not found</h1>
-          <Link to="/shop" className="mt-6 inline-block bg-[#1a1a1a] text-white px-6 py-3 rounded text-sm font-bold hover:bg-gray-800 transition-colors uppercase">
+          <Link to="/shop" className="mt-6 inline-block bg-[#1a1a1a] text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-gray-800 transition-colors uppercase">
             Back to Shop
           </Link>
         </div>
@@ -132,7 +133,7 @@ const ProductDetail = () => {
     );
   }
 
-  const selected = product.sizes[sizeIdx] ?? product.sizes[0];
+  const selected = sortedSizes[sizeIdx] ?? sortedSizes[0];
   const sizeOption: SizeOption = { size: selected.label, L: selected.L, W: selected.W, T: selected.T, price: selected.price };
 
   const handleAdd = () => {
@@ -144,7 +145,7 @@ const ProductDetail = () => {
         description: product.description,
         grade: (product.grade ?? product.categoryLabel) as any,
         badgeClass: product.badgeClass ?? "",
-        sizes: product.sizes.map((s) => ({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price })),
+        sizes: sortedSizes.map((s) => ({ size: s.label, L: s.L, W: s.W, T: s.T, price: s.price })),
         image: product.image ?? undefined,
       },
       sizeOption,
@@ -202,7 +203,7 @@ const ProductDetail = () => {
               </p>
 
               {product.grade && product.badgeClass && (
-                <span className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded mt-2 mb-1 ${product.badgeClass}`}>
+                <span className={`inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-xl mt-2 mb-1 ${product.badgeClass}`}>
                   {product.grade}
                 </span>
               )}
@@ -213,7 +214,7 @@ const ProductDetail = () => {
                 <p className="text-primary font-bold text-2xl">
                   {product.sizes.length > 1 ? "From " : ""}{formatNaira(selected.price)}
                 </p>
-                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">VAT inclusive</span>
+                <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-xl">VAT inclusive</span>
               </div>
 
               <p className="mt-4 text-sm text-gray-600 leading-relaxed">{product.shortDesc}</p>
@@ -226,7 +227,7 @@ const ProductDetail = () => {
                       <SelectValue placeholder="Choose a size" />
                     </SelectTrigger>
                     <SelectContent className="max-h-72">
-                      {product.sizes.map((s, i) => (
+                      {sortedSizes.map((s, i) => (
                         <SelectItem key={i} value={String(i)} className="text-sm">
                           {displaySize(s)} — {formatNaira(s.price)}
                         </SelectItem>

@@ -93,7 +93,7 @@ const Faqs = () => {
               href="https://wa.me/2348053054348"
               target="_blank"
               rel="noreferrer"
-              className="inline-block bg-[#25D366] text-white font-bold px-8 py-3 rounded hover:bg-[#20bd5a] transition-colors uppercase tracking-wide text-sm"
+              className="inline-block bg-[#25D366] text-white font-bold px-8 py-3 rounded-xl hover:bg-[#20bd5a] transition-colors uppercase tracking-wide text-sm"
             >
               Chat on WhatsApp
             </a>

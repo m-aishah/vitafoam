@@ -70,7 +70,7 @@ const HowToShop = () => (
               href="https://wa.me/2348053054348"
               target="_blank"
               rel="noreferrer"
-              className="mt-5 w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-2.5 rounded hover:bg-[#20bd5a] transition-colors text-sm"
+              className="mt-5 w-full flex items-center justify-center gap-2 bg-[#25D366] text-white font-bold py-2.5 rounded-xl hover:bg-[#20bd5a] transition-colors text-sm"
             >
               <WhatsAppIcon className="h-4 w-4" /> Chat on WhatsApp
             </a>

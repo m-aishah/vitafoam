@@ -101,7 +101,7 @@ const Contact = () => {
                   href="https://wa.me/2348053054348"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded hover:bg-[#1fba59] transition-colors text-sm"
+                  className="inline-flex items-center gap-2 bg-[#25D366] text-white font-bold px-5 py-2.5 rounded-xl hover:bg-[#1fba59] transition-colors text-sm"
                 >
                   <WhatsAppIcon className="h-4 w-4" /> Chat on WhatsApp
                 </a>
@@ -136,7 +136,7 @@ const Contact = () => {
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         placeholder="e.g. Amaka Okonkwo"
-                        className="w-full h-10 px-4 border border-gray-300 rounded text-sm focus:outline-none focus:border-primary"
+                        className="w-full h-10 px-4 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-primary"
                       />
                     </div>
                     <div>
@@ -146,7 +146,7 @@ const Contact = () => {
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
                         placeholder="+234 800 000 0000"
-                        className="w-full h-10 px-4 border border-gray-300 rounded text-sm focus:outline-none focus:border-primary"
+                        className="w-full h-10 px-4 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-primary"
                       />
                     </div>
                   </div>
@@ -158,7 +158,7 @@ const Contact = () => {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="you@example.com"
-                      className="w-full h-10 px-4 border border-gray-300 rounded text-sm focus:outline-none focus:border-primary"
+                      className="w-full h-10 px-4 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-primary"
                     />
                   </div>
                   <div>
@@ -167,7 +167,7 @@ const Contact = () => {
                       required
                       value={form.subject}
                       onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                      className="w-full h-10 px-4 border border-gray-300 rounded text-sm focus:outline-none focus:border-primary bg-white"
+                      className="w-full h-10 px-4 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-primary bg-white"
                     >
                       <option value="">Select a subject</option>
                       {SUBJECTS.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -181,12 +181,12 @@ const Contact = () => {
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       placeholder="How can we help you?"
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-300 rounded text-sm focus:outline-none focus:border-primary resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:outline-none focus:border-primary resize-none"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-primary text-white font-bold py-3 rounded hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
+                    className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
                   >
                     Send Message
                   </button>

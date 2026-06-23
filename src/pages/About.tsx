@@ -112,7 +112,7 @@ const About = () => (
           <p className="text-gray-600 mb-6">Browse our full range of Vitafoam mattresses, toppers, pillows, and bedding.</p>
           <Link
             to="/shop"
-            className="inline-block bg-primary text-white font-bold px-8 py-3 rounded hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
+            className="inline-block bg-primary text-white font-bold px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors uppercase tracking-wide text-sm"
           >
             Shop Now
           </Link>

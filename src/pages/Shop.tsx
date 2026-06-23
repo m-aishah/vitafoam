@@ -128,7 +128,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-200 flex items-end justify-center pb-4">
               <button
                 onClick={() => setShowModal(true)}
-                className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200 bg-white text-gray-900 text-xs font-bold px-5 py-2 rounded shadow-lg hover:bg-primary hover:text-white"
+                className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200 bg-white text-gray-900 text-xs font-bold px-5 py-2 rounded-xl shadow-lg hover:bg-primary hover:text-white"
               >
                 QUICK VIEW
               </button>
@@ -138,7 +138,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
         <div className="p-4 border-t border-gray-100">
           <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">{item.categoryLabel}</p>
           {item.grade && item.badgeClass && (
-            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
+            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-xl mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
           )}
           <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">
             {isMattress ? (
@@ -152,14 +152,14 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
           {isMattress ? (
             <Link
               to={`/product/${item.id}`}
-              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
+              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded-xl hover:bg-primary transition-colors uppercase tracking-wide"
             >
               SELECT OPTIONS
             </Link>
           ) : (
             <button
               onClick={() => setShowModal(true)}
-              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded hover:bg-primary transition-colors uppercase tracking-wide"
+              className="block w-full text-center bg-[#1a1a1a] text-white text-xs font-bold py-2.5 rounded-xl hover:bg-primary transition-colors uppercase tracking-wide"
             >
               {item.sizes.length > 1 ? "SELECT OPTIONS" : "ADD TO CART"}
             </button>
@@ -198,7 +198,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
                     <select
                       value={selectedIdx}
                       onChange={(e) => setSelectedIdx(Number(e.target.value))}
-                      className="w-full h-10 border border-gray-300 rounded px-3 text-sm focus:outline-none focus:border-primary"
+                      className="w-full h-10 border border-gray-300 rounded-xl px-3 text-sm focus:outline-none focus:border-primary"
                     >
                       {item.sizes.map((s, i) => (
                         <option key={i} value={i}>{s.label} — {formatNaira(s.price)}</option>
@@ -335,7 +335,7 @@ const Shop = () => {
       {(selectedGrades.size > 0 || priceMin !== null || priceMax !== null) && (
         <button
           onClick={clearAll}
-          className="mt-3 w-full text-xs bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 transition-colors font-semibold uppercase tracking-wide"
+          className="mt-3 w-full text-xs bg-gray-100 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors font-semibold uppercase tracking-wide"
         >
           Clear Filters
         </button>
