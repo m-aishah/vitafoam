@@ -201,40 +201,56 @@ export const SiteHeader = () => {
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile drawer — fixed overlay, slides in from the right */}
       {mobileOpen && (
-        <div className="bg-white border-t border-gray-200 md:hidden shadow-lg">
-          {/* Mobile search */}
-          <div className="p-3 border-b border-gray-100" ref={mobileSearchRef}>
-            <form onSubmit={handleSearchSubmit} className="relative">
-              <div className="flex items-center border border-gray-300 rounded-2xl overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
-                  className="flex-1 h-11 px-4 text-sm focus:outline-none"
-                />
-                <button type="submit" className="h-11 w-11 flex items-center justify-center bg-primary text-white hover:bg-primary/90 transition-colors rounded-r-2xl flex-shrink-0">
-                  <Search className="h-4 w-4" />
-                </button>
-              </div>
-              {searchOpen && <ResultsDropdown />}
-            </form>
-          </div>
-          <div className="py-2">
-            {NAV_CATEGORIES.map((cat) => (
-              <Link
-                key={cat.label}
-                to={cat.to}
-                className={`block px-5 py-3 text-sm font-semibold border-b border-gray-50 hover:text-primary hover:bg-gray-50 ${activeCat === cat.cat ? "text-primary" : "text-gray-800"}`}
-              >
-                {cat.label}
-              </Link>
-            ))}
-            <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="block px-5 py-3 text-sm font-semibold text-gray-800 hover:text-primary">
-              CONTACT
-            </a>
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          {/* Drawer panel */}
+          <div className="absolute top-0 right-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl flex flex-col">
+            {/* Drawer header */}
+            <div className="flex items-center justify-between px-5 h-16 border-b border-gray-100 flex-shrink-0">
+              <img src={vitafoamLogo} alt="Vitafoam" className="h-9 w-auto" />
+              <button onClick={() => setMobileOpen(false)} className="h-9 w-9 flex items-center justify-center rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors" aria-label="Close menu">
+                <X className="h-5 w-5 text-gray-700" />
+              </button>
+            </div>
+            {/* Search */}
+            <div className="px-4 py-3 border-b border-gray-100 flex-shrink-0" ref={mobileSearchRef}>
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <div className="flex items-center border border-gray-300 rounded-2xl overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search products..."
+                    className="flex-1 h-11 px-4 text-sm focus:outline-none"
+                  />
+                  <button type="submit" className="h-11 w-11 flex items-center justify-center bg-primary text-white hover:bg-primary/90 transition-colors rounded-r-2xl flex-shrink-0">
+                    <Search className="h-4 w-4" />
+                  </button>
+                </div>
+                {searchOpen && <ResultsDropdown />}
+              </form>
+            </div>
+            {/* Nav links */}
+            <nav className="flex-1 overflow-y-auto py-2">
+              <p className="px-5 pt-2 pb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">Categories</p>
+              {NAV_CATEGORIES.map((cat) => (
+                <Link
+                  key={cat.label}
+                  to={cat.to}
+                  className={`flex items-center px-5 py-3.5 text-sm font-semibold border-b border-gray-50 transition-colors ${activeCat === cat.cat ? "text-primary bg-primary/5" : "text-gray-800 hover:text-primary hover:bg-gray-50"}`}
+                >
+                  {cat.label}
+                  {activeCat === cat.cat && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />}
+                </Link>
+              ))}
+              <p className="px-5 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-gray-400">Help</p>
+              <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="flex items-center px-5 py-3.5 text-sm font-semibold text-gray-800 hover:text-primary hover:bg-gray-50 border-b border-gray-50 transition-colors">
+                CONTACT US
+              </a>
+            </nav>
           </div>
         </div>
       )}
