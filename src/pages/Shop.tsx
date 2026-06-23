@@ -114,7 +114,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
 
   return (
     <>
-      <div className="group border border-gray-200 rounded bg-white shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="group border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-200">
         <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center p-4">
           {item.image ? (
             <img src={item.image} alt={item.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" />
@@ -212,7 +212,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
                 <p className="text-2xl font-bold text-primary mb-5">{formatNaira(selected?.price ?? item.minPrice)}</p>
                 <button
                   onClick={handleAdd}
-                  className="flex items-center justify-center gap-2 w-full h-11 bg-[#1a1a1a] text-white text-sm font-bold rounded hover:bg-primary transition-colors"
+                  className="flex items-center justify-center gap-2 w-full h-11 bg-[#1a1a1a] text-white text-sm font-bold rounded-xl hover:bg-primary transition-colors"
                 >
                   <ShoppingCart className="h-4 w-4" /> ADD TO CART
                 </button>
@@ -384,7 +384,7 @@ const Shop = () => {
         <div className="container mx-auto container-px grid gap-8 lg:grid-cols-[240px_1fr]">
           <aside className="hidden lg:block">
             <div className="sticky top-36">
-              <div className="border border-gray-200 rounded p-4">
+              <div className="border border-gray-200 rounded-xl p-4">
                 <FilterPanel />
               </div>
               <div className="mt-6 bg-primary text-white rounded-lg p-5">
@@ -423,7 +423,7 @@ const Shop = () => {
             </div>
 
             {filtered.length === 0 ? (
-              <div className="border border-dashed border-gray-300 rounded p-16 text-center">
+              <div className="border border-dashed border-gray-300 rounded-xl p-16 text-center">
                 <p className="font-bold text-xl text-gray-700">No products match your filters</p>
                 <p className="mt-2 text-gray-500 text-sm">Try clearing some filters to see more options.</p>
                 {(selectedGrades.size > 0 || priceMin !== null || priceMax !== null) && (

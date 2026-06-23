@@ -186,7 +186,7 @@ const ProductDetail = () => {
         <div className="container mx-auto container-px">
           <div className="grid gap-8 lg:gap-10 lg:grid-cols-2">
             {/* Image */}
-            <div className="border border-gray-200 rounded bg-gray-50 aspect-square flex items-center justify-center p-6 md:p-8">
+            <div className="border border-gray-200 rounded-2xl bg-gray-50 aspect-square flex items-center justify-center p-6 md:p-8">
               {product.image ? (
                 <img src={product.image} alt={product.name} className="max-w-full max-h-[420px] object-contain" />
               ) : (
@@ -240,14 +240,14 @@ const ProductDetail = () => {
               )}
 
               <div className="mt-5 flex items-center gap-3">
-                <div className="inline-flex items-center border border-gray-300 rounded flex-shrink-0">
+                <div className="inline-flex items-center border border-gray-300 rounded-xl flex-shrink-0">
                   <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-10 text-gray-700 text-xl font-medium hover:bg-gray-100 transition-colors">−</button>
                   <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
                   <button onClick={() => setQty(qty + 1)} className="h-11 w-10 text-gray-700 text-xl font-medium hover:bg-gray-100 transition-colors">+</button>
                 </div>
                 <button
                   onClick={handleAdd}
-                  className="flex-1 h-11 bg-[#1a1a1a] text-white text-xs sm:text-sm font-bold rounded hover:bg-primary transition-colors uppercase tracking-wide flex items-center justify-center gap-2 min-w-0"
+                  className="flex-1 h-11 bg-[#1a1a1a] text-white text-xs sm:text-sm font-bold rounded-xl hover:bg-primary transition-colors uppercase tracking-wide flex items-center justify-center gap-2 min-w-0"
                 >
                   <ShoppingCart className="h-4 w-4 flex-shrink-0" /> ADD TO CART
                 </button>
@@ -258,7 +258,7 @@ const ProductDetail = () => {
                   href={whatsappOrderUrl(waMessage)}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-center gap-2 w-full h-11 bg-[#25D366] text-white text-xs sm:text-sm font-bold rounded hover:bg-[#1fba59] transition-colors uppercase tracking-wide"
+                  className="flex items-center justify-center gap-2 w-full h-11 bg-[#25D366] text-white text-xs sm:text-sm font-bold rounded-xl hover:bg-[#1fba59] transition-colors uppercase tracking-wide"
                 >
                   <WhatsAppIcon className="h-5 w-5 flex-shrink-0" /> ORDER ON WHATSAPP
                 </a>
