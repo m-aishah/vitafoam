@@ -25,7 +25,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { LogOut, Pencil, Trash2, Plus, Package, Layers, Tag, ImageIcon, Search } from "lucide-react";
+import { LogOut, Pencil, Trash2, Plus, Package, Layers, Tag, ImageIcon, Search, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ─── Shared input class ───────────────────────────────────────────────────────
 const inp = "mt-1 w-full border border-border rounded-xl px-3 h-10 text-sm focus:outline-none focus:border-primary transition-colors";
@@ -118,6 +118,42 @@ function GradeImagesPanel({ onRefresh }: { onRefresh: () => void }) {
   );
 }
 
+// ─── Pagination ──────────────────────────────────────────────────────────────
+const PAGE_SIZE = 20;
+
+function Pagination({ page, total, onChange }: { page: number; total: number; onChange: (p: number) => void }) {
+  const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (pages <= 1) return null;
+  const from = (page - 1) * PAGE_SIZE + 1;
+  const to = Math.min(page * PAGE_SIZE, total);
+  return (
+    <div className="flex items-center justify-between mt-3 px-1">
+      <p className="text-xs text-muted-foreground">{from}–{to} of {total}</p>
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onChange(page - 1)} disabled={page === 1}
+          className="h-8 w-8 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        ><ChevronLeft className="h-4 w-4" /></button>
+        {Array.from({ length: pages }, (_, i) => i + 1).filter((p) => p === 1 || p === pages || Math.abs(p - page) <= 1).reduce<(number | "…")[]>((acc, p, i, arr) => {
+          if (i > 0 && (p as number) - (arr[i - 1] as number) > 1) acc.push("…");
+          acc.push(p);
+          return acc;
+        }, []).map((p, i) =>
+          p === "…" ? <span key={`e${i}`} className="px-1 text-xs text-muted-foreground">…</span> : (
+            <button key={p} onClick={() => onChange(p as number)}
+              className={`h-8 min-w-8 px-2 rounded-xl text-xs font-semibold border transition-colors ${page === p ? "bg-primary text-white border-primary" : "border-border hover:bg-surface"}`}
+            >{p}</button>
+          )
+        )}
+        <button
+          onClick={() => onChange(page + 1)} disabled={page === pages}
+          className="h-8 w-8 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        ><ChevronRight className="h-4 w-4" /></button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Search bar ───────────────────────────────────────────────────────────────
 function TableSearch({ value, onChange, placeholder }: { value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
@@ -138,17 +174,21 @@ function TableSearch({ value, onChange, placeholder }: { value: string; onChange
 function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRefresh: () => void }) {
   const [gradeFilter, setGradeFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editTarget, setEditTarget] = useState<MattressRaw | null>(null);
   const [adding, setAdding] = useState(false);
   const blank: MattressRaw = { code: "", grade: "Corona", gradeSuffix: "CP", dimensionRaw: "", lengthInches: 75, widthInches: 60, thicknessInches: 6, price: 0, displaySize: "", displayLabel: "" };
   const [form, setForm] = useState<MattressRaw>(blank);
 
-  const rows = useMemo(() => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
     let list = gradeFilter === "all" ? products : products.filter((p) => p.grade === gradeFilter);
     if (q) list = list.filter((p) => p.grade.toLowerCase().includes(q) || p.displaySize.toLowerCase().includes(q) || p.code.toLowerCase().includes(q));
     return [...list].sort((a, b) => a.grade.localeCompare(b.grade) || a.widthInches - b.widthInches || a.thicknessInches - b.thicknessInches);
   }, [products, gradeFilter, search]);
+  const rows = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+  // reset page when filter/search changes
+  useEffect(() => { setPage(1); }, [gradeFilter, search]);
 
   const updateDims = (patch: Partial<MattressRaw>) => {
     setForm((f) => {
@@ -188,7 +228,7 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
           <TableSearch value={search} onChange={setSearch} placeholder="Search grade, size, code…" />
         </div>
         <div className="flex items-center gap-3">
-          <p className="text-xs text-muted-foreground">{rows.length} of {products.length} SKUs</p>
+          <p className="text-xs text-muted-foreground">{filtered.length} of {products.length} SKUs</p>
           <Button size="sm" variant="navy" onClick={openAdd} className="rounded-xl"><Plus className="h-4 w-4" /> Add SKU</Button>
         </div>
       </div>
@@ -236,6 +276,7 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
           </tbody>
         </table>
       </div>
+      <Pagination page={page} total={filtered.length} onChange={setPage} />
 
       <Dialog open={modalOpen} onOpenChange={(o) => !o && closeModal()}>
         <DialogContent className="max-w-md rounded-2xl">
@@ -279,15 +320,18 @@ function MattressTable({ products, onRefresh }: { products: MattressRaw[]; onRef
 // ─── Topper Table ─────────────────────────────────────────────────────────────
 function TopperTable({ products, onRefresh }: { products: MattressRaw[]; onRefresh: () => void }) {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editTarget, setEditTarget] = useState<MattressRaw | null>(null);
   const [adding, setAdding] = useState(false);
   const blank: MattressRaw = { code: "", grade: "Memory Topper", gradeSuffix: "MT", dimensionRaw: "", lengthInches: 75, widthInches: 60, thicknessInches: 4, price: 0, displaySize: "", displayLabel: "" };
   const [form, setForm] = useState<MattressRaw>(blank);
 
-  const rows = useMemo(() => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return q ? products.filter((p) => p.displaySize.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) : products;
   }, [products, search]);
+  const rows = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+  useEffect(() => { setPage(1); }, [search]);
 
   const updateDims = (patch: Partial<MattressRaw>) => {
     setForm((f) => { const next = { ...f, ...patch }; next.displaySize = calcDisplaySize(next.lengthInches, next.widthInches, next.thicknessInches); next.displayLabel = `Memory Topper — ${next.displaySize}`; return next; });
@@ -343,6 +387,7 @@ function TopperTable({ products, onRefresh }: { products: MattressRaw[]; onRefre
           </tbody>
         </table>
       </div>
+      <Pagination page={page} total={filtered.length} onChange={setPage} />
       <div className="mt-5 border-t border-border pt-4">
         <h3 className="text-sm font-semibold text-gray-900 mb-3">Memory Topper Product Image</h3>
         <ImageUploader value={(products[0] as any)?.image ?? null} folder="toppers" onChange={(url) => { saveTopperProducts(products.map((p) => ({ ...p, image: url }))); onRefresh(); }} />
@@ -374,15 +419,18 @@ function TopperTable({ products, onRefresh }: { products: MattressRaw[]; onRefre
 // ─── Simple Product Table ─────────────────────────────────────────────────────
 function SimpleProductTable({ cat, products, onRefresh }: { cat: "pillow" | "baby" | "lifestyle" | "leisure"; products: SimpleProductRaw[]; onRefresh: () => void }) {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editTarget, setEditTarget] = useState<SimpleProductRaw | null>(null);
   const [adding, setAdding] = useState(false);
   const blank: SimpleProductRaw = { id: "", name: "", shortDesc: "", description: "", price: 0, image: null };
   const [form, setForm] = useState<SimpleProductRaw>(blank);
 
-  const rows = useMemo(() => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return q ? products.filter((p) => p.name.toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)) : products;
   }, [products, search]);
+  const rows = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+  useEffect(() => { setPage(1); }, [search]);
 
   const openEdit = (p: SimpleProductRaw) => { setForm({ ...p }); setEditTarget(p); };
   const openAdd = () => { setForm({ ...blank, id: `${cat}-${Date.now()}` }); setAdding(true); };
@@ -440,6 +488,7 @@ function SimpleProductTable({ cat, products, onRefresh }: { cat: "pillow" | "bab
           </tbody>
         </table>
       </div>
+      <Pagination page={page} total={filtered.length} onChange={setPage} />
 
       <Dialog open={modalOpen} onOpenChange={(o) => !o && closeModal()}>
         <DialogContent className="rounded-2xl">
@@ -464,15 +513,18 @@ function SimpleProductTable({ cat, products, onRefresh }: { cat: "pillow" | "bab
 // ─── Bedding Table ────────────────────────────────────────────────────────────
 function BeddingTable({ products, onRefresh }: { products: BeddingProductRaw[]; onRefresh: () => void }) {
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
   const [editTarget, setEditTarget] = useState<BeddingProductRaw | null>(null);
   const [adding, setAdding] = useState(false);
   const blank: BeddingProductRaw = { id: "", name: "", shortDesc: "", description: "", image: null, variants: [] };
   const [form, setForm] = useState<BeddingProductRaw>(blank);
 
-  const rows = useMemo(() => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
     return q ? products.filter((p) => p.name.toLowerCase().includes(q) || p.shortDesc.toLowerCase().includes(q)) : products;
   }, [products, search]);
+  const rows = useMemo(() => filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), [filtered, page]);
+  useEffect(() => { setPage(1); }, [search]);
 
   const openEdit = (p: BeddingProductRaw) => { setForm({ ...p }); setEditTarget(p); };
   const openAdd = () => { setForm({ ...blank, id: `bedding-${Date.now()}` }); setAdding(true); };
@@ -530,6 +582,7 @@ function BeddingTable({ products, onRefresh }: { products: BeddingProductRaw[]; 
           </tbody>
         </table>
       </div>
+      <Pagination page={page} total={filtered.length} onChange={setPage} />
 
       <Dialog open={modalOpen} onOpenChange={(o) => !o && closeModal()}>
         <DialogContent className="max-w-lg rounded-2xl">
