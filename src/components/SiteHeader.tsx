@@ -155,7 +155,6 @@ export const SiteHeader = () => {
           {/* Right links */}
           <div className="hidden md:flex items-center gap-5 ml-auto text-sm font-semibold text-gray-700">
             <a href="https://wa.me/2348053054348" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">CONTACT</a>
-            <Link to="/admin/login" className="hover:text-primary transition-colors">LOGIN</Link>
             <Link to="/cart" className="flex items-center gap-1.5 hover:text-primary transition-colors" aria-label="Cart">
               <ShoppingCart className="h-5 w-5" />
               <span>CART / <span className="text-primary">₦{count > 0 ? count : "0.00"}</span></span>

@@ -26,9 +26,9 @@ export const SiteFooter = () => {
               placeholder="Your Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-10 px-4 border border-gray-300 rounded text-sm flex-1 sm:w-56 focus:outline-none focus:border-primary"
+              className="h-10 px-4 border border-gray-300 rounded-xl text-sm flex-1 sm:w-56 focus:outline-none focus:border-primary"
             />
-            <button type="submit" className="h-10 px-5 bg-[#1a1a1a] text-white text-sm font-bold rounded hover:bg-gray-800 transition-colors whitespace-nowrap">
+            <button type="submit" className="h-10 px-5 bg-[#1a1a1a] text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors whitespace-nowrap">
               SUBSCRIBE
             </button>
           </form>

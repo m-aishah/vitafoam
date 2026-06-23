@@ -66,14 +66,14 @@ const Cart = () => {
                 {items.map((i) => {
                   const key = `${i.productId}-${i.size.size}`;
                   return (
-                    <div key={key} className="flex flex-col sm:flex-row gap-4 border border-gray-200 rounded p-5">
+                    <div key={key} className="flex flex-col sm:flex-row gap-4 border border-gray-200 rounded-2xl p-5">
                       <div className="flex-1">
                         <Link to={`/product/${i.productId}`} className="font-bold text-gray-900 hover:text-primary transition-colors text-base">{i.name}</Link>
                         <div className="mt-1 text-sm text-gray-500">{displaySize(i.size)}</div>
                         <div className="mt-2 font-semibold text-gray-900">{formatNaira(i.size.price)} <span className="text-xs font-normal text-gray-400">/ unit · VAT incl.</span></div>
                       </div>
                       <div className="flex sm:flex-col items-center sm:items-end gap-3 justify-between">
-                        <div className="inline-flex items-center border border-gray-300 rounded">
+                        <div className="inline-flex items-center border border-gray-300 rounded-xl">
                           <button onClick={() => updateQty(i.productId, i.size.size, Math.max(1, i.qty - 1))} className="h-9 w-9 text-gray-700 hover:bg-gray-100 transition-colors">−</button>
                           <span className="w-9 text-center font-semibold text-gray-900 text-sm">{i.qty}</span>
                           <button onClick={() => updateQty(i.productId, i.size.size, i.qty + 1)} className="h-9 w-9 text-gray-700 hover:bg-gray-100 transition-colors">+</button>
@@ -94,7 +94,7 @@ const Cart = () => {
 
               {/* Order summary */}
               <aside>
-                <div className="lg:sticky lg:top-36 border border-gray-200 rounded p-6">
+                <div className="lg:sticky lg:top-36 border border-gray-200 rounded-2xl p-6">
                   <h3 className="font-display font-bold text-lg text-gray-900 mb-5">Order Summary</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -117,7 +117,7 @@ const Cart = () => {
                     href={whatsappOrderUrl(message)}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-5 flex items-center justify-center gap-2 w-full h-11 bg-[#25D366] text-white text-sm font-bold rounded hover:bg-[#1fba59] transition-colors uppercase tracking-wide"
+                    className="mt-5 flex items-center justify-center gap-2 w-full h-11 bg-[#25D366] text-white text-sm font-bold rounded-xl hover:bg-[#1fba59] transition-colors uppercase tracking-wide"
                   >
                     <WhatsAppIcon className="h-5 w-5" /> CHECKOUT VIA WHATSAPP
                   </a>

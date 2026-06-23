@@ -115,7 +115,7 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
   return (
     <>
       <div className="group border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-all duration-200">
-        <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center p-4">
+        <div className="relative overflow-hidden bg-gray-50 aspect-square flex items-center justify-center p-4 rounded-t-2xl">
           {item.image ? (
             <img src={item.image} alt={item.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" loading="lazy" />
           ) : (
