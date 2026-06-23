@@ -239,7 +239,7 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              <div className="mt-5 flex items-center gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center border border-gray-300 rounded-xl flex-shrink-0">
                   <button onClick={() => setQty(Math.max(1, qty - 1))} className="h-11 w-10 text-gray-700 text-xl font-medium hover:bg-gray-100 transition-colors">−</button>
                   <span className="w-10 text-center font-semibold text-gray-900">{qty}</span>
@@ -303,7 +303,7 @@ const ProductDetail = () => {
         <section className="border-t border-gray-200 bg-gray-50 py-12">
           <div className="container mx-auto container-px">
             <h2 className="font-display text-xl sm:text-2xl font-bold text-gray-900 uppercase mb-6 md:mb-8">You May Also Like</h2>
-            <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-5 grid-cols-2 lg:grid-cols-3">
               {related.map((p) => (
                 <ProductCard key={p.id} item={p} />
               ))}

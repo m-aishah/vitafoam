@@ -20,15 +20,15 @@ export const SiteFooter = () => {
               By entering your email address, you agree to receive our marketing promotion and offers in accordance with our Privacy Policy
             </p>
           </div>
-          <form className="flex items-center gap-2 flex-shrink-0 w-full sm:w-auto" onSubmit={(e) => e.preventDefault()}>
+          <form className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto sm:flex-shrink-0" onSubmit={(e) => e.preventDefault()}>
             <input
               type="email"
               placeholder="Your Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-10 px-4 border border-gray-300 rounded-xl text-sm flex-1 sm:w-56 focus:outline-none focus:border-primary"
+              className="h-10 px-4 border border-gray-300 rounded-xl text-sm w-full sm:w-56 focus:outline-none focus:border-primary"
             />
-            <button type="submit" className="h-10 px-5 bg-[#1a1a1a] text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors whitespace-nowrap">
+            <button type="submit" className="h-10 px-5 bg-[#1a1a1a] text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors whitespace-nowrap w-full sm:w-auto">
               SUBSCRIBE
             </button>
           </form>

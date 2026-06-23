@@ -138,18 +138,18 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
             </div>
           )}
         </div>
-        <div className="p-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">{item.categoryLabel}</p>
+        <div className="p-2 sm:p-4 border-t border-gray-100">
+          <p className="text-[10px] sm:text-xs text-gray-400 uppercase tracking-wide mb-1">{item.categoryLabel}</p>
           {item.grade && item.badgeClass && (
-            <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-xl mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
+            <span className={`inline-block text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-xl mb-1 sm:mb-1.5 ${item.badgeClass}`}>{item.grade}</span>
           )}
-          <h3 className="font-display text-base font-bold text-gray-900 mb-1 line-clamp-2">
+          <h3 className="font-display text-sm sm:text-base font-bold text-gray-900 mb-1 line-clamp-2">
             {isMattress ? (
               <Link to={`/product/${item.id}`} className="hover:text-primary transition-colors">{item.name}</Link>
             ) : item.name}
           </h3>
-          <p className="text-xs text-gray-500 mb-3 line-clamp-2">{item.shortDesc}</p>
-          <p className="text-sm text-gray-700 mb-4">
+          <p className="text-[10px] sm:text-xs text-gray-500 mb-2 sm:mb-3 line-clamp-2">{item.shortDesc}</p>
+          <p className="text-xs sm:text-sm text-gray-700 mb-3 sm:mb-4">
             {item.sizes.length > 1 ? "FROM " : ""}<span className="font-bold text-gray-900">{formatNaira(item.minPrice)}</span>
           </p>
           {isMattress ? (
@@ -171,14 +171,14 @@ function ShopItemCard({ item }: { item: GroupedShopItem }) {
       </div>
 
       {showModal && !isMattress && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowModal(false)}>
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={() => setShowModal(false)}>
           <div className="absolute inset-0 bg-black/50" />
-          <div className="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="relative bg-white rounded-t-2xl sm:rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowModal(false)} className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 z-10">
               <span className="text-gray-600 text-sm font-bold">✕</span>
             </button>
             <div className="grid sm:grid-cols-2 gap-0">
-              <div className="bg-gray-50 flex items-center justify-center p-8 rounded-t-xl sm:rounded-l-xl sm:rounded-tr-none min-h-[260px]">
+              <div className="bg-gray-50 flex items-center justify-center p-6 sm:p-8 rounded-t-2xl sm:rounded-l-xl sm:rounded-tr-none min-h-[200px] sm:min-h-[260px]">
                 {item.image ? (
                   <img src={item.image} alt={item.name} className="max-h-52 w-full object-contain" />
                 ) : (
@@ -397,11 +397,11 @@ const Shop = () => {
           </aside>
 
           <div>
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
               <div className="flex items-center gap-3">
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="outline" className="lg:hidden h-10 text-sm">
+                    <Button variant="outline" className="lg:hidden h-10 text-sm flex-shrink-0">
                       <Filter className="h-4 w-4" /> Filters
                     </Button>
                   </SheetTrigger>
@@ -413,7 +413,7 @@ const Shop = () => {
                 <p className="text-sm text-gray-500">{filtered.length} {filtered.length === 1 ? "product" : "products"}</p>
               </div>
               <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-                <SelectTrigger className="w-full sm:w-[200px] h-10 text-sm"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="w-full sm:w-48 h-10 text-sm"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="price-asc">Default sorting</SelectItem>
                   <SelectItem value="price-desc">Price: High to Low</SelectItem>
@@ -431,7 +431,7 @@ const Shop = () => {
                 )}
               </div>
             ) : (
-              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:gap-5 grid-cols-2 xl:grid-cols-3">
                 {filtered.map((item) => <ShopItemCard key={item.id} item={item} />)}
               </div>
             )}
