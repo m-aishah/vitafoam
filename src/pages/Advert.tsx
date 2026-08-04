@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Play, Pause, Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
@@ -12,37 +12,18 @@ const VIDEOS = ["/videos/video1.mp4", "/videos/video2.mp4", "/videos/video3.mp4"
 
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
-const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: {
-  src: string; label: string; index: number; active: boolean; onEnded: () => void; onActivate: () => void; mobile?: boolean;
+const VideoPhone = ({ src, label, index, active, onActivate, mobile }: {
+  src: string; label: string; index: number; active: boolean; onActivate: () => void; mobile?: boolean;
 }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
-
-  // Ensure muted attr is set via ref on mount (React's muted prop is broken on <video>)
-  useEffect(() => {
-    if (ref.current) ref.current.muted = true;
-  }, []);
-
-  // Auto-play when this phone becomes active
-  useEffect(() => {
-    if (!ref.current) return;
-    if (active) {
-      ref.current.muted = true; // must be muted for autoplay to work on production
-      ref.current.currentTime = 0;
-      ref.current.play().then(() => setPlaying(true)).catch(() => {});
-    } else {
-      ref.current.pause();
-      ref.current.currentTime = 0;
-      setPlaying(false);
-    }
-  }, [active]);
+  const [muted, setMuted] = useState(false);
 
   const toggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!ref.current) return;
     if (playing) { ref.current.pause(); setPlaying(false); }
-    else { ref.current.play(); setPlaying(true); }
+    else { ref.current.play().then(() => setPlaying(true)).catch(() => {}); }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
@@ -72,8 +53,6 @@ const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: 
               src={src}
               className="w-full h-full object-cover"
               playsInline
-              muted
-              onEnded={onEnded}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
@@ -116,7 +95,6 @@ const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: 
 
 const Advert = () => {
   const [activeVideo, setActiveVideo] = useState(0);
-  const paymentRef = useRef<HTMLElement>(null);
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white font-body">
@@ -195,7 +173,7 @@ const Advert = () => {
       <section className="py-10 pb-16 overflow-hidden">
         <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-500 mb-8">Watch Our Latest</p>
 
-        {/* Mobile: stacked, one at a time */}
+        {/* Mobile: stacked */}
         <div className="flex flex-col items-center gap-6 sm:hidden px-4">
           {VIDEOS.map((src, i) => (
             <VideoPhone
@@ -205,13 +183,6 @@ const Advert = () => {
               index={i}
               active={activeVideo === i}
               onActivate={() => setActiveVideo(i)}
-              onEnded={() => {
-                if (i < VIDEOS.length - 1) {
-                  setActiveVideo(i + 1);
-                } else {
-                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
               mobile
             />
           ))}
@@ -227,17 +198,9 @@ const Advert = () => {
               index={i}
               active={activeVideo === i}
               onActivate={() => setActiveVideo(i)}
-              onEnded={() => {
-                if (i < VIDEOS.length - 1) {
-                  setActiveVideo(i + 1);
-                } else {
-                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
             />
           ))}
         </div>
-
         {/* Progress dots */}
         <div className="flex items-center justify-center gap-2 mt-8">
           {VIDEOS.map((_, i) => (
@@ -251,7 +214,7 @@ const Advert = () => {
       </section>
 
       {/* Payment Details */}
-      <section ref={paymentRef} className="max-w-5xl mx-auto px-4 py-14">
+      <section className="max-w-5xl mx-auto px-4 py-14">
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-10 text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <CreditCard className="h-5 w-5 text-primary" />
