@@ -8,11 +8,7 @@ const SITE_URL = "https://vitafoammattress.com";
 const OG_IMAGE = `${SITE_URL}/og-advert.jpg`;
 const OG_TITLE = "Vitafoam Nigeria — Premium Mattresses, Free Delivery in Lagos & Ogun State";
 const OG_DESC = "Shop Nigeria's most trusted mattress brand. Free delivery within Lagos & Ogun State. Pay via bank transfer: Zenith Bank · 1011040357 · Vitafoam Nig Plc.";
-import video1 from "@/assets/videos/video1.mp4";
-import video2 from "@/assets/videos/video2.mp4";
-import video3 from "@/assets/videos/video3.mp4";
-
-const VIDEOS = [video1, video2, video3];
+const VIDEOS = ["/videos/video1.mp4", "/videos/video2.mp4", "/videos/video3.mp4"];
 
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
