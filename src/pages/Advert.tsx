@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { Play, Pause, Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
+import { Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
 import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
 
 const SITE_URL = "https://vitafoammattress.com";
@@ -9,81 +9,78 @@ const OG_IMAGE = `${SITE_URL}/og-advert.jpg`;
 const OG_TITLE = "Vitafoam Nigeria — Premium Mattresses, Free Delivery in Lagos & Ogun State";
 const OG_DESC = "Shop Nigeria's most trusted mattress brand. Free delivery within Lagos & Ogun State. Pay via bank transfer: Zenith Bank · 1011040357 · Vitafoam Nig Plc.";
 const VIDEOS = ["/videos/video1.mp4", "/videos/video2.mp4", "/videos/video3.mp4"];
-
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
 const VideoPhone = ({ src, label, index, active, onActivate, mobile }: {
   src: string; label: string; index: number; active: boolean; onActivate: () => void; mobile?: boolean;
 }) => {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
 
-  const toggle = (e: React.MouseEvent) => {
+  const handleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!ref.current) return;
-    if (playing) { ref.current.pause(); setPlaying(false); }
-    else { ref.current.play().then(() => setPlaying(true)).catch(() => {}); }
-  };
-
-  const toggleMute = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!ref.current) return;
-    ref.current.muted = !muted;
-    setMuted(!muted);
+    setMuted(m => !m);
   };
 
   return (
     <div
-      className={`flex flex-col items-center gap-3 transition-all duration-500 cursor-pointer ${mobile ? (active ? "scale-100 z-10" : "scale-95 opacity-60 hover:opacity-80") : (active ? "scale-105 z-10" : "scale-90 opacity-50 hover:opacity-70")}`}
-      onClick={onActivate}
+      className={`flex flex-col items-center gap-3 transition-all duration-500 ${mobile ? (active ? "scale-100" : "scale-95 opacity-50") : (active ? "scale-105 z-10" : "scale-90 opacity-45 hover:opacity-65 cursor-pointer")}`}
+      onClick={!active ? onActivate : undefined}
     >
       {/* Phone shell */}
-      <div className={`relative ${mobile ? "w-[75vw] max-w-[280px]" : "w-[180px] sm:w-[210px]"}`} style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
-        {/* Outer phone body */}
-        <div className="relative bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-[36px] p-[10px] shadow-2xl border border-white/10">
-          {/* Top notch bar */}
+      <div
+        className={`relative ${mobile ? "w-[78vw] max-w-[300px]" : "w-[180px] sm:w-[210px]"}`}
+        style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.45))" : "none" }}
+      >
+        <div className="relative bg-gradient-to-b from-[#2e2e2e] to-[#1a1a1a] rounded-[36px] p-[10px] shadow-2xl border border-white/10">
+          {/* Notch */}
           <div className="flex items-center justify-center mb-1.5">
             <div className="w-16 h-1.5 bg-[#111] rounded-full" />
           </div>
-          {/* Screen area */}
+
+          {/* Screen */}
           <div className="relative rounded-[28px] overflow-hidden bg-black" style={{ aspectRatio: "9/19" }}>
+            {/* Native video with controls — most reliable cross-browser */}
             <video
-              ref={ref}
               src={src}
               className="w-full h-full object-cover"
               playsInline
+              muted={muted}
+              controls
+              controlsList="nodownload noremoteplayback"
+              style={{ display: "block" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
-            <div className="absolute bottom-10 left-0 right-0 text-center">
-              <span className="text-white text-xs font-semibold drop-shadow">{label}</span>
+            {/* Label overlay at bottom (above controls) */}
+            <div className="absolute bottom-14 left-0 right-0 text-center pointer-events-none">
+              <span className="text-white text-xs font-semibold drop-shadow-lg px-2">{label}</span>
             </div>
 
-            <button onClick={toggle} className="absolute inset-0 flex items-center justify-center group/btn">
-              <div className={`h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${playing ? "opacity-0 group-hover/btn:opacity-100" : "opacity-100"}`}>
-                {playing ? <Pause className="h-5 w-5 text-white" /> : <Play className="h-5 w-5 text-white ml-0.5" />}
-              </div>
-            </button>
-
-            <button onClick={toggleMute} className="absolute top-2.5 right-2.5 h-7 w-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white">
+            {/* Mute toggle */}
+            <button
+              onClick={handleMute}
+              className="absolute top-2.5 right-2.5 h-7 w-7 rounded-full bg-black/60 flex items-center justify-center text-white z-10"
+            >
               {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
             </button>
           </div>
 
+          {/* Home bar */}
           <div className="flex items-center justify-center mt-1.5">
             <div className="w-20 h-1 bg-white/20 rounded-full" />
           </div>
         </div>
 
-        {active && <div className="absolute inset-0 rounded-[36px] ring-2 ring-primary/60 pointer-events-none" />}
+        {/* Active glow ring */}
+        {active && <div className="absolute inset-0 rounded-[36px] ring-2 ring-primary/70 pointer-events-none" />}
 
+        {/* Side buttons */}
         <div className="absolute top-16 -left-[3px] w-[3px] h-8 bg-[#333] rounded-l-sm" />
         <div className="absolute top-28 -left-[3px] w-[3px] h-12 bg-[#333] rounded-l-sm" />
         <div className="absolute top-20 -right-[3px] w-[3px] h-14 bg-[#333] rounded-r-sm" />
       </div>
 
-      <div className="flex items-center gap-2">
+      {/* Label + number below phone */}
+      <div className="flex items-center gap-2 cursor-pointer" onClick={onActivate}>
         <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${active ? "bg-primary text-white" : "bg-white/10 text-gray-400"}`}>
           {index + 1}
         </div>
