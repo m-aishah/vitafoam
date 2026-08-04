@@ -27,6 +27,7 @@ import HowToShop from "./pages/HowToShop.tsx";
 import BecomeDistributor from "./pages/BecomeDistributor.tsx";
 import Blog from "./pages/Blog.tsx";
 import Locations from "./pages/Locations.tsx";
+import Advert from "./pages/Advert.tsx";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/become-a-distributor" element={<BecomeDistributor />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/locations" element={<Locations />} />
+          <Route path="/advert" element={<Advert />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
