@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Play, Pause, Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
@@ -8,22 +8,32 @@ const SITE_URL = "https://vitafoammattress.com";
 const OG_IMAGE = `${SITE_URL}/og-advert.jpg`;
 const OG_TITLE = "Vitafoam Nigeria — Premium Mattresses, Free Delivery in Lagos & Ogun State";
 const OG_DESC = "Shop Nigeria's most trusted mattress brand. Free delivery within Lagos & Ogun State. Pay via bank transfer: Zenith Bank · 1011040357 · Vitafoam Nig Plc.";
-import video1 from "@/assets/videos/video1.mp4";
-import video2 from "@/assets/videos/video2.mp4";
-import video3 from "@/assets/videos/video3.mp4";
+const VIDEOS = ["/videos/video1.mp4", "/videos/video2.mp4", "/videos/video3.mp4"];
 
-const VIDEOS = [
-  { src: video1, label: "Premium Comfort" },
-  { src: video2, label: "Quality Craftsmanship" },
-  { src: video3, label: "Better Sleep" },
-];
+const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
-const VideoPlayer = ({ src, label, index }: { src: string; label: string; index: number }) => {
+const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: {
+  src: string; label: string; index: number; active: boolean; onEnded: () => void; onActivate: () => void; mobile?: boolean;
+}) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
 
-  const toggle = () => {
+  // Auto-play when this phone becomes active
+  useEffect(() => {
+    if (!ref.current) return;
+    if (active) {
+      ref.current.currentTime = 0;
+      ref.current.play().then(() => setPlaying(true)).catch(() => {});
+    } else {
+      ref.current.pause();
+      ref.current.currentTime = 0;
+      setPlaying(false);
+    }
+  }, [active]);
+
+  const toggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!ref.current) return;
     if (playing) { ref.current.pause(); setPlaying(false); }
     else { ref.current.play(); setPlaying(true); }
@@ -37,45 +47,70 @@ const VideoPlayer = ({ src, label, index }: { src: string; label: string; index:
   };
 
   return (
-    <div className="relative group rounded-2xl overflow-hidden bg-black shadow-2xl cursor-pointer" onClick={toggle}>
-      <video
-        ref={ref}
-        src={src}
-        className="w-full aspect-video object-cover"
-        loop
-        muted
-        playsInline
-        onEnded={() => setPlaying(false)}
-      />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-      {/* Label */}
-      <div className="absolute bottom-3 left-4 text-white font-semibold text-sm opacity-90">{label}</div>
-      {/* Step badge */}
-      <div className="absolute top-3 left-3 bg-primary text-white text-xs font-bold rounded-full h-7 w-7 flex items-center justify-center shadow">
-        {index + 1}
-      </div>
-      {/* Controls */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className={`h-14 w-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${playing ? "opacity-0 group-hover:opacity-100" : "opacity-100"}`}>
-          {playing
-            ? <Pause className="h-6 w-6 text-white" />
-            : <Play className="h-6 w-6 text-white ml-0.5" />
-          }
+    <div
+      className={`flex flex-col items-center gap-3 transition-all duration-500 cursor-pointer ${mobile ? (active ? "scale-100 z-10" : "scale-95 opacity-60 hover:opacity-80") : (active ? "scale-105 z-10" : "scale-90 opacity-50 hover:opacity-70")}`}
+      onClick={onActivate}
+    >
+      {/* Phone shell */}
+      <div className={`relative ${mobile ? "w-[75vw] max-w-[280px]" : "w-[180px] sm:w-[210px]"}`} style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
+        {/* Outer phone body */}
+        <div className="relative bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-[36px] p-[10px] shadow-2xl border border-white/10">
+          {/* Top notch bar */}
+          <div className="flex items-center justify-center mb-1.5">
+            <div className="w-16 h-1.5 bg-[#111] rounded-full" />
+          </div>
+          {/* Screen area */}
+          <div className="relative rounded-[28px] overflow-hidden bg-black" style={{ aspectRatio: "9/19" }}>
+            <video
+              ref={ref}
+              src={src}
+              className="w-full h-full object-cover"
+              playsInline
+              onEnded={onEnded}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+
+            <div className="absolute bottom-10 left-0 right-0 text-center">
+              <span className="text-white text-xs font-semibold drop-shadow">{label}</span>
+            </div>
+
+            <button onClick={toggle} className="absolute inset-0 flex items-center justify-center group/btn">
+              <div className={`h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${playing ? "opacity-0 group-hover/btn:opacity-100" : "opacity-100"}`}>
+                {playing ? <Pause className="h-5 w-5 text-white" /> : <Play className="h-5 w-5 text-white ml-0.5" />}
+              </div>
+            </button>
+
+            <button onClick={toggleMute} className="absolute top-2.5 right-2.5 h-7 w-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white">
+              {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
+            </button>
+          </div>
+
+          <div className="flex items-center justify-center mt-1.5">
+            <div className="w-20 h-1 bg-white/20 rounded-full" />
+          </div>
         </div>
+
+        {active && <div className="absolute inset-0 rounded-[36px] ring-2 ring-primary/60 pointer-events-none" />}
+
+        <div className="absolute top-16 -left-[3px] w-[3px] h-8 bg-[#333] rounded-l-sm" />
+        <div className="absolute top-28 -left-[3px] w-[3px] h-12 bg-[#333] rounded-l-sm" />
+        <div className="absolute top-20 -right-[3px] w-[3px] h-14 bg-[#333] rounded-r-sm" />
       </div>
-      {/* Mute button */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-3 right-3 h-8 w-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/60 transition-colors"
-      >
-        {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-      </button>
+
+      <div className="flex items-center gap-2">
+        <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${active ? "bg-primary text-white" : "bg-white/10 text-gray-400"}`}>
+          {index + 1}
+        </div>
+        <span className={`text-xs font-semibold transition-colors ${active ? "text-white" : "text-gray-500"}`}>{label}</span>
+      </div>
     </div>
   );
 };
 
 const Advert = () => {
+  const [activeVideo, setActiveVideo] = useState(0);
+  const paymentRef = useRef<HTMLElement>(null);
+
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white font-body">
       <Helmet>
@@ -150,39 +185,66 @@ const Advert = () => {
       </section>
 
       {/* Videos */}
-      <section className="max-w-5xl mx-auto px-4 pb-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {VIDEOS.map((v, i) => (
-            <VideoPlayer key={i} src={v.src} label={v.label} index={i} />
+      <section className="py-10 pb-16 overflow-hidden">
+        <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-500 mb-8">Watch Our Latest</p>
+
+        {/* Mobile: stacked, one at a time */}
+        <div className="flex flex-col items-center gap-6 sm:hidden px-4">
+          {VIDEOS.map((src, i) => (
+            <VideoPhone
+              key={i}
+              src={src}
+              label={LABELS[i]}
+              index={i}
+              active={activeVideo === i}
+              onActivate={() => setActiveVideo(i)}
+              onEnded={() => {
+                if (i < VIDEOS.length - 1) {
+                  setActiveVideo(i + 1);
+                } else {
+                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              mobile
+            />
+          ))}
+        </div>
+
+        {/* Desktop: side by side */}
+        <div className="hidden sm:flex items-end justify-center gap-8 px-4">
+          {VIDEOS.map((src, i) => (
+            <VideoPhone
+              key={i}
+              src={src}
+              label={LABELS[i]}
+              index={i}
+              active={activeVideo === i}
+              onActivate={() => setActiveVideo(i)}
+              onEnded={() => {
+                if (i < VIDEOS.length - 1) {
+                  setActiveVideo(i + 1);
+                } else {
+                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Progress dots */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {VIDEOS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveVideo(i)}
+              className={`rounded-full transition-all duration-300 ${activeVideo === i ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/20"}`}
+            />
           ))}
         </div>
       </section>
 
-      {/* Why Vitafoam */}
-      <section className="bg-white/5 border-y border-white/10 py-12">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-xl font-bold text-center mb-8 text-white/80 uppercase tracking-widest text-sm">
-            Why Vitafoam?
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { icon: "🛏️", title: "50+ Years", sub: "of Nigerian excellence" },
-              { icon: "✅", title: "Certified Quality", sub: "SON & ISO standards" },
-              { icon: "🚚", title: "Free Delivery", sub: "Lagos & Ogun State" },
-              { icon: "💬", title: "24/7 Support", sub: "WhatsApp & phone" },
-            ].map((item) => (
-              <div key={item.title} className="flex flex-col items-center text-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-3xl">{item.icon}</span>
-                <p className="font-bold text-white text-sm">{item.title}</p>
-                <p className="text-gray-400 text-xs">{item.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Payment Details */}
-      <section className="max-w-5xl mx-auto px-4 py-14">
+      <section ref={paymentRef} className="max-w-5xl mx-auto px-4 py-14">
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-10 text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <CreditCard className="h-5 w-5 text-primary" />
