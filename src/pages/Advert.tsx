@@ -17,12 +17,18 @@ const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: 
 }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
+
+  // Ensure muted attr is set via ref on mount (React's muted prop is broken on <video>)
+  useEffect(() => {
+    if (ref.current) ref.current.muted = true;
+  }, []);
 
   // Auto-play when this phone becomes active
   useEffect(() => {
     if (!ref.current) return;
     if (active) {
+      ref.current.muted = true; // must be muted for autoplay to work on production
       ref.current.currentTime = 0;
       ref.current.play().then(() => setPlaying(true)).catch(() => {});
     } else {
@@ -66,6 +72,7 @@ const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: 
               src={src}
               className="w-full h-full object-cover"
               playsInline
+              muted
               onEnded={onEnded}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
