@@ -94,7 +94,7 @@ export const SiteHeader = () => {
       {searchResults.map((p) => (
         <Link
           key={p.id}
-          to={`/shop/${p.id}`}
+          to={`/product/${p.id}`}
           className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-primary/5 transition-colors text-sm border-b border-gray-100 last:border-0"
           onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
         >
