@@ -16,18 +16,31 @@ const VIDEOS = [video1, video2, video3];
 
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
-const VideoPhone = ({ src, label, index, active, onActivate }: {
-  src: string; label: string; index: number; active: boolean; onActivate: () => void;
+const VideoPhone = ({ src, label, index, active, onEnded }: {
+  src: string; label: string; index: number; active: boolean; onEnded: () => void;
 }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
+
+  // Auto-play when this phone becomes active
+  useEffect(() => {
+    if (!ref.current) return;
+    if (active) {
+      ref.current.currentTime = 0;
+      ref.current.play().then(() => setPlaying(true)).catch(() => {});
+    } else {
+      ref.current.pause();
+      ref.current.currentTime = 0;
+      setPlaying(false);
+    }
+  }, [active]);
 
   const toggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!ref.current) return;
     if (playing) { ref.current.pause(); setPlaying(false); }
-    else { ref.current.play(); setPlaying(true); onActivate(); }
+    else { ref.current.play(); setPlaying(true); }
   };
 
   const toggleMute = (e: React.MouseEvent) => {
@@ -38,12 +51,9 @@ const VideoPhone = ({ src, label, index, active, onActivate }: {
   };
 
   return (
-    <div
-      className={`flex flex-col items-center gap-3 transition-all duration-300 ${active ? "scale-105 z-10" : "scale-95 opacity-75"}`}
-      onClick={onActivate}
-    >
+    <div className={`flex flex-col items-center gap-3 transition-all duration-500 ${active ? "scale-105 z-10" : "scale-90 opacity-50"}`}>
       {/* Phone shell */}
-      <div className="relative w-[200px] sm:w-[220px]" style={{ filter: active ? "drop-shadow(0 0 32px rgba(230,126,34,0.35))" : "none" }}>
+      <div className="relative w-[180px] sm:w-[210px]" style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
         {/* Outer phone body */}
         <div className="relative bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-[36px] p-[10px] shadow-2xl border border-white/10">
           {/* Top notch bar */}
@@ -56,59 +66,38 @@ const VideoPhone = ({ src, label, index, active, onActivate }: {
               ref={ref}
               src={src}
               className="w-full h-full object-cover"
-              loop
-              muted
               playsInline
-              onEnded={() => setPlaying(false)}
+              onEnded={onEnded}
             />
-            {/* Bottom gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
-            {/* Label bottom */}
             <div className="absolute bottom-10 left-0 right-0 text-center">
               <span className="text-white text-xs font-semibold drop-shadow">{label}</span>
             </div>
 
-            {/* Play/Pause center */}
-            <button
-              onClick={toggle}
-              className="absolute inset-0 flex items-center justify-center group/btn"
-            >
+            <button onClick={toggle} className="absolute inset-0 flex items-center justify-center group/btn">
               <div className={`h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center transition-all duration-200 ${playing ? "opacity-0 group-hover/btn:opacity-100" : "opacity-100"}`}>
-                {playing
-                  ? <Pause className="h-5 w-5 text-white" />
-                  : <Play className="h-5 w-5 text-white ml-0.5" />
-                }
+                {playing ? <Pause className="h-5 w-5 text-white" /> : <Play className="h-5 w-5 text-white ml-0.5" />}
               </div>
             </button>
 
-            {/* Mute top-right */}
-            <button
-              onClick={toggleMute}
-              className="absolute top-2.5 right-2.5 h-7 w-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white"
-            >
+            <button onClick={toggleMute} className="absolute top-2.5 right-2.5 h-7 w-7 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white">
               {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
             </button>
           </div>
 
-          {/* Bottom home indicator */}
           <div className="flex items-center justify-center mt-1.5">
             <div className="w-20 h-1 bg-white/20 rounded-full" />
           </div>
         </div>
 
-        {/* Glow ring when active */}
-        {active && (
-          <div className="absolute inset-0 rounded-[36px] ring-2 ring-primary/60 pointer-events-none" />
-        )}
+        {active && <div className="absolute inset-0 rounded-[36px] ring-2 ring-primary/60 pointer-events-none" />}
 
-        {/* Side buttons (decorative) */}
         <div className="absolute top-16 -left-[3px] w-[3px] h-8 bg-[#333] rounded-l-sm" />
         <div className="absolute top-28 -left-[3px] w-[3px] h-12 bg-[#333] rounded-l-sm" />
         <div className="absolute top-20 -right-[3px] w-[3px] h-14 bg-[#333] rounded-r-sm" />
       </div>
 
-      {/* Number badge + label below phone */}
       <div className="flex items-center gap-2">
         <div className={`h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors ${active ? "bg-primary text-white" : "bg-white/10 text-gray-400"}`}>
           {index + 1}
@@ -120,7 +109,8 @@ const VideoPhone = ({ src, label, index, active, onActivate }: {
 };
 
 const Advert = () => {
-  const [activeVideo, setActiveVideo] = useState(1);
+  const [activeVideo, setActiveVideo] = useState(0);
+  const paymentRef = useRef<HTMLElement>(null);
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white font-body">
@@ -206,37 +196,30 @@ const Advert = () => {
               label={LABELS[i]}
               index={i}
               active={activeVideo === i}
-              onActivate={() => setActiveVideo(i)}
+              onEnded={() => {
+                if (i < VIDEOS.length - 1) {
+                  setActiveVideo(i + 1);
+                } else {
+                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            />
+          ))}
+        </div>
+        {/* Progress dots */}
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {VIDEOS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveVideo(i)}
+              className={`rounded-full transition-all duration-300 ${activeVideo === i ? "w-6 h-2 bg-primary" : "w-2 h-2 bg-white/20"}`}
             />
           ))}
         </div>
       </section>
 
-      {/* Why Vitafoam */}
-      <section className="bg-white/5 border-y border-white/10 py-12">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-xl font-bold text-center mb-8 text-white/80 uppercase tracking-widest text-sm">
-            Why Vitafoam?
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { icon: "🛏️", title: "50+ Years", sub: "of Nigerian excellence" },
-              { icon: "✅", title: "Certified Quality", sub: "SON & ISO standards" },
-              { icon: "🚚", title: "Free Delivery", sub: "Lagos & Ogun State" },
-              { icon: "💬", title: "24/7 Support", sub: "WhatsApp & phone" },
-            ].map((item) => (
-              <div key={item.title} className="flex flex-col items-center text-center gap-2 p-4 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-3xl">{item.icon}</span>
-                <p className="font-bold text-white text-sm">{item.title}</p>
-                <p className="text-gray-400 text-xs">{item.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Payment Details */}
-      <section className="max-w-5xl mx-auto px-4 py-14">
+      <section ref={paymentRef} className="max-w-5xl mx-auto px-4 py-14">
         <div className="bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-3xl p-6 sm:p-10 text-center">
           <div className="flex items-center justify-center gap-2 mb-2">
             <CreditCard className="h-5 w-5 text-primary" />
