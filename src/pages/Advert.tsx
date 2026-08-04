@@ -16,8 +16,8 @@ const VIDEOS = [video1, video2, video3];
 
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
-const VideoPhone = ({ src, label, index, active, onEnded, onActivate }: {
-  src: string; label: string; index: number; active: boolean; onEnded: () => void; onActivate: () => void;
+const VideoPhone = ({ src, label, index, active, onEnded, onActivate, mobile }: {
+  src: string; label: string; index: number; active: boolean; onEnded: () => void; onActivate: () => void; mobile?: boolean;
 }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -52,11 +52,11 @@ const VideoPhone = ({ src, label, index, active, onEnded, onActivate }: {
 
   return (
     <div
-      className={`flex flex-col items-center gap-3 transition-all duration-500 cursor-pointer ${active ? "scale-105 z-10" : "scale-90 opacity-50 hover:opacity-70"}`}
+      className={`flex flex-col items-center gap-3 transition-all duration-500 cursor-pointer ${mobile ? (active ? "scale-100 z-10" : "scale-95 opacity-60 hover:opacity-80") : (active ? "scale-105 z-10" : "scale-90 opacity-50 hover:opacity-70")}`}
       onClick={onActivate}
     >
       {/* Phone shell */}
-      <div className="relative w-[180px] sm:w-[210px]" style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
+      <div className={`relative ${mobile ? "w-[75vw] max-w-[280px]" : "w-[180px] sm:w-[210px]"}`} style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
         {/* Outer phone body */}
         <div className="relative bg-gradient-to-b from-[#2a2a2a] to-[#1a1a1a] rounded-[36px] p-[10px] shadow-2xl border border-white/10">
           {/* Top notch bar */}
@@ -191,7 +191,31 @@ const Advert = () => {
       {/* Videos */}
       <section className="py-10 pb-16 overflow-hidden">
         <p className="text-center text-xs font-bold uppercase tracking-widest text-gray-500 mb-8">Watch Our Latest</p>
-        <div className="flex items-end justify-center gap-4 sm:gap-8 px-4">
+
+        {/* Mobile: stacked, one at a time */}
+        <div className="flex flex-col items-center gap-6 sm:hidden px-4">
+          {VIDEOS.map((src, i) => (
+            <VideoPhone
+              key={i}
+              src={src}
+              label={LABELS[i]}
+              index={i}
+              active={activeVideo === i}
+              onActivate={() => setActiveVideo(i)}
+              onEnded={() => {
+                if (i < VIDEOS.length - 1) {
+                  setActiveVideo(i + 1);
+                } else {
+                  paymentRef.current?.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              mobile
+            />
+          ))}
+        </div>
+
+        {/* Desktop: side by side */}
+        <div className="hidden sm:flex items-end justify-center gap-8 px-4">
           {VIDEOS.map((src, i) => (
             <VideoPhone
               key={i}
@@ -210,6 +234,7 @@ const Advert = () => {
             />
           ))}
         </div>
+
         {/* Progress dots */}
         <div className="flex items-center justify-center gap-2 mt-8">
           {VIDEOS.map((_, i) => (
