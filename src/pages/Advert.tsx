@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Play, Pause, Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
@@ -16,8 +16,8 @@ const VIDEOS = [video1, video2, video3];
 
 const LABELS = ["Premium Comfort", "Quality Craftsmanship", "Better Sleep"];
 
-const VideoPhone = ({ src, label, index, active, onEnded }: {
-  src: string; label: string; index: number; active: boolean; onEnded: () => void;
+const VideoPhone = ({ src, label, index, active, onEnded, onActivate }: {
+  src: string; label: string; index: number; active: boolean; onEnded: () => void; onActivate: () => void;
 }) => {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -51,7 +51,10 @@ const VideoPhone = ({ src, label, index, active, onEnded }: {
   };
 
   return (
-    <div className={`flex flex-col items-center gap-3 transition-all duration-500 ${active ? "scale-105 z-10" : "scale-90 opacity-50"}`}>
+    <div
+      className={`flex flex-col items-center gap-3 transition-all duration-500 cursor-pointer ${active ? "scale-105 z-10" : "scale-90 opacity-50 hover:opacity-70"}`}
+      onClick={onActivate}
+    >
       {/* Phone shell */}
       <div className="relative w-[180px] sm:w-[210px]" style={{ filter: active ? "drop-shadow(0 0 36px rgba(230,126,34,0.4))" : "none" }}>
         {/* Outer phone body */}
@@ -196,6 +199,7 @@ const Advert = () => {
               label={LABELS[i]}
               index={i}
               active={activeVideo === i}
+              onActivate={() => setActiveVideo(i)}
               onEnded={() => {
                 if (i < VIDEOS.length - 1) {
                   setActiveVideo(i + 1);
