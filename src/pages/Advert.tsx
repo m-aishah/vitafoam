@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Play, Pause, Volume2, VolumeX, ShoppingBag, Truck, CreditCard, Phone } from "lucide-react";
 import vitafoamLogo from "@/assets/vitafoam-logo-1.svg";
+
+const SITE_URL = "https://vitafoammattress.com";
+const OG_IMAGE = `${SITE_URL}/og-advert.jpg`;
+const OG_TITLE = "Vitafoam Nigeria — Premium Mattresses, Free Delivery in Lagos & Ogun State";
+const OG_DESC = "Shop Nigeria's most trusted mattress brand. Free delivery within Lagos & Ogun State. Pay via bank transfer: Zenith Bank · 1011040357 · Vitafoam Nig Plc.";
 import video1 from "@/assets/videos/video1.mp4";
 import video2 from "@/assets/videos/video2.mp4";
 import video3 from "@/assets/videos/video3.mp4";
@@ -72,6 +78,32 @@ const VideoPlayer = ({ src, label, index }: { src: string; label: string; index:
 const Advert = () => {
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white font-body">
+      <Helmet>
+        <title>{OG_TITLE}</title>
+        <meta name="description" content={OG_DESC} />
+
+        {/* Open Graph (Facebook, WhatsApp, LinkedIn) */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${SITE_URL}/advert`} />
+        <meta property="og:title" content={OG_TITLE} />
+        <meta property="og:description" content={OG_DESC} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:image:width" content="2560" />
+        <meta property="og:image:height" content="800" />
+        <meta property="og:image:alt" content="Vitafoam Nigeria — Start Your Day The Right Way" />
+        <meta property="og:site_name" content="Vitafoam Nigeria" />
+        <meta property="og:locale" content="en_NG" />
+
+        {/* Twitter / X card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={OG_TITLE} />
+        <meta name="twitter:description" content={OG_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+        <meta name="twitter:image:alt" content="Vitafoam Nigeria — Start Your Day The Right Way" />
+
+        {/* WhatsApp prefers og: tags above, but this helps */}
+        <meta name="theme-color" content="#e67e22" />
+      </Helmet>
       {/* Header */}
       <header className="sticky top-0 z-30 bg-[#0f0f0f]/90 backdrop-blur-md border-b border-white/10">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
